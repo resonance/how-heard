@@ -90,6 +90,17 @@ app.use(function *(next) {
 
 
 
+router.get('/dropdown.js', function *() {
+
+  //this.redirect(__dirname + '/public/dropdown.js');
+this.redirect('/public/dropdown.js');
+});
+
+
+
+
+
+
 
 router.get('/dropdown', function *() {
   
