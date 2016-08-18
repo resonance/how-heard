@@ -24,6 +24,7 @@ var admin = require('./admin');
  * Load jade template files.
  */
 
+var dropdownTemplate = fs.readFileSync(__dirname + '/dropdown.jade', 'utf8');
 
 
 /**
@@ -88,16 +89,34 @@ app.use(function *(next) {
 
 
 
-app.use(function *(){
-	this.body="hi mom";
-	}	
-)
 
+
+router.get('/dropdown', function *() {
+  
+  var jadeOptions = {
+
+  };
+
+
+  // Serve html to client.
+  var html = jade.compile(dropdownTemplate, {
+    basedir: __dirname
+  })(jadeOptions);
+
+  this.body = html;
+});
+
+
+
+
+
+/**
+ * logging
+ */
 
 
 
 var port = process.env.PORT || 4000;
-
 
 app.listen(port,function() {
 console.log("mjk-test up and running on",port);
