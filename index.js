@@ -1,3 +1,10 @@
+'use strict';
+
+/**
+ * Module dependencies
+ */
+
+var fs = require('fs');
 var koa = require('koa');
 
 var app = koa();
