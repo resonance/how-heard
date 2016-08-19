@@ -111,7 +111,7 @@ router.get('/dropdown.js', function *() {
 router.get('/dropdown', function *() {
 
   var jadeOptions = {
-
+    books: {"A", "B", "C"}
   };
 
 
