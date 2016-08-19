@@ -109,7 +109,7 @@ router.get('/dropdown.js', function *() {
 
 
 router.get('/dropdown', function *() {
-  
+
   var jadeOptions = {
 
   };
@@ -119,7 +119,7 @@ router.get('/dropdown', function *() {
   var html = jade.compile(dropdownTemplate, {
     basedir: __dirname
   })(jadeOptions);
-
+ 	
   this.body = html;
 });
 
