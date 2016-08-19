@@ -20,9 +20,9 @@ script.
   var iframeId = 'howhearddropdown'
   var iframe = document.getElementById(iframeId);
 
-  var crossover = "<p>Hello there</p>";
+  var message = 'Hello!  The time is: ' + (new Date().getTime());
 
-  iframe.contentWindow.postMessage(crossover, '*');
+  iframe.contentWindow.postMessage(message, '*');
 
   
 
