@@ -11,13 +11,11 @@
 
 
 !function() {
-  /*	
+	
   var iframeId = 'howhearddropdown'
   var iframe = document.getElementById(iframeId);
-  iframe.src = __dirname+'/dropdown?key=0';
+  iframe.src = './dropdown?key=0';
   iframe.width = '100%';
   iFrameResize(undefined, iframe);
-  */
-  var root = window.location.pathname.substr(0, window.location.pathname.lastIndexOf('/'));
-  document.write('*Hello, there!*' + root);
+
 }()
