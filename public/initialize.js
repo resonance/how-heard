@@ -17,5 +17,6 @@
   iframe.src = 'https://how-heard.herokuapp.com/dropdown?key=0';
   iframe.width = '100%';
   iFrameResize(undefined, iframe);
-
+  
+  $('#cross').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
 }()

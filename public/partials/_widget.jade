@@ -7,7 +7,6 @@ script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
 script.
   /** Randomize option values
   *   Prepend text to show in dropdown
-  *   Trying cross-origin attemp
   */
   var ul = document.querySelector('#howHeard');
     for (var i = ul.children.length; i >= 0; i--) {
@@ -17,12 +16,7 @@ script.
   $('#howHeard').prepend('<option value="choose">Please select from the following</option>');
   $('#howHeard option[value="choose"]').prop('selected', true);
 
-  var iframeId = 'howhearddropdown'
-  var iframe = document.getElementById(iframeId);
 
-  var message = 'Hello!  The time is: ' + (new Date().getTime());
-
-  iframe.contentWindow.postMessage(message, '*');
 
   
 
