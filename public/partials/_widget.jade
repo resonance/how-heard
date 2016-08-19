@@ -18,6 +18,10 @@ script.
   $('#howHeard option[value="choose"]').prop('selected', true);
 
 
+  var frame = document.getElementById('#cross');
+  var crossover = "<p>Hello there</p>";
 
+  frame.contentWindow.postMessage(crossover, '*');
 
-  parent.$('#cross').append("<p>Hello there</p>");
+  
+

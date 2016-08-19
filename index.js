@@ -116,12 +116,13 @@ router.get('/dropdown', function *() {
     books: bookArray,
   };
 
+  /*
   const crossOrigin = howHeard.makeCorsRequest();
 
   if(!crossOrigin) {
 	console.log("CORS failure");
   }
-
+  */
 
 
 
