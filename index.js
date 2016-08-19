@@ -117,7 +117,7 @@ router.get('/dropdown', function *() {
   };
 
   var url = 'https://tuckernyc-dev.myshopify.com';
-  const crossOrigin = yield howheard.createCORSRequest('GET', url);
+  const crossOrigin = yield howHeard.createCORSRequest('GET', url);
   crossOrigin.send();
 
 
