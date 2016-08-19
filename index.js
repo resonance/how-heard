@@ -46,12 +46,7 @@ module.exports = app;
  * Initialize all needed middleware packages
  */
 
-var options = {
-	origin: 'https://tuckernyc-dev.myshopify.com'
-};
-
-app.use(cors(options));
-
+app.use(cors());
 app.use(bodyParser());
 var router = koaRouter();
 app.use(router.routes());
@@ -113,13 +108,18 @@ router.get('/initialize.js', function *() {
  * Fetch store if available and gather dropdown list
  */
 
-router.get('/dropdown', cors(), function *() {
+router.get('/dropdown', function *() {
 
   var bookArray = ["A", "B", "C"];
 
   var jadeOptions = {
     books: bookArray,
   };
+
+  var url = 'https://tuckernyc-dev.myshopify.com';
+  const crossOrigin = yield howheard.createCORSRequest('GET', url);
+  crossOrigin.send();
+
 
 
   // Serve html to client.
