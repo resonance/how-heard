@@ -108,18 +108,7 @@ router.get('/dropdown.js', function *() {
 
 
 
-
 router.get('/dropdown', function *() {
-
-  	this.body = 'OK'
-    return;
-
-});
-
-
-
-
-router.get('/whatever', function *() {
   
   var jadeOptions = {
 
