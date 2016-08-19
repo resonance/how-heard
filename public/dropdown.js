@@ -14,7 +14,7 @@
 	
   var iframeId = 'howhearddropdown'
   var iframe = document.getElementById(iframeId);
-  iframe.src = './dropdown?key=0';
+  iframe.src = 'https://how-heard.herokuapp.com/dropdown?key=0';
   iframe.width = '100%';
   iFrameResize(undefined, iframe);
 
