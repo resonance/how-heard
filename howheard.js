@@ -9,6 +9,7 @@
 var request = require('request');
 var thunkify = require('thunkify');
 var moment = require('moment-timezone');
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 //var constants = require('./constants');
 
 
