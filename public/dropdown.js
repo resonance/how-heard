@@ -18,6 +18,6 @@
   iframe.width = '100%';
   iFrameResize(undefined, iframe);
   */
-  var root = document.location.hostname;
+  var root = window.location.pathname.substr(0, window.location.pathname.lastIndexOf('/'));
   document.write('*Hello, there!*' + root);
 }()
