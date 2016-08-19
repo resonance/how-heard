@@ -92,21 +92,21 @@ app.use(function *(next) {
 
 /**
  * Initial request for iframe
- * Read store_id from url param
- * Fetch store if available and gather dropdown list
- * Append dropdown to dropdown.js with fs.appendFile()
- * Redirect to /public/dropdown.js
  */
 
-router.get('/dropdown.js', function *() {
+router.get('/initialize.js', function *() {
 
-  this.redirect('/public/dropdown.js');
+  this.redirect('/public/initialize.js');
 
 });
 
 
 
 
+/**
+ * Read store_id from url param
+ * Fetch store if available and gather dropdown list
+ */
 
 router.get('/dropdown', function *() {
 
