@@ -9,7 +9,7 @@ var koa = require('koa');
 var koaRouter = require('koa-router');
 var bodyParser = require('koa-bodyparser');
 var serve = require('koa-static');
-var cors = require('kcors');
+var cors = require('koa-cors');
 var jade = require('jade');
 var mount = require('koa-mount');
 var request = require('request');
@@ -46,7 +46,12 @@ module.exports = app;
  * Initialize all needed middleware packages
  */
 
-app.use(cors());
+var options = {
+	origin: 'https://tuckernyc-dev.myshopify.com'
+};
+
+app.use(cors(options));
+
 app.use(bodyParser());
 var router = koaRouter();
 app.use(router.routes());
@@ -108,7 +113,7 @@ router.get('/initialize.js', function *() {
  * Fetch store if available and gather dropdown list
  */
 
-router.get('/dropdown', function *() {
+router.get('/dropdown', cors(), function *() {
 
   var bookArray = ["A", "B", "C"];
 
