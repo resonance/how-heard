@@ -16,6 +16,7 @@ var request = require('request');
 var thunkify = require('thunkify');
 var moment = require('moment-timezone');
 var admin = require('./admin');
+var howHeard = require('./howheard');
 
 
 
@@ -56,6 +57,7 @@ app.use(router.routes());
  * Mount other apps as middleware
  */
 
+app.use(mount('/howheard', howHeard));
 app.use(mount('/admin', admin));
 
 
@@ -88,12 +90,18 @@ app.use(function *(next) {
 
 
 
-
+/**
+ * Initial request for iframe
+ * Read store_id from url param
+ * Fetch store if available and gather dropdown list
+ * Append dropdown to dropdown.js with fs.appendFile()
+ * Redirect to /public/dropdown.js
+ */
 
 router.get('/dropdown.js', function *() {
 
-  //this.redirect(__dirname + '/public/dropdown.js');
-this.redirect('/public/dropdown.js');
+  this.redirect('/public/dropdown.js');
+
 });
 
 
@@ -102,7 +110,7 @@ this.redirect('/public/dropdown.js');
 
 
 
-router.get('/dropdown', function *() {
+router.get('/whatever', function *() {
   
   var jadeOptions = {
 
