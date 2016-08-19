@@ -1,4 +1,19 @@
 div
-  select#HowHeard
+  select#howHeard
     each book, i in books
       option(value=i) Book #{book}
+
+script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
+script.
+  /** Randomize option values
+  *   Prepend text to show in dropdown
+  */
+  var ul = document.querySelector('#howHeard');
+    for (var i = ul.children.length; i >= 0; i--) {
+      ul.appendChild(ul.children[Math.random() * i | 0]);
+  }
+
+  $('#howHeard').prepend('<option value="choose">Please select from the following</option>');
+  $('#howHeard option[value="choose"]').prop('selected', true);
+
+  $("#cross").append("<p>Hello there</p>");
