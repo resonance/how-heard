@@ -16,6 +16,6 @@ function createCORSRequest(method, url) {
 }
 
 
-var url = 'https://www.tuckernyc.com';
+var url = 'https://tuckernyc-dev.myshopify.com';
 var xhr = createCORSRequest('GET', url);
 xhr.send();
