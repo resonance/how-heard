@@ -113,7 +113,7 @@ router.get('/dropdown', function *() {
   var bookArray = ["A", "B", "C"];
 
   var jadeOptions = {
-    books: bookArray
+    "books": bookArray
   };
 
 
