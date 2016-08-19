@@ -116,9 +116,12 @@ router.get('/dropdown', function *() {
     books: bookArray,
   };
 
-  var url = 'https://tuckernyc-dev.myshopify.com';
-  const crossOrigin = howHeard.createCORSRequest('GET', url);
-  crossOrigin.send();
+  const crossOrigin = howHeard.makeCorsRequest('GET', url);
+
+  if(!crossOrigin) {
+	console.log("CORS failure");
+  }
+
 
 
 

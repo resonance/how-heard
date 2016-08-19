@@ -20,7 +20,9 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 exports.createCORSRequest = createCORSRequest;
 
 
-//exports.findShop = findShop;
+
+
+
 // Create the XHR object.
 function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
@@ -38,7 +40,32 @@ function createCORSRequest(method, url) {
   return xhr;
 }
 
+// Helper method to parse the title tag from the response.
+function getTitle(text) {
+  return text.match('<title>(.*)?</title>')[1];
+}
 
-var url = 'https://tuckernyc-dev.myshopify.com';
-var xhr = createCORSRequest('GET', url);
-xhr.send();
+// Make the actual CORS request.
+function makeCorsRequest() {
+  // This is a sample server that supports CORS.
+  var url = 'https://tuckernyc-dev.myshopify.com';
+
+  var xhr = createCORSRequest('GET', url);
+  if (!xhr) {
+    alert('CORS not supported');
+    return;
+  }
+
+  // Response handlers.
+  xhr.onload = function() {
+    var text = xhr.responseText;
+    var title = getTitle(text);
+    alert('Response from CORS request to ' + url + ': ' + title);
+  };
+
+  xhr.onerror = function() {
+    alert('Woops, there was an error making the request.');
+  };
+
+  xhr.send();
+}
