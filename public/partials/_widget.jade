@@ -17,11 +17,12 @@ script.
   $('#howHeard').prepend('<option value="choose">Please select from the following</option>');
   $('#howHeard option[value="choose"]').prop('selected', true);
 
+  var iframeId = 'howhearddropdown'
+  var iframe = document.getElementById(iframeId);
 
-  var frame = document.getElementById('#cross');
   var crossover = "<p>Hello there</p>";
 
-  frame.contentWindow.postMessage(crossover, '*');
+  iframe.contentWindow.postMessage(crossover, '*');
 
   
 
