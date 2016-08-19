@@ -18,7 +18,7 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
  * Expose public API.
  */
 exports.createCORSRequest = createCORSRequest;
-
+exports.makeCorsRequest = makeCorsRequest;
 
 
 
