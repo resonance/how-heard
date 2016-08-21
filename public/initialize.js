@@ -37,7 +37,6 @@ function scriptLoadHandler() {
 
 /******** Our main function ********/
 function main() { 
-    jQuery(document).ready(function($) { 
     
       var sizer = sizeToContent(a);
 
@@ -53,7 +52,7 @@ function main() {
 
 	 
 
-    });
+
 }
 
 /*
