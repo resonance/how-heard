@@ -56,8 +56,7 @@ module.exports = app;
 
 app.use(cors());
 app.use(bodyParser());
-var router = koaRouter();
-app.use(router.routes());
+
 
 
 
@@ -80,7 +79,8 @@ app.use(mount('/admin', admin));
 app.use(mount('/public', serve(__dirname+'/public')));
 
 
-
+var router = koaRouter();
+app.use(router.routes());
 
 
 /**
