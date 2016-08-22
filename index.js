@@ -17,6 +17,8 @@ var thunkify = require('thunkify');
 var moment = require('moment-timezone');
 var admin = require('./admin');
 var howHeard = require('./howheard');
+var constants = require('./constants');
+
 
 
 
@@ -25,7 +27,11 @@ var howHeard = require('./howheard');
  * Load jade template files.
  */
 
+var homeTemplate = fs.readFileSync(__dirname + '/home.jade', 'utf8');
 var dropdownTemplate = fs.readFileSync(__dirname + '/dropdown.jade', 'utf8');
+
+
+
 
 
 /**
@@ -42,6 +48,8 @@ module.exports = app;
 
 
 
+
+
 /**
  * Initialize all needed middleware packages
  */
@@ -53,12 +61,14 @@ app.use(router.routes());
 
 
 
+
+
 /**
- * Mount other apps as middleware
+ * Mount admin
  */
 
-app.use(mount('/howheard', howHeard));
 app.use(mount('/admin', admin));
+
 
 
 
@@ -90,8 +100,111 @@ app.use(function *(next) {
 
 
 
+
 /**
- * Initial request for iframe
+ * Initial incoming request from shopify app store
+ * ex. https://how-heard.herokuapp.com/?shop=tuckernyc.myshopify.com
+ * Redirect user to either Sign-up flow
+ * or home view of app by checking DB.
+ */
+
+router.get('/', function *() {
+  const exists = yield howheard.accessTokenExists(this.query.shop);
+  if (!exists) {
+    this.redirect('./install?shop='+this.query.shop);
+    return;
+  }
+  
+  // find store object in db
+  const shop = yield howheard.findShop(this.query.shop);
+
+
+  // Create jade options with default properties.
+  var jadeOptions = {
+    shopName: shop.companyName,
+    // Needed for initializing embedded Shopify framework.
+    apiKey: constants.SHOPIFY_API_KEY,
+
+    // Leave as empty object for jade.
+    connection: {},
+  };
+
+
+  // Serve html to client.
+  var html = jade.compile(homeTemplate, {
+    basedir: __dirname
+  })(jadeOptions);
+
+  this.body = html;
+});
+
+
+
+
+
+/**
+ * Save new shop into DB.
+ */
+
+router.get('/install', function *() {
+  // check for empty shop query???
+  const shopName = this.query.shop;
+
+  // Use `findOrCreate` in case an
+  // uninstalled shop still exists
+  // in the db.
+  yield howheard.findOrCreate(shopName);
+
+  const url = howheard.getAuthUrl(shopName);
+
+  // redirects to /authenticate
+  this.redirect(url);
+});
+
+
+
+
+
+/**
+ * Create an auth token and
+ * update shop document in DB.
+ */
+
+router.get('/authenticate', function *() {
+  const token = yield howheard.fetchAuthToken(this.query);
+  const shopName = this.query.shop;
+  yield howheard.saveToken(token, shopName);
+
+  const shop = yield howheard.fetchShopFromShopify(shopName, token);
+  yield howheard.updateShop(shopName, shop.shop);
+
+  yield howheard.addShopifyUninstallWebhook(shopName, token);
+
+  this.redirect('./?shop='+shopName);
+});
+
+
+
+
+
+/**
+ * Save slack webhook URL into DB.
+ */
+
+ router.post('/uninstall', function *() {
+   console.log('request body', this.request.body);
+   console.log('content-type', this.request.type);
+   const shopName = this.request.body.domain;
+   yield howheard.uninstallShop(shopName);
+   this.status = 200;
+});
+
+
+
+
+
+/**
+ * Initial request for iframe from checkout
  */
 
 router.get('/initialize.js', function *() {
@@ -99,6 +212,7 @@ router.get('/initialize.js', function *() {
   this.redirect('/public/initialize.js');
 
 });
+
 
 
 

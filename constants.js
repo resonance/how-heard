@@ -1,0 +1,3 @@
+exports.SHOPIFY_API_SECRET = process.env.SHOPIFY_API_SECRET;
+exports.SHOPIFY_API_KEY = process.env.SHOPIFY_API_KEY;
+exports.HOWHEARD_PUBLIC_URL_ROOT = process.env.HOWHEARD_PUBLIC_URL_ROOT;
