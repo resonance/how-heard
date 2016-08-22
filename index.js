@@ -16,7 +16,7 @@ var request = require('request');
 var thunkify = require('thunkify');
 var moment = require('moment-timezone');
 var admin = require('./admin');
-var howHeard = require('./howheard');
+var howHeard = require('/howheard');
 var constants = require('./constants');
 
 
