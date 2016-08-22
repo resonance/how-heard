@@ -6,6 +6,7 @@
 
 var fs = require('fs');
 var koa = require('koa');
+var logger = require('koa-logger');
 var koaRouter = require('koa-router');
 var bodyParser = require('koa-bodyparser');
 var serve = require('koa-static');
@@ -24,17 +25,6 @@ var constants = require('./constants');
 
 
 /**
- * Load jade template files.
- */
-
-var homeTemplate = fs.readFileSync(__dirname + '/home.jade', 'utf8');
-var dropdownTemplate = fs.readFileSync(__dirname + '/dropdown.jade', 'utf8');
-
-
-
-
-
-/**
  * Create mini-app.
  */
 
@@ -45,6 +35,96 @@ var get = thunkify(request.get);
 
 
 module.exports = app;
+
+
+
+
+
+
+/**
+ * logging
+ */
+
+var port = process.env.PORT || 4000;
+
+app.use(logger());
+
+
+
+
+
+/**
+ * See if the app is running.
+ */
+
+app.use(function *(next) {
+  if (this.path === '/status') {
+    this.body = 'Ok';
+    return;
+  }
+  yield next;
+});
+
+/**
+ * Favicons.
+ */
+
+app.use(function *(next) {
+  if (this.path === '/favicon') {
+    this.body = 'haha';
+    return;
+  }
+  yield next;
+})
+
+
+
+
+
+/**
+ * Listen to the port set and
+ * log connection on success.
+ */
+app.listen(port,function() {
+  console.log("how-heard up and running on",port);
+}
+);
+
+
+
+
+
+/**
+ * Error handling.
+ */
+
+app.use(function *(next) {
+  try {
+    yield next;
+  } catch(err) {
+    this.status = err.status || 500;
+    this.body = 'Sorry, we made a mistake.';
+    this.app.emit('error', err, this);
+  }
+});
+
+
+
+
+
+
+/**
+ * Load jade template files.
+ */
+
+var homeTemplate = fs.readFileSync(__dirname + '/home.jade', 'utf8');
+var dropdownTemplate = fs.readFileSync(__dirname + '/dropdown.jade', 'utf8');
+
+
+
+
+
+
 
 
 
@@ -82,19 +162,6 @@ var router = koaRouter();
 app.use(router.routes());
 
 
-/**
- * Error handling.
- */
-
-app.use(function *(next) {
-  try {
-    yield next;
-  } catch(err) {
-    this.status = err.status || 500;
-    this.body = 'Sorry, we made a mistake.';
-    this.app.emit('error', err, this);
-  }
-});
 
 
 
@@ -251,18 +318,7 @@ router.get('/dropdown', function *() {
 
 
 
-/**
- * logging
- */
 
-
-
-var port = process.env.PORT || 4000;
-
-app.listen(port,function() {
-console.log("mjk-test up and running on",port);
-}
-);
 
 
 
