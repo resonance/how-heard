@@ -1,4 +1,5 @@
 Read checkout.id on the payment_method step of checkout.
+- Need to import css class for the dropdown from checkout
 
 Ping Shopify API to see if customer is new. If new, show the dropdown (pass email address along in route?).
 
