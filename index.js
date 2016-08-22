@@ -67,7 +67,6 @@ app.use(bodyParser());
  */
 
 app.use(mount('/admin', admin));
-app.use(mount('/howheard', howHeard));
 
 
 
@@ -109,14 +108,14 @@ app.use(function *(next) {
  */
 
 router.get('/', function *() {
-  const exists = yield howheard.accessTokenExists(this.query.shop);
+  const exists = yield howHeard.accessTokenExists(this.query.shop);
   if (!exists) {
     this.redirect('./install?shop='+this.query.shop);
     return;
   }
   
   // find store object in db
-  const shop = yield howheard.findShop(this.query.shop);
+  const shop = yield howHeard.findShop(this.query.shop);
 
 
   // Create jade options with default properties.
@@ -153,9 +152,9 @@ router.get('/install', function *() {
   // Use `findOrCreate` in case an
   // uninstalled shop still exists
   // in the db.
-  yield howheard.findOrCreate(shopName);
+  yield howHeard.findOrCreate(shopName);
 
-  const url = howheard.getAuthUrl(shopName);
+  const url = howHeard.getAuthUrl(shopName);
 
   // redirects to /authenticate
   this.redirect(url);
@@ -171,14 +170,14 @@ router.get('/install', function *() {
  */
 
 router.get('/authenticate', function *() {
-  const token = yield howheard.fetchAuthToken(this.query);
+  const token = yield howHeard.fetchAuthToken(this.query);
   const shopName = this.query.shop;
-  yield howheard.saveToken(token, shopName);
+  yield howHeard.saveToken(token, shopName);
 
-  const shop = yield howheard.fetchShopFromShopify(shopName, token);
-  yield howheard.updateShop(shopName, shop.shop);
+  const shop = yield howHeard.fetchShopFromShopify(shopName, token);
+  yield howHeard.updateShop(shopName, shop.shop);
 
-  yield howheard.addShopifyUninstallWebhook(shopName, token);
+  yield howHeard.addShopifyUninstallWebhook(shopName, token);
 
   this.redirect('./?shop='+shopName);
 });
@@ -195,7 +194,7 @@ router.get('/authenticate', function *() {
    console.log('request body', this.request.body);
    console.log('content-type', this.request.type);
    const shopName = this.request.body.domain;
-   yield howheard.uninstallShop(shopName);
+   yield howHeard.uninstallShop(shopName);
    this.status = 200;
 });
 
