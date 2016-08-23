@@ -1,6 +1,7 @@
 html
   head
-  body
-    div.main-content
-      block content
-
+    include /public/partials/_appHead.jade
+      body
+        div.main-content
+          block content
+          include /public/partials/_appNav.jade

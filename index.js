@@ -65,6 +65,10 @@ app.use(function *(next) {
   yield next;
 });
 
+
+
+
+
 /**
  * Favicons.
  */
@@ -316,6 +320,24 @@ router.get('/dropdown', function *() {
   this.body = html;
 });
 
+
+
+
+
+/**
+ * User instructions linked from the Shopify App Bar
+ */
+router.get('/instructions', function *() {
+  var jadeOptions = {
+    shopName: this.query.shop,
+    apiKey: constants.SHOPIFY_API_KEY,
+  };
+
+  var html = jade.compile(instructionsTemplate, {
+    basedir: __dirname
+  })(jadeOptions);
+  this.body = html;
+});
 
 
 

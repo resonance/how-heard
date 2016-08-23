@@ -69,6 +69,7 @@ var get = thunkify(request.get);
 // Collection name must be unique on mLab db,
 // so we can't use `shops`.
 var shopsCollection = db.get('howHeardShops');
+var listsCollection = db.get('howHeardLists');
 
 
 

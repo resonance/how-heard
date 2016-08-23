@@ -1,0 +1,13 @@
+script.
+  ShopifyApp.ready(function(){
+    ShopifyApp.Bar.initialize({
+      title: '#{shopName}',
+      buttons: {
+        secondary: [
+          //- { label: "Instructions", loading: false, href: "/instructions?shop=#{shopName}", target: "app" },
+          { label: "Home", loading: false, href: "/?shop=#{shopName}", target: "app" }
+        ],
+      }
+    });
+    ShopifyApp.Bar.loadingOff();
+  });
