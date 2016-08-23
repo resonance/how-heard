@@ -45,6 +45,7 @@ exports.daysOrders = daysOrders;
 
 /**
  * Connect to database.
+ * Be sure to grab the right config var, as they can vary for mongodb 
  */
 
 var db = monk(process.env.MONGODB_URI || 'localhost');
