@@ -47,7 +47,7 @@ exports.daysOrders = daysOrders;
  * Connect to database.
  */
 
-var db = monk(process.env.MONGOLAB_URI || 'localhost');
+var db = monk(process.env.MONGODB_URI || 'localhost');
 
 
 
