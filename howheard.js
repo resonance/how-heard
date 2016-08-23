@@ -26,7 +26,7 @@ exports.fetchShopFromShopify = fetchShopFromShopify;
 exports.updateShop = updateShop;
 exports.addShopifyUninstallWebhook = addShopifyUninstallWebhook;
 exports.uninstallShop = uninstallShop;
-exports.getHowHeardList = getHowHeardList;
+exports.findHowHeardList = findHowHeardList;
 
 /*
 exports.findOrders = findOrders;
