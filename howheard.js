@@ -26,7 +26,7 @@ exports.fetchShopFromShopify = fetchShopFromShopify;
 exports.updateShop = updateShop;
 exports.addShopifyUninstallWebhook = addShopifyUninstallWebhook;
 exports.uninstallShop = uninstallShop;
-
+exports.getHowHeardList = getHowHeardList;
 
 /*
 exports.findOrders = findOrders;
@@ -335,6 +335,20 @@ function *addShopifyUninstallWebhook(shopName, token) {
   });
  }
 
+
+
+
+
+/**
+ * Find the array list of How Heards for the store
+ *
+ * @return {object}
+ * @api public
+ */
+
+function *findHowHeardList(shopName) {
+  return yield listsCollection.findOne({ companyName: shopName });
+}
 
 
 

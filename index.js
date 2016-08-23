@@ -187,6 +187,7 @@ router.get('/', function *() {
     return;
   }
   
+
   // find store object in db
   const shop = yield howHeard.findShop(this.query.shop);
 
@@ -198,8 +199,19 @@ router.get('/', function *() {
     apiKey: constants.SHOPIFY_API_KEY,
 
     // Leave as empty object for jade.
-    connection: {},
+    choices: {},
   };
+
+
+  // get existing list of howheards if available, use shopsCollection object
+  const howHeardList = yield howHeard.findHowHeardList(shop.companyName);
+
+  // if list exists, add to jadeOptions
+  if (howHeardList.length > 0) {
+	jadeOptions.choices = {
+      list: howHeardList
+    }
+  }
 
 
   // Serve html to client.
