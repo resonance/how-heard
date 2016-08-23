@@ -158,6 +158,7 @@ function getRandomCode(length) {
  *
  * @return {String}
  * @api public
+ * Grab Key & Secret from App Admin and add as config vars in Heroku 
  */
 
 function getAuthUrl(shopName) {

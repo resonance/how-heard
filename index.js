@@ -124,12 +124,6 @@ var dropdownTemplate = fs.readFileSync(__dirname + '/dropdown.jade', 'utf8');
 
 
 
-
-
-
-
-
-
 /**
  * Initialize all needed middleware packages
  */
@@ -158,7 +152,15 @@ app.use(mount('/admin', admin));
 app.use(mount('/public', serve(__dirname+'/public')));
 
 
+
+
+
 var router = koaRouter();
+
+
+
+
+
 app.use(router.routes());
 
 
