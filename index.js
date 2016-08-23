@@ -211,10 +211,12 @@ router.get('/', function *() {
 	jadeOptions.choices = {
       list: howHeardList
     }
+  }
   else {
 	jadeOptions.choices = {
       list: ["Other"]
     }
+  }
  
 
 
