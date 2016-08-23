@@ -3,5 +3,11 @@ block content
 
   h1 HOME PAGE
   p show CRUD
-  br
+  if choices
+    div
+      p Send New Order Notifications to:
+      div
+        ul(style="width:100%;")
+          for choice in choices
+            li(data-choice="#{choice}") #{choice}#
 
