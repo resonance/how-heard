@@ -214,7 +214,7 @@ router.get('/', function *() {
   }
   else {
 	jadeOptions.choices = {
-      {name: 'Other'}
+      name: 'Other'
   }
  
 
