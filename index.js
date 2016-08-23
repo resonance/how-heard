@@ -213,9 +213,7 @@ router.get('/', function *() {
     }
   }
   else {
-	jadeOptions.choices = {
-      list: ["Other"]
-    }
+	jadeOptions.choices = {["Other"]}
   }
  
 
