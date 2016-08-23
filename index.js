@@ -211,7 +211,6 @@ router.get('/', function *() {
 	jadeOptions.choices = {
       list: howHeardList
     }
-  // Otherwise create new array and populate with choice "Other"
   else {
 	jadeOptions.choices = {
       list: ["Other"]
