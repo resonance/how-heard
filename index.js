@@ -215,7 +215,6 @@ router.get('/', function *() {
 	jadeOptions.choices = {
       list: ["Other"]
     }
-  }
  
 
 
