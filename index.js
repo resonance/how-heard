@@ -239,12 +239,7 @@ router.get('/', function *() {
  */
 
 router.post('/:shopName/:selection/delete', function *() {
-	
-	NEXT
-	Redirect to /
-	
-	
-	
+
 }
 
 
