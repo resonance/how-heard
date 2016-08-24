@@ -1,12 +1,15 @@
 extends /layout.jade
 block content
 
-  h1 HOME PAGE
-  p show CRUD
-  if choices
-    div
-      p
-      div
-        ul(style="width:100%;")
-          each selection in choices.selections
-            li(data-choice="#{selection}") #{selection}#
+  .container.main
+    .col-xs-12.col-xs-offset-2
+      if choices
+        div
+          p
+          div
+            ul(style="width:100%;")
+              each selection in choices.selections
+                li(data-choice="#{selection}") #{selection}
+
+
+script(src="https://code.jquery.com/jquery-1.11.1.js")
