@@ -272,7 +272,7 @@ router.post('/add', function *() {
 
   // if list does not exist, append 'Other'
   if (!howHeardList) {
-	  selectionsArray.push({'Other'});
+	  selectionsArray.push("Other");
 	  
 	  // add selections to listsCollection
 	  yield howHeard.addSelections(shopName, selectionsArray);
