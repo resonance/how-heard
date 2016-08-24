@@ -347,9 +347,11 @@ function *addShopifyUninstallWebhook(shopName, token) {
  */
 
 function *findHowHeardList(shopName) {
-  return yield listsCollection.find({ companyName: shopName });
-}
+  const list = yield listsCollection.findOne({ companyName: shopName });
 
+  //  converting a value to a boolean, then inverting it, then inverting it again	
+  return !!list;
+}
 
 
 
