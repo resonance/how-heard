@@ -1,0 +1,42 @@
+.main {
+  margin: 20px auto;
+  text-align: center;
+}
+
+.shop-button {
+  margin: 0 5px 0px 0;
+  padding: 10px 40px;
+  border: 1px solid #3A87AD;
+  border-radius: 3px;
+  background-color: white;
+}
+
+.shop-button:focus {
+  outline:0;
+}
+
+.shop-button.selected {
+  box-shadow:none;
+  background-color: #3A87AD;
+  color: white;
+  border-color: #3A87AD;
+}
+
+.shop-collection-view {
+  font-size: 0.8em;
+  width: 100%;
+  margin: 0 auto;
+
+  /* Old Syntax */
+  display: -webkit-box;
+  display: -moz-box;
+
+  /* New Syntax */
+  display: -webkit-flexbox;
+  -webkit-box-pack: center;
+}
+
+ul
+{
+    list-style-type: none;
+}

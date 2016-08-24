@@ -8,14 +8,14 @@ block content
       .row
         .col-md-6
           if choices
-          table.table.table-striped
-            thead
-              tr
-                th
-            tbody
-              each selection in choices.selections
+            table.table.table-striped
+              thead
                 tr
-                  td(data-choice="#{selection}") #{selection}
+                  th
+              tbody
+                each selection in choices.selections
+                  tr
+                    td(data-choice="#{selection}") #{selection}
 
 
 script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
