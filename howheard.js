@@ -394,7 +394,7 @@ function *addSelections(shopName, selectionsArray, insert) {
 // what does 'issued' mean?
 // what does the 'coupon' document look like?
 
-  yield listsCollection.update({
+  yield listsCollection.insert({
       companyName: shopName,
       selections: selectionsArray,
     }, {
