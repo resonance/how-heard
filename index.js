@@ -234,6 +234,24 @@ router.get('/', function *() {
 
 
 /**
+ * User wants to delete a how heard selection
+ * 
+ */
+
+router.post('/:shopName/:selection/delete', function *() {
+	
+	NEXT
+	Redirect to /
+	
+	
+	
+}
+
+
+
+
+
+/**
  * Save new shop into DB.
  */
 
