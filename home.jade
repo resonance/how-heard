@@ -8,6 +8,5 @@ block content
       p
       div
         ul(style="width:100%;")
-          each choice in choices
-            each selection in choice.selections
-              li(data-choice="#{selection}") #{selection}#
+          each selection in choices.selections
+            li(data-choice="#{selection}") #{selection}#
