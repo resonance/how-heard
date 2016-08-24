@@ -217,7 +217,6 @@ router.get('/', function *() {
 	jadeOptions.choices = {
       selections: ['Other']
     }
-    console.log("OTHER has been set");
   }
  
 
@@ -228,6 +227,19 @@ router.get('/', function *() {
   })(jadeOptions);
 
   this.body = html;
+});
+
+
+
+
+
+/**
+ * User wants to delete a how heard selection
+ * 
+ */
+
+router.post('/:shopName/:selection/delete', function *() {
+
 });
 
 
