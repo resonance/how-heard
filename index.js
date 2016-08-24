@@ -265,7 +265,7 @@ router.post('/add', function *() {
   const selectionsArray = selections.match(/[^\r\n]+/g);
 
   // get store object in db
-  const shop = yield howHeard.findShop(shop);
+  const shop = yield howHeard.findShop(shopName);
 
   // get existing list of howheards if available, use shopsCollection object
   const howHeardList = yield howHeard.findHowHeardList(shop.companyName);
