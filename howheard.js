@@ -347,7 +347,7 @@ function *addShopifyUninstallWebhook(shopName, token) {
  */
 
 function *findHowHeardList(shopName) {
-  return yield listsCollection.findOne({ companyName: shopName });
+  return yield listsCollection.find({ companyName: shopName });
 }
 
 

@@ -207,7 +207,7 @@ router.get('/', function *() {
   const howHeardList = yield howHeard.findHowHeardList(shop.companyName);
 
   // if list exists, add to jadeOptions
-  if (howHeardList[0] != null) {
+  if (howHeardList) {
 	jadeOptions.choices = {
       selections: howHeardList
     }
