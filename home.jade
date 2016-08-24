@@ -9,5 +9,5 @@ block content
       div
         ul(style="width:100%;")
           each choice in choices
-            each selection in choice.selections
-              li(data-choice="#{choice.selection}") #{choice.selection}#
+            each selection in selections
+              li(data-choice="#{selection}") #{selection}#
