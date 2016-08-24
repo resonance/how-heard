@@ -1,12 +1,21 @@
 extends /layout.jade
 block content
 
-  .container.main
-    .col-xs-2.col-xs-offset-2
-      if choices
-        div
-          p
-          div
-            ul(style="width:100%;")
-              each selection in choices.selections
-                li(data-choice="#{selection}") #{selection}
+  .container
+    .main
+      .page-header
+       h1 Marketing Sources
+        .row
+          .col-md-6
+            if choices
+              table.table.table-striped
+                thead
+                  tr
+                    th
+                tbody
+                  each selection in choices.selections
+                    tr
+                      td(data-choice="#{selection}") #{selection}
+
+
+script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
