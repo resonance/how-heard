@@ -211,12 +211,13 @@ router.get('/', function *() {
 	jadeOptions.choices = {
       selections: howHeardList
     }
-    console.log("object is not null");
+    
   }
   else {
 	jadeOptions.choices = {
       selections: ['Other']
     }
+    console.log("OTHER has been set");
   }
  
 
