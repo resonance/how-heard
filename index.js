@@ -258,10 +258,12 @@ router.post('/:shopName/:selection/delete', function *() {
 
 router.post('/:shopName/add', function *() {
 
+  const shop = this.request.body.shopName;
+
   console.log("READY FOR ROUND TRIP");
 
 //if no record found, append "Other" to end
-  this.redirect('./?circuit=yes&shop='+this.query.shopName);
+  this.redirect('./?circuit=yes&shop='+shop);
 
 
 });
