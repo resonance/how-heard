@@ -211,6 +211,7 @@ router.get('/', function *() {
 	jadeOptions.choices = {
       selections: howHeardList
     }
+    console.log("object is not null");
   }
   else {
 	jadeOptions.choices = {
