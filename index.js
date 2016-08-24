@@ -261,7 +261,7 @@ router.post('/:shopName/add', function *() {
   console.log("READY FOR ROUND TRIP");
 
 //if no record found, append "Other" to end
-  this.redirect('./?circuit=yes&shop='+shopName);
+  this.redirect('./?circuit=yes&shop='+this.query.shopName);
 
 
 });
