@@ -238,7 +238,7 @@ router.get('/', function *() {
  * 
  */
 
-router.post('/:shopName/:selection/delete', function *() {
+router.post('/temp/:shopName/:selection/delete', function *() {
 
 });
 
