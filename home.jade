@@ -1,12 +1,12 @@
 extends /layout.jade
 block content
 
-.container.main
-  .col-xs-2.col-xs-offset-2
-    if choices
-      div
-        p
+  .container.main
+    .col-xs-2.col-xs-offset-2
+      if choices
         div
-          ul(style="width:100%;")
-            each selection in choices.selections
-              li(data-choice="#{selection}") #{selection}
+          p
+          div
+            ul(style="width:100%;")
+              each selection in choices.selections
+                li(data-choice="#{selection}") #{selection}
