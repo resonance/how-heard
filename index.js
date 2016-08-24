@@ -256,7 +256,7 @@ router.post('/:shopName/:selection/delete', function *() {
  * 
  */
 
-router.post('/:shopName/add', function *() {
+router.post('/add', function *() {
 
   const shop = this.request.body.shopName;
 
