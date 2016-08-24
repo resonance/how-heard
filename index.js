@@ -242,7 +242,7 @@ router.get('/', function *() {
  * 
  */
 
-router.post('/:shopName/:selection/delete', function *() {
+router.post('/delete', function *() {
 
 });
 
@@ -258,12 +258,36 @@ router.post('/:shopName/:selection/delete', function *() {
 
 router.post('/add', function *() {
 
-  const shop = this.request.body.shopName;
+  const shopName = this.request.body.shopName;
 
-  console.log("READY FOR ROUND TRIP");
+  // separate selections text field by \n into an array
+  const selections = this.request.body.selection;
+  const selectionsArray = selections.match(/[^\r\n]+/g);
 
-//if no record found, append "Other" to end
-  this.redirect('./?circuit=yes&shop='+shop);
+  // get store object in db
+  const shop = yield howHeard.findShop(shop);
+
+  // get existing list of howheards if available, use shopsCollection object
+  const howHeardList = yield howHeard.findHowHeardList(shop.companyName);
+
+  // if list does not exist, append 'Other'
+  if (!howHeardList) {
+	  selectionsArray.push({'Other'});
+	  
+	  // add selections to listsCollection
+	  yield howHeard.addSelections(shopName, selectionsArray);
+		
+  }
+  else {
+	
+	  // update listsCollection with new selections
+	  yield howHeard.updateSelections(shopName, selectionsArray);
+
+  }
+
+  // need to pass 'success' msg to user?
+
+  this.redirect('./?circuit=yes&shop='+shopName);
 
 
 });

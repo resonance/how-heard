@@ -27,6 +27,8 @@ exports.updateShop = updateShop;
 exports.addShopifyUninstallWebhook = addShopifyUninstallWebhook;
 exports.uninstallShop = uninstallShop;
 exports.findHowHeardList = findHowHeardList;
+exports.updateSelections = updateSelections;
+exports.addSelections = addSelections;
 
 /*
 exports.findOrders = findOrders;
@@ -353,6 +355,53 @@ function *findHowHeardList(shopName) {
   return !!list;
 }
 
+
+
+
+
+/**
+ * @param {String} shopName
+ * @param {array} selectionsArray
+ * @api public
+ */
+
+function *updateSelections(shopName, selectionsArray, update) {
+// can we update only if unique?
+// what does 'issued' mean?
+// what does the 'coupon' document look like?
+
+  yield listsCollection.update({
+      companyName: shopName,
+      selections: selectionsArray,
+    }, {
+      $set: update,
+  });
+
+}
+
+
+
+
+
+/**
+ * @param {String} shopName
+ * @param {array} selectionsArray
+ * @api public
+ */
+
+function *addSelections(shopName, selectionsArray, insert) {
+// can we update only if unique?
+// what does 'issued' mean?
+// what does the 'coupon' document look like?
+
+  yield listsCollection.update({
+      companyName: shopName,
+      selections: selectionsArray,
+    }, {
+      $set: insert,
+  });
+
+}
 
 
 
