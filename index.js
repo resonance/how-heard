@@ -246,6 +246,20 @@ router.post('/:shopName/:selection/delete', function *() {
 
 
 
+
+/**
+ * User wants to add a how heard selection
+ * 
+ */
+
+router.post('/:shopName/:selection/add', function *() {
+  console.log("calling add selection");
+});
+
+
+
+
+
 /**
  * Save new shop into DB.
  */
