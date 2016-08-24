@@ -17,10 +17,10 @@ block content
                         a(href="/") Delete
 
             div
-              form(action='/#{shopName}/add', method="post")
+              form(action='/#{shopName}/add' id="addselections" name='addselections', method="post")
                 div
-                  label(for="selection") Enter your selection
-                  input(id='selection', type='text', value='', name='selection')
+                  label(for="selection") Enter your selections
+                  textarea.coupons-text(name="selection" rows="10")
                   button(type="submit" style="margin: 10px;") Add
 
 script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")

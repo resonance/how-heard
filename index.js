@@ -181,15 +181,19 @@ app.use(router.routes());
  */
 
 router.get('/', function *() {
-  const exists = yield howHeard.accessTokenExists(this.query.shop);
-  if (!exists) {
-    this.redirect('./install?shop='+this.query.shop);
-    return;
+	
+  // if already coming from our homepage, bypass	
+  if (!this.query.circuit) {
+    const exists = yield howHeard.accessTokenExists(this.query.shop);
+    if (!exists) {
+      this.redirect('./install?shop='+this.query.shop);
+      return;
+    }
   }
   
 
-  // find store object in db
-  const shop = yield howHeard.findShop(this.query.shop);
+    // find store object in db
+    const shop = yield howHeard.findShop(this.query.shop);
 
 
   // Create jade options with default properties.
@@ -253,9 +257,12 @@ router.post('/:shopName/:selection/delete', function *() {
  */
 
 router.post('/:shopName/add', function *() {
-  console.log("calling add selection");
+
+  console.log("READY FOR ROUND TRIP");
 
 //if no record found, append "Other" to end
+  this.redirect('./?circuit=yes&shop='+shopName);
+
 
 });
 
