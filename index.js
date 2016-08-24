@@ -254,6 +254,9 @@ router.post('/:shopName/:selection/delete', function *() {
 
 router.post('/:shopName/:selection/add', function *() {
   console.log("calling add selection");
+
+//if no record found, append "Other" to end
+
 });
 
 
