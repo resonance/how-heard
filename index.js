@@ -215,7 +215,7 @@ router.get('/', function *() {
 	jadeOptions.choices = {
       selections: howHeardList
     }
-    
+    console.log(howHeardList);
   }
   else {
 	jadeOptions.choices = {
