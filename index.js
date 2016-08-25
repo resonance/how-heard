@@ -244,7 +244,7 @@ router.get('/', function *() {
  * 
  */
 
-router.post('/delete', function *() {
+router.get('/delete', function *() {
 	
   const shopName = this.query.shop;
   const selectionChoice = this.query.selection;
