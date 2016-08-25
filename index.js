@@ -216,7 +216,7 @@ router.get('/', function *() {
 	const list = yield howHeard.getHowHeardList(shop.companyName);
 	
 	jadeOptions.choices = {
-      selections: list.selections
+      selections: list
     }
   }
   else {
