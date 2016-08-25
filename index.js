@@ -212,10 +212,13 @@ router.get('/', function *() {
 
   // if list exists, add to jadeOptions
   if (howHeardList) {
+	
+	const selections = array.from(howHeardList);
+	
 	jadeOptions.choices = {
-      selections: howHeardList
+      selections: selections
     }
-    console.log(howHeardList);
+    console.log(selections);
   }
   else {
 	jadeOptions.choices = {
@@ -281,7 +284,7 @@ router.post('/add', function *() {
   else {
 	
 	  // update listsCollection with new selections
-	  yield howHeard.updateSelections(shopName, selectionsArray);
+	  yield howHeard.addSelections(shopName, selectionsArray);
 
   }
 
