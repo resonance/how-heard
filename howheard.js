@@ -365,16 +365,15 @@ function *findHowHeardList(shopName) {
  * @api public
  */
 
-function *updateSelections(shopName, selectionsArray, update) {
+function *updateSelections(shopName, selectionsArray) {
 // can we update only if unique?
 // what does 'issued' mean?
 // what does the 'coupon' document look like?
 
   yield listsCollection.update({
-      companyName: shopName,
-      selections: selectionsArray,
+      companyName: shopName
     }, {
-      $addToSet: update,
+      $addToSet: { selections: {$each: selectionsArray } },
   });
 
 
