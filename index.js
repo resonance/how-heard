@@ -284,7 +284,7 @@ router.post('/add', function *() {
   else {
 	
 	  // update listsCollection with new selections
-	  yield howHeard.addSelections(shopName, selectionsArray);
+	  yield howHeard.updateSelections(shopName, selectionsArray);
 
   }
 
