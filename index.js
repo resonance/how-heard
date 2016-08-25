@@ -213,12 +213,12 @@ router.get('/', function *() {
   // if list exists, add to jadeOptions
   if (howHeardList) {
 	
-	const selections = Array.from(howHeardList);
+	const list = yield howHeard.getHowHeardList(shop.companyName);
 	
 	jadeOptions.choices = {
-      selections: selections
+      selections: list.selections
     }
-    console.log(selections);
+    console.log("WORKING ON IT");
   }
   else {
 	jadeOptions.choices = {

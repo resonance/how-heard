@@ -29,6 +29,7 @@ exports.uninstallShop = uninstallShop;
 exports.findHowHeardList = findHowHeardList;
 exports.updateSelections = updateSelections;
 exports.addSelections = addSelections;
+exports.getHowHeardList = getHowHeardList;
 
 /*
 exports.findOrders = findOrders;
@@ -342,7 +343,7 @@ function *addShopifyUninstallWebhook(shopName, token) {
 
 
 /**
- * Find the array list of How Heards for the store
+ * See if How Heards already exist for the store
  *
  * @return {object}
  * @api public
@@ -353,6 +354,21 @@ function *findHowHeardList(shopName) {
 
   //  converting a value to a boolean, then inverting it, then inverting it again	
   return !!list;
+}
+
+
+
+
+
+/**
+ * See if How Heards already exist for the store
+ *
+ * @return {object}
+ * @api public
+ */
+
+function *getHowHeardList(shopName) {
+  return yield listsCollection.findOne({ companyName: shopName });
 }
 
 
