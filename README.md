@@ -2,7 +2,7 @@ Read checkout.id on the payment_method step of checkout.
 - Need to import css class for the dropdown from checkout
 
 Create admin for shops to construct their howHeard list (CRUD)
-- Add "From A Friend" as a default
+- Make "Other" and "From A Friend" immutable
 - Delete option
 - Proper case the howHeard list when inserting into db
 
