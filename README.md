@@ -11,6 +11,7 @@ When customer selects an option from the dropdown (.change() in jquery), save it
 
 Ping Shopify API to save the option in a metafield (https://help.shopify.com/api/reference/metafield#create).
 
+Ok
 
 
 
