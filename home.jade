@@ -14,7 +14,7 @@ block content
                     tr
                       td(data-choice="#{selection}") #{selection}
                       td
-                        a(href="/delete") Delete
+                        a(href="/delete?shop=#{shopName}&selection=#{selection}") Delete
 
             div
               form(action='/add' id="addselections" name='addselections', method="post")
