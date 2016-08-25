@@ -372,7 +372,7 @@ function *updateSelections(shopName, selectionsArray) {
 
   yield listsCollection.findAndModify(
 	{ companyName: shopName },
-    { $set: { accessToken: token }}
+    { $set: { selections: selectionsArray }}
   );
 
 }
