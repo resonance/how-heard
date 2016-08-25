@@ -192,8 +192,8 @@ router.get('/', function *() {
   }
   
 
-    // find store object in db
-    const shop = yield howHeard.findShop(this.query.shop);
+  // find store object in db
+  const shop = yield howHeard.findShop(this.query.shop);
 
 
   // Create jade options with default properties.
@@ -266,6 +266,7 @@ router.post('/add', function *() {
   // separate selections text field by \n into an array
   const selections = this.request.body.selection;
   const selectionsArray = selections.match(/[^\r\n]+/g);
+  const insertSelections = selectionsArray.map();
 
   // get store object in db
   const shop = yield howHeard.findShop(shopName);

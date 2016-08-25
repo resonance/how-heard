@@ -370,9 +370,15 @@ function *updateSelections(shopName, selectionsArray) {
 // what does 'issued' mean?
 // what does the 'coupon' document look like?
 
-  yield listsCollection.findAndModify(
+  var doc = selectionsArray.map(function(selection) {
+    return {
+      selections: selection
+    }
+  });
+
+  yield listsCollection.update(
 	{ companyName: shopName },
-    { $push: { selections: selectionsArray }}
+    { $addToSet: { selections: doc }}
   );
 
 }
