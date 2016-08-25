@@ -208,12 +208,12 @@ router.get('/', function *() {
 
 
   // get existing list of howheards if available, use shopsCollection object
-  const howHeardList = yield howHeard.findHowHeardList(shop);
+  const howHeardList = yield howHeard.findHowHeardList(shop.companyName);
 
   // if list exists, add to jadeOptions
   if (howHeardList) {
 	
-	const list = yield howHeard.getHowHeardList(shop);
+	const list = yield howHeard.getHowHeardList(shop.companyName);
 	
 	jadeOptions.choices = {
       selections: list.selections
