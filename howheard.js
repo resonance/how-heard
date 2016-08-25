@@ -374,7 +374,7 @@ function *updateSelections(shopName, selectionsArray, update) {
       companyName: shopName,
       selections: selectionsArray,
     }, {
-      $addToset: update,
+      $addToSet: update,
   });
 
 
