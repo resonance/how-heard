@@ -429,11 +429,13 @@ function *addSelections(shopName, selectionsArray, insert) {
  */
 
  function *deleteSelection(shopName, selectionChoice) {
+
   return yield listsCollection.findOneAndUpdate({
     companyName: shopName,
   }, {
-    $unset: { selections: selectionChoice },
+    $pull: { selections: selectionChoice },
   });
+	
  }
 
 
