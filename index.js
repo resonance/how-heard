@@ -213,7 +213,7 @@ router.get('/', function *() {
   // if list exists, add to jadeOptions
   if (howHeardList) {
 	
-	const selections = array.from(howHeardList);
+	const selections = Array.from(howHeardList);
 	
 	jadeOptions.choices = {
       selections: selections
