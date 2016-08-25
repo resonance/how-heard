@@ -252,6 +252,10 @@ router.post('/delete', function *() {
 	
   yield howHeard.deleteSelection(shopName, selectionChoice);
 
+  // need to pass 'success' msg to user?
+
+  this.redirect('./?circuit=yes&shop='+shopName);
+
 });
 
 
