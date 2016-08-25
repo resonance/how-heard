@@ -30,7 +30,7 @@ exports.findHowHeardList = findHowHeardList;
 exports.updateSelections = updateSelections;
 exports.addSelections = addSelections;
 exports.getHowHeardList = getHowHeardList;
-
+exports.deleteSelection = deleteSelection;
 /*
 exports.findOrders = findOrders;
 exports.saveNewShop = saveNewShop;
@@ -407,8 +407,6 @@ function *updateSelections(shopName, selectionsArray) {
 
 function *addSelections(shopName, selectionsArray, insert) {
 // can we update only if unique?
-// what does 'issued' mean?
-// what does the 'coupon' document look like?
 
   yield listsCollection.insert({
       companyName: shopName,
@@ -418,6 +416,26 @@ function *addSelections(shopName, selectionsArray, insert) {
   });
 
 }
+
+
+
+
+
+/**
+ * Delete How Heard selection
+ *
+ * @return {object} The updated shop
+ * @api public
+ */
+
+ function *deleteSelection(shopName, selectionChoice) {
+  return yield listsCollection.findAndModify({
+    companyName: shopName,
+  }, {
+    $unset: { selections: selectionChoice },
+  });
+ }
+
 
 
 

@@ -218,11 +218,10 @@ router.get('/', function *() {
 	jadeOptions.choices = {
       selections: list.selections
     }
-    console.log("WORKING ON IT");
   }
   else {
 	jadeOptions.choices = {
-      selections: ['Other']
+      selections: ['From A Friend', 'Other']
     }
   }
  
@@ -246,9 +245,14 @@ router.get('/', function *() {
  */
 
 router.post('/delete', function *() {
+	
+  const shopName = this.query.shop;
+  const selectionChoice = this.query.selection;
+	
+	
+  yield howHeard.deleteSelection(shopName, selectionChoice);
 
 });
-
 
 
 
@@ -263,19 +267,21 @@ router.post('/add', function *() {
 
   const shopName = this.request.body.shopName;
 
+  // get store object in db
+  //const shop = yield howHeard.findShop(shopName);
+
+
   // separate selections text field by \n into an array
   const selections = this.request.body.selection;
   const selectionsArray = selections.match(/[^\r\n]+/g);
 
-  // get store object in db
-  const shop = yield howHeard.findShop(shopName);
 
   // get existing list of howheards if available, use shopsCollection object
-  const howHeardList = yield howHeard.findHowHeardList(shop.companyName);
+  const howHeardList = yield howHeard.findHowHeardList(shopName);
 
   // if list does not exist, append 'Other'
   if (!howHeardList) {
-	  selectionsArray.push("Other");
+	  selectionsArray.push("From A Friend", "Other");
 	  
 	  // add selections to listsCollection
 	  yield howHeard.addSelections(shopName, selectionsArray);
