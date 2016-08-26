@@ -34,6 +34,9 @@ exports.deleteSelection = deleteSelection;
 exports.fetchSavedToken = fetchSavedToken;
 exports.fetchCustomerFromShopify = fetchCustomerFromShopify;
 exports.findShopById = findShopById;
+exports.addUserSelection = addUserSelection;
+
+
 /*
 exports.findOrders = findOrders;
 exports.saveNewShop = saveNewShop;
@@ -76,7 +79,7 @@ var get = thunkify(request.get);
 // so we can't use `shops`.
 var shopsCollection = db.get('howHeardShops');
 var listsCollection = db.get('howHeardLists');
-
+var selectionCollection = db.get('howHeardSelections');
 
 
 
@@ -499,3 +502,22 @@ function *findShopById(storeId) {
 }
 
 
+
+
+
+/**
+ * @param {String} shopName
+ * @param {Int} custId
+ * @param {String} choice
+ * @api public
+ */
+
+function *addUserSelection(shopName, custId, choice) {
+
+  yield selectionCollection.insert({
+      companyName: shopName,
+      customerId: custId,
+      selection: choice,
+    });
+
+}

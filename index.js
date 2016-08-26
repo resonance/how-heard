@@ -459,8 +459,13 @@ router.get('/dropdown', function *() {
 
 router.get('/response', function *() {
 
+  const shopName = this.query.shopName;
+  const custId = this.query.custId;
   const choice = this.query.choice;
-  console.log("CHOICE IS", choice);
+
+  // see if custId + shopName already exists, if so, update instead of insert
+  yield howHeard.addUserSelection(shopName, custId, choice);
+
 
 });
 
