@@ -176,7 +176,7 @@ function getAuthUrl(shopName) {
     shop: shopName,
     shopify_api_key: constants.SHOPIFY_API_KEY,
     shopify_shared_secret: constants.SHOPIFY_API_SECRET,
-    shopify_scope: ['read_content','write_content', 'read_products', 'write_products', 'read_fulfillments','write_fulfillments', 'read_orders', 'write_orders'],
+    shopify_scope: ['read_orders', 'write_orders', 'read_customers', 'write_customers'],
     redirect_uri: constants.HOWHEARD_PUBLIC_URL_ROOT + 'authenticate',
     nonce: nonce
   });
