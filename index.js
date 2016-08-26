@@ -435,7 +435,7 @@ router.get('/dropdown', function *() {
   var jadeOptions = {
     selections: listArray,
     shopName: shopName,
-    email: email,
+    email: customer.customers[0].email,
   };
 
 
