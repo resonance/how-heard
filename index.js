@@ -396,7 +396,7 @@ router.get('/dropdown', function *() {
   const shop = yield howHeard.findShopById(storeId);
 
   if (!shop) {
-    console.log("BROKEN");
+    return;
   }
 
 
@@ -450,6 +450,9 @@ router.get('/dropdown', function *() {
   var html = jade.compile(dropdownTemplate, {
     basedir: __dirname
   })(jadeOptions);
+
+  console.log("EMAIL ADDRESS IS",email);
+
  	
   this.body = html;
 
