@@ -114,5 +114,8 @@ function GetURLParameter(sParam) {
         if (sParameterName[0] == sParam) {
             return sParameterName[1];
         }
+		else {
+			return "";
+		}
     }
  };
