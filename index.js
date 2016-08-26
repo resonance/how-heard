@@ -419,8 +419,8 @@ router.get('/dropdown', function *() {
   // ping Shopify API for Customer object
   const customer = yield howHeard.fetchCustomerFromShopify(email, shopName, token);
 
-  console.log("CUSTOMER ORDER COUNT IS ", customer.customers.orders_count);
-  console.log("CUSTOMER EMAIL IS ", customer.customers.email);
+  console.log("CUSTOMER ORDER COUNT IS ", customer.customers.[orders_count]);
+  console.log("CUSTOMER EMAIL IS ", customer.customers.[email]);
 
   // is customer is not new, then exit
   if (customer.orders_count > 0) {
