@@ -417,15 +417,13 @@ router.get('/dropdown', function *() {
   const token = shop.accessToken;
 
   // ping Shopify API for Customer object
-  const customerRequest = yield howHeard.fetchCustomerFromShopify(email, shopName, token);
+  const customer = yield howHeard.fetchCustomerFromShopify(email, shopName, token);
 
-  const customer = JSON.parse(customerRequest);
-
-  console.log("CUSTOMER ORDER COUNT IS ", customer.customers.orders_count);
-  console.log("CUSTOMER EMAIL IS ", customer.customers.email);
+  console.log("CUSTOMER ORDER COUNT IS ", customer.customers[0].orders_count);
+  console.log("CUSTOMER EMAIL IS ", customer.customers[0].email);
 
   // is customer is not new, then exit
-  if (customer.orders_count > 0) {
+  if (customer.customers[0].orders_count > 0) {
     return;	
   }
   
