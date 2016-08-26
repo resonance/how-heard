@@ -51,7 +51,7 @@ var myAppJavaScript = function($){
 
 
   var stepper = GetURLParameter('step');
-  if (stepper.toString() === 'payment_method') {
+  if (stepper.toString() !== 'shipping_method' || stepper.toString() !== 'contact_information') {
 	
 	/*
 	*  Desc: Force cross domain iframes to size to content.
