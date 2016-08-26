@@ -419,8 +419,8 @@ router.get('/dropdown', function *() {
   // ping Shopify API for Customer object
   const customer = yield howHeard.fetchCustomerFromShopify(email, shopName, token);
 
-  console.log("CUSTOMER ORDER COUNT IS ", customer.customers[0].orders_count);
-  console.log("CUSTOMER EMAIL IS ", customer.customers[0].email);
+  //console.log("CUSTOMER ORDER COUNT IS ", customer.customers[0].orders_count);
+  //console.log("CUSTOMER EMAIL IS ", customer.customers[0].email);
 
   const custId = customer.customers[0].id;
 
@@ -440,24 +440,11 @@ router.get('/dropdown', function *() {
     custId: custId,
   };
 
-
-
-  /*
-  const crossOrigin = howHeard.makeCorsRequest();
-
-  if(!crossOrigin) {
-	console.log("CORS failure");
-  }
-  */
-
   // Serve html to client.
   var html = jade.compile(dropdownTemplate, {
     basedir: __dirname
   })(jadeOptions);
 
-  console.log("EMAIL ADDRESS IS",email);
-
- 	
   this.body = html;
 
 });

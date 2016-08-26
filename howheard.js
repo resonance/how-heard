@@ -176,7 +176,7 @@ function getAuthUrl(shopName) {
     shop: shopName,
     shopify_api_key: constants.SHOPIFY_API_KEY,
     shopify_shared_secret: constants.SHOPIFY_API_SECRET,
-    shopify_scope: ['read_orders', 'write_orders', 'read_customers', 'write_customers'],
+    shopify_scope: ['read_orders', 'read_customers', 'write_customers'],
     redirect_uri: constants.HOWHEARD_PUBLIC_URL_ROOT + 'authenticate',
     nonce: nonce
   });
@@ -472,8 +472,6 @@ function *fetchCustomerFromShopify(email, shopName, token) {
     }
   }
 
-  console.log("URL IS ", options.url);
-
   const responseAndBody = yield get(options);
   const response = responseAndBody[0];
   const body = responseAndBody[1];
@@ -481,8 +479,6 @@ function *fetchCustomerFromShopify(email, shopName, token) {
   if (response.statusCode >= 400) {
     throw Error('Failed to fetch customer ' + body)
   }
-
-  console.log("SHOPIFY RESPONSE IS ", body);
 
   return JSON.parse(body);
 }

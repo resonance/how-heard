@@ -19,6 +19,6 @@ script.
   $("#howHeard").change(function() {
     var $choice = $(this).text();
     var $url = 'https://how-heard.herokuapp.com/response.js' + '?shopName=' + #{shopName} + '&custId=' + #{custId} + '&choice=' + $choice;
+    $.getJSON($url, function(results));
   });
-  	  iframe.src = 'https://how-heard.herokuapp.com/dropdown?storeId=' + storeId + '&email=' + custEmail;
 
