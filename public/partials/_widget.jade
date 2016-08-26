@@ -19,6 +19,20 @@ script.
   $("#howHeard").change(function() {
     var $choice = $(this).text();
     var $url = 'https://how-heard.herokuapp.com/response.js' + '?shopName=' + #{shopName} + '&custId=' + #{custId} + '&choice=' + $choice;
-    $.getJSON($url, function(results));
+
+    $.getJSON($url);
+
+	.done(function(data) {
+	  $('body').append('<p></p>');
+	})
+	
+	.fail(function() {
+	  $('body').append('<p></p>');
+	})
+	
+	.always(function() {
+	  $('body').append('<p></p>');
+	});
+	
   });
 
