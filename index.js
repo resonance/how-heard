@@ -464,7 +464,7 @@ router.get('/response', function *() {
   const choice = this.query.choice;
 
   // see if custId + shopName already exists, if so, update instead of insert
-  yield howHeard.updateUserSelection(shopName, custId, choice);
+  yield howHeard.addUserSelection(shopName, custId, choice);
 
 
 });
