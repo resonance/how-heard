@@ -424,6 +424,8 @@ router.get('/dropdown', function *() {
 
   const custEmail = customer.customers[0].email;
 
+  console.log("CUSTEMAIL IS ", custEmail);
+
   // is customer is not new, then exit
   if (customer.customers[0].orders_count > 0) {
     return;	
@@ -439,7 +441,7 @@ router.get('/dropdown', function *() {
   var jadeOptions = {
     selections: listArray,
     shopName: shopName,
-    email: custEmail,
+    custEmail: custEmail,
   };
 
 
