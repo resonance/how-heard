@@ -501,6 +501,3 @@ function *findShopById(shopId) {
 
 
 
-
-
-
