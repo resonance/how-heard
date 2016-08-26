@@ -514,10 +514,12 @@ function *findShopById(storeId) {
 
 function *addUserSelection(shopName, custId, choice) {
 
-  yield selectionCollection.insert({
+  yield selectionCollection.updateOne({
       companyName: shopName,
-      customerId: custId,
-      selection: choice,
+      customerId: custId
+    }, {
+	
+		Set: { selection: {$each: selectionsArray } },
     });
 
 }
