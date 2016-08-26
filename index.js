@@ -454,6 +454,21 @@ router.get('/dropdown', function *() {
 
 
 /**
+ *
+ */
+
+router.get('/response', function *() {
+
+  const choice = this.query.choice;
+  console.log("CHOICE IS", choice);
+
+});
+
+
+
+
+
+/**
  * User instructions linked from the Shopify App Bar
  */
 router.get('/instructions', function *() {

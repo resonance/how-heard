@@ -18,7 +18,7 @@ script.
 
   $("#howHeard").change(function() {
     var $choice = $(this).text();
-    var $url = 'https://how-heard.herokuapp.com/response.js' + '?shopName=' + #{shopName} + '&custId=' + #{custId} + '&choice=' + $choice;
+    var $url = 'https://how-heard.herokuapp.com/response' + '?shopName=' + #{shopName} + '&custId=' + #{custId} + '&choice=' + $choice;
 
     $.getJSON($url);
 	
