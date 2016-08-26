@@ -17,7 +17,7 @@ script.
   $('#howHeard option[value="choose"]').prop('selected', true);
 
   $("#howHeard").change(function() {
-    var choice = $("option:selected".text();
+    var choice = $("option:selected").text();
     console.log("CHOICE IS", choice);
     var $url = 'https://how-heard.herokuapp.com/response' + '?shopName=' + '#{shopName}' + '&custId=' + '#{custId}' + '&choice=' + choice;
 
