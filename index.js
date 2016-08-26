@@ -395,6 +395,12 @@ router.get('/dropdown', function *() {
 
   // get shopName by using storeId
   const shop = yield howHeard.findShopById(storeId);
+
+  if (!shop) {
+    console.log("BROKEN");
+  }
+
+
   const shopName = shop.companyName;
 
   // if store does not exist in our db, exit
