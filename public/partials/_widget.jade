@@ -16,10 +16,11 @@ script.
   $('#howHeard').prepend('<option value="choose">Please select from the following</option>');
   $('#howHeard option[value="choose"]').prop('selected', true);
 
-  $("#howHeard option").change(function() {
-    var $choice = $(this).text();
-    console.log("CHOICE IS", $choice);
-    var $url = 'https://how-heard.herokuapp.com/response' + '?shopName=' + '#{shopName}' + '&custId=' + '#{custId}' + '&choice=' + $choice;
+  $("#howHeard").change(function() {
+    var getSelected = $("option:selected", this);
+    var choice = this.value;
+    console.log("CHOICE IS", choice);
+    var $url = 'https://how-heard.herokuapp.com/response' + '?shopName=' + '#{shopName}' + '&custId=' + '#{custId}' + '&choice=' + choice;
 
     $.getJSON($url);
 	
