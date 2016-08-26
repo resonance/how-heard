@@ -471,7 +471,8 @@ function *fetchCustomerFromShopify(email, shopName, token) {
       'X-Shopify-Access-Token': token,
     }
 
-  console.log("URL IS ", url);
+
+  console.log("URL IS ", options.url);
 
   }
 
