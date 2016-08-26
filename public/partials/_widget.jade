@@ -16,6 +16,11 @@ script.
   $('#howHeard').prepend('<option value="choose">Please select from the following</option>');
   $('#howHeard option[value="choose"]').prop('selected', true);
 
+  $("#howHeard").change(function() {
+    var $choice = $(this).text();
+  });
+
+
 
   
 
