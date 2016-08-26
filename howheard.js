@@ -465,11 +465,12 @@ function *fetchSavedToken(shopName) {
  */
 function *fetchCustomerFromShopify(email, shopName, token) {
   const options = {
-    url: `https://${shopName}/admin/customers/search.json?query=email:${email},
+    url: `https://${shopName}/admin/customers/search.json?query=email:${email}`,
     headers: {
       'X-Shopify-Access-Token': token,
     }
   }
+
   const responseAndBody = yield get(options);
   const response = responseAndBody[0];
   const body = responseAndBody[1];
