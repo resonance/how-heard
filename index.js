@@ -390,7 +390,7 @@ router.get('/initialize.js', function *() {
 router.get('/dropdown', function *() {
 
   const email = this.query.custEmail;
-  const storeId = this.query.storeId;
+  const storeId = parseInt(this.query.storeId);
 
   // get shopName by using storeId
   const shop = yield howHeard.findShopById(storeId);
