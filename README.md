@@ -22,3 +22,7 @@ admin reports
       slackify.makeHTTPRequest
 
 
+
+
+To fix:
+- limit fields from shopify shop api call
