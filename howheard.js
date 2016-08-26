@@ -466,10 +466,13 @@ function *fetchSavedToken(shopName) {
  */
 function *fetchCustomerFromShopify(email, shopName, token) {
   const options = {
-    url: `https://${shopName}/admin/customers/search.json?query=email:${email}`,
+    url: `https://${shopName}/admin/customers/search.json?query=email:"${email}"`,
     headers: {
       'X-Shopify-Access-Token': token,
     }
+
+  console.log("URL IS ", url);
+
   }
 
   const responseAndBody = yield get(options);
