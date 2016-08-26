@@ -32,6 +32,7 @@ exports.addSelections = addSelections;
 exports.getHowHeardList = getHowHeardList;
 exports.deleteSelection = deleteSelection;
 exports.fetchSavedToken = fetchSavedToken;
+exports.fetchCustomerFromShopify = fetchCustomerFromShopify;
 exports.findShopById = findShopById;
 /*
 exports.findOrders = findOrders;
@@ -496,8 +497,5 @@ function *fetchCustomerFromShopify(email, shopName, token) {
 function *findShopById(storeId) {
   return yield shopsCollection.findOne({ id: storeId });
 }
-
-
-
 
 
