@@ -480,6 +480,8 @@ function *fetchCustomerFromShopify(email, shopName, token) {
     throw Error('Failed to fetch customer ' + body)
   }
 
+  console.log("SHOPIFY RESPONSE IS ", body);
+
   return JSON.parse(body);
 }
 
