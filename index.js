@@ -428,21 +428,15 @@ router.get('/dropdown', function *() {
   // get store's how heard list
   const list = yield howHeard.getHowHeardList(shop.companyName);
   
-  var bookArray = list.selections;
+  var listArray = list.selections;
 
   var jadeOptions = {
-    books: bookArray,
+    selections: listArray,
+    shopName: shopName,
+    email: email,
   };
 
 
-
- /*
-  var bookArray = ["A", "B", "C"];
-
-  var jadeOptions = {
-    books: bookArray,
-  };
- */
 
   /*
   const crossOrigin = howHeard.makeCorsRequest();
@@ -458,6 +452,7 @@ router.get('/dropdown', function *() {
   })(jadeOptions);
  	
   this.body = html;
+
 });
 
 

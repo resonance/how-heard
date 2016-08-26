@@ -1,7 +1,7 @@
 div
   select#howHeard.field__input--select
-    each book, i in books
-      option(value=i) Book #{book}
+    each selection, i in selections
+      option(value=i) #{selection}
 
 script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
 script.
@@ -16,6 +16,14 @@ script.
   $('#howHeard').prepend('<option value="choose">Please select from the following</option>');
   $('#howHeard option[value="choose"]').prop('selected', true);
 
+  $("#howHeard").change(function() {
+    var choice = $(this).text();
+
+	var url = 'https://how-heard.herokuapp.com/response.js"' + '?shopName=' + #{shopName} + '&email=' + #{email} + '&choice=' + choice;
+
+	$.getJSON(url, function(results));
+
+  });
 
 
   
