@@ -269,16 +269,13 @@ router.post('/add', function *() {
 
   const shopName = this.request.body.shopName;
 
-  // get store object in db
-  //const shop = yield howHeard.findShop(shopName);
-
 
   // separate selections text field by \n into an array
   const selections = this.request.body.selection;
   const selectionsArray = selections.match(/[^\r\n]+/g);
 
 
-  // get existing list of howheards if available, use shopsCollection object
+  // see if shop has an existing how heard list in our db
   const howHeardList = yield howHeard.findHowHeardList(shopName);
 
   // if list does not exist, append 'Other'
@@ -340,7 +337,10 @@ router.get('/authenticate', function *() {
   const shopName = this.query.shop;
   yield howHeard.saveToken(token, shopName);
 
+  // ping Shopify API for Shop object
   const shop = yield howHeard.fetchShopFromShopify(shopName, token);
+ 
+  // save shop to db
   yield howHeard.updateShop(shopName, shop.shop);
 
   yield howHeard.addShopifyUninstallWebhook(shopName, token);
@@ -353,7 +353,7 @@ router.get('/authenticate', function *() {
 
 
 /**
- * Save slack webhook URL into DB.
+ * Save how heard webhook URL into DB.
  */
 
  router.post('/uninstall', function *() {
@@ -383,17 +383,62 @@ router.get('/initialize.js', function *() {
 
 
 /**
- * Read store_id from url param
+ * This is the incoming request from the store's checkout
  * Fetch store if available and gather dropdown list
  */
 
 router.get('/dropdown', function *() {
 
+  // Bring in shop id from <div>
+  const email = this.query.custEmail;
+  const storeId = this.query.storeId;
+
+  // get shopName by using storeId
+  const shop = yield howHeard.findShopById(storeId);
+  const shopName = shop.companyName;
+
+  // if store does not exist in our db, exit
+  if (!shopName) {
+    return;
+  }
+
+  // see if store has an existing how heard list with us
+  const howHeardList = yield howHeard.findHowHeardList(shopName);
+
+  // if list does not exist, exit
+  if (!howHeardList) {
+    return;
+  }
+
+  // fetch shop token for shopify API call
+  const token = yield howHeard.fetchSavedToken(shopName);
+
+  // ping Shopify API for Customer object
+  const customer = yield howHeard.fetchCustomerFromShopify(email, shopName, token);
+
+  // is customer is not new, then exit
+ if (customer.orders_count > 0) {
+   return;	
+  }
+  
+  // get store's how heard list
+  const list = yield howHeard.getHowHeardList(shop.companyName);
+  
+  var bookArray = list.selections;
+
+  var jadeOptions = {
+    books: bookArray,
+  };
+
+
+
+ /*
   var bookArray = ["A", "B", "C"];
 
   var jadeOptions = {
     books: bookArray,
   };
+ */
 
   /*
   const crossOrigin = howHeard.makeCorsRequest();
@@ -402,8 +447,6 @@ router.get('/dropdown', function *() {
 	console.log("CORS failure");
   }
   */
-
-
 
   // Serve html to client.
   var html = jade.compile(dropdownTemplate, {

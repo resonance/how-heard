@@ -31,6 +31,8 @@ exports.updateSelections = updateSelections;
 exports.addSelections = addSelections;
 exports.getHowHeardList = getHowHeardList;
 exports.deleteSelection = deleteSelection;
+exports.fetchSavedToken = fetchSavedToken;
+exports.findShopById = findShopById;
 /*
 exports.findOrders = findOrders;
 exports.saveNewShop = saveNewShop;
@@ -427,8 +429,7 @@ function *addSelections(shopName, selectionsArray, insert) {
  * @return {object} The updated shop
  * @api public
  */
-
- function *deleteSelection(shopName, selectionChoice) {
+function *deleteSelection(shopName, selectionChoice) {
 
   return yield listsCollection.findOneAndUpdate({
     companyName: shopName,
@@ -438,6 +439,62 @@ function *addSelections(shopName, selectionsArray, insert) {
 	
  }
 
+
+
+
+
+/**
+ * Get the shopify API token for the shop
+ *
+ * @return {object} The updated shop
+ * @api public
+ */
+function *fetchSavedToken(shopName) {
+  return yield shopsCollection.findOne({ companyName: shopName });
+
+}
+
+
+
+
+
+/**
+ * @param {String} email
+ * @param {String} token
+ * @api public
+ */
+function *fetchCustomerFromShopify(email, shopName, token) {
+  const options = {
+    url: `https://${shopName}/admin/customers/search.json?query=email:${email},
+    headers: {
+      'X-Shopify-Access-Token': token,
+    }
+  }
+  const responseAndBody = yield get(options);
+  const response = responseAndBody[0];
+  const body = responseAndBody[1];
+
+  if (response.statusCode >= 400) {
+    throw Error('Failed to fetch customer ' + body)
+  }
+
+  return JSON.parse(body);
+}
+
+
+
+
+
+/**
+ * Find a shop by its id
+ *
+ * @return {object}
+ * @api public
+ */
+
+function *findShopById(shopId) {
+  return yield shopsCollection.findOne({ companyName: shopName });
+}
 
 
 
