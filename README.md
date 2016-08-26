@@ -10,7 +10,8 @@ Ping Shopify API to see if customer is new. If new, show the dropdown (pass emai
 
 
 
-When customer selects an option from the dropdown (.change() in jquery), save it to the database.
+When customer selects an option from the dropdown (.change() in jquery)
+- save it to the database.
 
 Ping Shopify API to save the option in a metafield (https://help.shopify.com/api/reference/metafield#create).
 
@@ -25,4 +26,4 @@ admin reports
 
 
 To fix:
-- limit fields from shopify shop api call
+- limit fields from shopify shop api call to insert into db
