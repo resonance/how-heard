@@ -415,8 +415,7 @@ router.get('/dropdown', function *() {
     return;
   }
 
-  // fetch shop token for shopify API call
-  const token = yield howHeard.fetchSavedToken(shopName);
+  const token = shop.accessToken;
 
   // ping Shopify API for Customer object
   const customer = yield howHeard.fetchCustomerFromShopify(email, shopName, token);
