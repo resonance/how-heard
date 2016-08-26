@@ -470,11 +470,9 @@ function *fetchCustomerFromShopify(email, shopName, token) {
     headers: {
       'X-Shopify-Access-Token': token,
     }
-
+  }
 
   console.log("URL IS ", options.url);
-
-  }
 
   const responseAndBody = yield get(options);
   const response = responseAndBody[0];
