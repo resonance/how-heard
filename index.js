@@ -389,7 +389,6 @@ router.get('/initialize.js', function *() {
 
 router.get('/dropdown', function *() {
 
-  // Bring in shop id from <div>
   const email = this.query.custEmail;
   const storeId = this.query.storeId;
 

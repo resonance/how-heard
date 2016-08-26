@@ -493,8 +493,8 @@ function *fetchCustomerFromShopify(email, shopName, token) {
  * @api public
  */
 
-function *findShopById(shopId) {
-  return yield shopsCollection.findOne({ id: shopId });
+function *findShopById(storeId) {
+  return yield shopsCollection.findOne({ id: storeId });
 }
 
 
