@@ -395,17 +395,11 @@ router.get('/dropdown', function *() {
 
   // get shopName by using storeId
   const shop = yield howHeard.findShopById(storeId);
-
-  if (!shop) {
-    console.log()""	
-  }
-
-
   const shopName = shop.companyName;
 
   // if store does not exist in our db, exit
   if (!shopName) {
-  console.log("BROKEN");
+    return;
   }
 
   // see if store has an existing how heard list with us

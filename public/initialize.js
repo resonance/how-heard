@@ -74,7 +74,7 @@ var myAppJavaScript = function($){
       $('.section.section--billing-address').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
 	  var iframeId = 'howhearddropdown'
 	  var iframe = document.getElementById(iframeId);
-	  iframe.src = 'https://how-heard.herokuapp.com/dropdown?storeId=' + storeId + 'email=' + custEmail;
+	  iframe.src = 'https://how-heard.herokuapp.com/dropdown?storeId=' + storeId + '&email=' + custEmail;
 	  iframe.width = '100%';
 	  iFrameResize(undefined, iframe);
 	
