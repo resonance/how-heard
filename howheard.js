@@ -537,14 +537,12 @@ function *updateUserSelection(shopName, custId, choice) {
 
   yield selectionCollection.updateOne(
 	{ companyName: shopName,
-      customerId: custId
+      customerId: custId,
     }, 
     { $set: { selection: choice }},
     { upsert: true }
    );
 
 }
-
-
 
 
