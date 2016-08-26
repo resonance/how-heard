@@ -35,7 +35,7 @@ exports.fetchSavedToken = fetchSavedToken;
 exports.fetchCustomerFromShopify = fetchCustomerFromShopify;
 exports.findShopById = findShopById;
 exports.addUserSelection = addUserSelection;
-
+exports.updateUserSelection = updateUserSelection;
 
 /*
 exports.findOrders = findOrders;
@@ -514,11 +514,32 @@ function *findShopById(storeId) {
 
 function *addUserSelection(shopName, custId, choice) {
 
+  yield selectionCollection.insert({
+      companyName: shopName,
+      customerId: custId,
+      selection: choice,
+    });
+
+}
+
+
+
+
+
+/**
+ * @param {String} shopName
+ * @param {Int} custId
+ * @param {String} choice
+ * @api public
+ */
+
+function *updateUserSelection(shopName, custId, choice) {
+
   yield selectionCollection.updateOne(
 	{ companyName: shopName,
       customerId: custId
     }, 
-    { Set: { selection: choice }},
+    { $set: { selection: choice }},
     { upsert: true }
    );
 
