@@ -479,6 +479,9 @@ function *fetchCustomerFromShopify(email, shopName, token) {
   const response = responseAndBody[0];
   const body = responseAndBody[1];
 
+  console.log("SHOPIFY API RETURNED", body);
+
+
   if (response.statusCode >= 400) {
     throw Error('Failed to fetch customer ' + body)
   }
