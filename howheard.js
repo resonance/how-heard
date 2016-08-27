@@ -36,6 +36,7 @@ exports.fetchCustomerFromShopify = fetchCustomerFromShopify;
 exports.findShopById = findShopById;
 exports.addUserSelection = addUserSelection;
 exports.updateUserSelection = updateUserSelection;
+exports.findUserSelection = findUserSelection;
 
 /*
 exports.findOrders = findOrders;
@@ -505,6 +506,25 @@ function *findShopById(storeId) {
 
 
 /**
+ *
+ */
+
+function *findUserSelection(shopName, custId) {
+  const userSelection = yield selectionCollection.findOne(
+	{ 
+		companyName: shopName,
+		customerId: custId
+	});
+
+  //  converting a value to a boolean, then inverting it, then inverting it again	
+  return !!userSelection;
+}
+
+
+
+
+
+/**
  * @param {String} shopName
  * @param {Int} custId
  * @param {String} choice
@@ -513,7 +533,8 @@ function *findShopById(storeId) {
 
 function *addUserSelection(shopName, custId, choice) {
 
-  yield selectionCollection.insert({
+  yield selectionCollection.insert(
+	{
       companyName: shopName,
       customerId: custId,
       selection: choice,
@@ -532,17 +553,18 @@ function *addUserSelection(shopName, custId, choice) {
  * @api public
  */
 
-function *updateUserSelection(shopName, custId, choice, update) {
+function *updateUserSelection(shopName, custId, choice) {
 
-  yield selectionCollection.update(
-    {
-	  companyName: shopName,
-	  customerId: custId,
-	  selection: choice,
-    },
-    { $set: update },
-    { upsert: true }
-	);
+	  yield selectionCollection.update(
+		{
+	      companyName: shopName,
+	      customerId: custId
+	    }, {
+	      $set: { selection: choice },
+	  });
+}
+
+
 
 
 

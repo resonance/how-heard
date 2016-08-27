@@ -463,9 +463,22 @@ router.get('/response', function *() {
   const custId = this.query.custId;
   const choice = this.query.choice;
 
-  // see if custId + shopName already exists, if so, update instead of insert
-  yield howHeard.updateUserSelection(shopName, custId, choice);
+  // see if user has an existing shopName, custId pair
+  const howHeardList = yield howHeard.findUserSelection(shopName, custId);
 
+  // if pair does not exist, add it
+  if (!howHeardList) {
+	
+	  // add selections to listsCollection
+	  yield howHeard.addUserSelection(shopName, custId, choice);
+
+  }
+  else {
+
+	  // update user selection with new choice
+	  yield howHeard.updateUserSelection(shopName, custId, choice);
+
+  }
 
 });
 
