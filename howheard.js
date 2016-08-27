@@ -535,12 +535,15 @@ function *addUserSelection(shopName, custId, choice) {
 
 function *updateUserSelection(shopName, custId, choice) {
 
-  yield selectionCollection.updateOne({ 
+  yield selectionCollection.update(
+	{ $elemMatch: { companyName: shopName, customerId: custId }},
+    {
 	  companyName: shopName,
-      customerId: custId,
-    }, 
-    { $set: { selection: choice }},
-    { upsert: true });
+	  customerId: custId,
+	  selection: choice,
+    },
+    { upsert: true }
+	);
 
 }
 
