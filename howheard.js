@@ -412,7 +412,6 @@ function *updateSelections(shopName, selectionsArray) {
  */
 
 function *addSelections(shopName, selectionsArray, insert) {
-// can we update only if unique?
 
   yield listsCollection.insert({
       companyName: shopName,
@@ -533,18 +532,17 @@ function *addUserSelection(shopName, custId, choice) {
  * @api public
  */
 
-function *updateUserSelection(shopName, custId, choice) {
+function *updateUserSelection(shopName, custId, choice, update) {
 
   yield selectionCollection.update(
-	{ $elemMatch: { companyName: shopName, customerId: custId }},
     {
 	  companyName: shopName,
 	  customerId: custId,
 	  selection: choice,
     },
+    { $set: update,}
     { upsert: true }
 	);
 
-}
 
 
