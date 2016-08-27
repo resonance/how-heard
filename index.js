@@ -422,6 +422,11 @@ router.get('/dropdown', function *() {
   console.log("CUSTOMER ORDER COUNT IS ", customer.customers[0].orders_count);
   console.log("CUSTOMER EMAIL IS ", customer.customers[0].email);
 
+
+  // ADD CHECK TO SKIP NEXT TWO COMMANDS if customer.customers[0] == ""
+  // THEN TRY TO USE EMAIL AGAIN INSTEAD OF CUSTID IN TEMPLATE
+
+
   const custId = customer.customers[0].id;
 
   // is customer is not new, then exit
