@@ -540,7 +540,7 @@ function *updateUserSelection(shopName, custId, choice, update) {
 	  customerId: custId,
 	  selection: choice,
     },
-    { $set: update,}
+    { $set: update },
     { upsert: true }
 	);
 
