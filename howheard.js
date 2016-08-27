@@ -479,6 +479,7 @@ function *fetchCustomerFromShopify(email, shopName, token) {
   const response = responseAndBody[0];
   const body = responseAndBody[1];
 
+  console.log("SHOPIFY API URL", url);
   console.log("SHOPIFY API RETURNED", body);
 
 

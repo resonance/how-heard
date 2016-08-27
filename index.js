@@ -419,8 +419,8 @@ router.get('/dropdown', function *() {
   // ping Shopify API for Customer object
   const customer = yield howHeard.fetchCustomerFromShopify(email, shopName, token);
 
-  //console.log("CUSTOMER ORDER COUNT IS ", customer.customers[0].orders_count);
-  //console.log("CUSTOMER EMAIL IS ", customer.customers[0].email);
+  console.log("CUSTOMER ORDER COUNT IS ", customer.customers[0].orders_count);
+  console.log("CUSTOMER EMAIL IS ", customer.customers[0].email);
 
   const custId = customer.customers[0].id;
 
