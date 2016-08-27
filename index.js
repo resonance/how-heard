@@ -425,7 +425,7 @@ router.get('/dropdown', function *() {
   const custId = customer.customers[0].id;
 
   // is customer is not new, then exit
-  if (customer.customers[0].orders_count > 0) {
+  if (customer.customers[0].orders_count > 0 || customer.customers[0] == "") {
     return;	
   }
   
