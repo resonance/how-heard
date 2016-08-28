@@ -350,7 +350,7 @@ function *updateShopWithWebhook(shopName, update) {
   
   const shopifyEvent = 'orderCreate';
 
-  yield shopsCollection.update({
+  yield shopsCollection.findAndModify({
     companyName: shopName,
   }, {
     $set: {
