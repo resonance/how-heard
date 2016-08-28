@@ -225,7 +225,7 @@ router.get('/', function *() {
       selections: ['From A Friend', 'Other']
     }
 
-    console.log("NOT HOWHEARDLIST"):
+    console.log("NOT HOWHEARDLIST");
   }
  
 
