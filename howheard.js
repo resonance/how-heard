@@ -357,7 +357,7 @@ function *updateShopWithWebhook(shopName, update) {
 	  'connections.$.id': update.id,
       'connections.$.address': update.address,
       'connections.$.topic': update.topic,
-      'connections.$.created_at': update.created_at
+      'connections.$.created_at': update.created_at,
       'connections.$.shopifyEvent': shopifyEvent
     }
   });
