@@ -207,7 +207,7 @@ router.get('/', function *() {
   };
 
 
-  const howHeardList = yield howHeard.findHowHeardList(shopName);
+  const howHeardList = yield howHeard.findHowHeardList(shop.shopName);
 
   // if list exists, add to jadeOptions
   if (howHeardList) {
