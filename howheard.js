@@ -347,6 +347,9 @@ function *addShopifyOrderCreateWebhook(shopName, token) {
 
 
 function *updateShopWithWebhook(shopName, update) {
+  
+  const shopifyEvent = 'orderCreate';
+
   yield shopsCollection.update({
     companyName: shopName,
   }, {
@@ -355,7 +358,7 @@ function *updateShopWithWebhook(shopName, update) {
       'connections.$.address': update.address,
       'connections.$.topic': update.topic,
       'connections.$.created_at': update.created_at
-      'connections.$.shopifyEvent': 'orderCreate'
+      'connections.$.shopifyEvent': shopifyEvent
     }
   });
 }
