@@ -287,20 +287,21 @@ function *updateShop(shopName, update) {
   yield shopsCollection.update({
     companyName: shopName,
   }, {
-    $set: { id: update.id },
-          { name: update.name },
-          { email: update.email },
-          { domain: update.domain },
-          { created_at: update.created_at },
-          { province: update.province },
-          { country: update.country },
-          { address1: update.address1 },
-          { zip: update.zip },
-          { city: update.city },
-          { phone: update.phone },
-          { shop_owner: update.shop_owner },
-          { plan_display_name: update.plan_display_name },
-          { myshopify_domain: update.myshopify_domain }
+    $set: { id: update.id,
+            name: update.name ,
+            email: update.email,
+            domain: update.domain,
+            created_at: update.created_at,
+            province: update.province,
+            country: update.country,
+            address1: update.address1,
+            zip: update.zip,
+            city: update.city,
+            phone: update.phone,
+            shop_owner: update.shop_owner,
+            plan_display_name: update.plan_display_name,
+            myshopify_domain: update.myshopify_domain
+          }
   });
 }
 
