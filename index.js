@@ -224,8 +224,6 @@ router.get('/', function *() {
 	jadeOptions.choices = {
       selections: ['From A Friend', 'Other']
     }
-
-    console.log("NOT HOWHEARDLIST");
   }
  
 
