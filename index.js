@@ -182,7 +182,7 @@ app.use(router.routes());
 
 router.get('/', function *() {
 	
-  // if already coming from our homepage, bypass	
+  // if submitting form from our homepage, bypass	
   if (!this.query.circuit) {
     const exists = yield howHeard.accessTokenExists(this.query.shop);
     if (!exists) {
@@ -207,7 +207,16 @@ router.get('/', function *() {
   };
 
 
-  const howHeardList = yield howHeard.findHowHeardList(shop.shopName);
+  // if submitting form from our homepage, don't query 	
+  if (!this.query.circuit) {
+	
+    const howHeardList = yield howHeard.findHowHeardList(shop.shopName);
+  }
+  else
+  {
+	const howHeardList === true;
+	
+  }
 
   // if list exists, add to jadeOptions
   if (howHeardList) {

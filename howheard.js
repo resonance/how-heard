@@ -356,7 +356,7 @@ function *updateShopWithWebhook(shopName, update) {
   yield shopsCollection.findAndModify({
     companyName: shopName,
   }, {
-    $set: update
+    $set: { connections: update }
   });
 }
 
