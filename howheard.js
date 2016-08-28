@@ -349,6 +349,13 @@ function *addShopifyOrderCreateWebhook(shopName, token) {
 
 
 
+/**
+ * Saves webhook details in db
+ *
+ * @param {String} shopName
+ * @api public
+ */
+
 function *updateShopWithWebhook(shopName, update) {
   
   const shopifyEvent = 'orderCreate';
