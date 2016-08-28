@@ -356,13 +356,7 @@ function *updateShopWithWebhook(shopName, update) {
   yield shopsCollection.findAndModify({
     companyName: shopName,
   }, {
-    $set: {
-	  'connections.$.id': update.id,
-      'connections.$.address': update.address,
-      'connections.$.topic': update.topic,
-      'connections.$.created_at': update.created_at,
-      'connections.$.shopifyEvent': shopifyEvent
-    }
+    $set: update
   });
 }
 
