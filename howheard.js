@@ -24,6 +24,8 @@ exports.fetchAuthToken = fetchAuthToken;
 exports.saveToken = saveToken;
 exports.fetchShopFromShopify = fetchShopFromShopify;
 exports.updateShop = updateShop;
+exports.addShopifyOrderCreateWebhook = addShopifyOrderCreateWebhook;
+exports.updateShopWithWebhook = updateShopWithWebhook;
 exports.addShopifyUninstallWebhook = addShopifyUninstallWebhook;
 exports.uninstallShop = uninstallShop;
 exports.findHowHeardList = findHowHeardList;
@@ -37,6 +39,7 @@ exports.findShopById = findShopById;
 exports.addUserSelection = addUserSelection;
 exports.updateUserSelection = updateUserSelection;
 exports.findUserSelection = findUserSelection;
+
 
 /*
 exports.findOrders = findOrders;
@@ -238,7 +241,8 @@ function fetchAuthToken(query) {
 function *saveToken(token, shopName) {
   return yield shopsCollection.findAndModify(
     { companyName: shopName },
-    { $set: { accessToken: token }}
+    { $set: { accessToken: token }
+    }
   );
 }
 
@@ -283,7 +287,75 @@ function *updateShop(shopName, update) {
   yield shopsCollection.update({
     companyName: shopName,
   }, {
-    $set: update,
+    $set: { id: update.id },
+          { name: update.name },
+          { email: update.email },
+          { domain: update.domain },
+          { created_at: update.created_at },
+          { province: update.province },
+          { country: update.country },
+          { address1: update.address1 },
+          { zip: update.zip },
+          { city: update.city },
+          { phone: update.phone },
+          { shop_owner: update.shop_owner },
+          { plan_display_name: update.plan_display_name },
+          { myshopify_domain: update.myshopify_domain }
+  });
+}
+
+
+
+
+
+/**
+ * Adds an orderCreate webhook. This Shopify webhook
+ * fires whenever an order is placed for the store
+ *
+ * @param {String} shopName
+ * @param {String} token
+ * @api public
+ */
+function *addShopifyOrderCreateWebhook(shopName, token) {
+  const options = {
+    url: `https://${shopName}/admin/webhooks.json`,
+    body: JSON.stringify({
+      webhook: {
+        topic: 'orders/create',
+        address: constants.HOWHEARD_PUBLIC_URL_ROOT+'messages/${shopName}/orderCreate',
+        format: 'json',
+      }
+    }),
+    headers: {
+      'X-Shopify-Access-Token': token,
+      'Content-Type': 'application/json'
+    }
+  };
+
+  // Post returns an array [response, body]
+  const responseAndBody = yield post(options);
+  const response = responseAndBody[0];
+  const body = responseAndBody[1];
+
+  if (response.statusCode >= 400) {
+    throw Error('Failed to set orderCreate webhook ' + response.body);
+  }
+
+  return JSON.parse(body);
+}
+
+
+function *updateShopWithWebhook(shopName, update) {
+  yield shopsCollection.update({
+    companyName: shopName,
+  }, {
+    $set: {
+	  'connections.$.id': update.id,
+      'connections.$.address': update.address,
+      'connections.$.topic': update.topic,
+      'connections.$.created_at': update.created_at
+      'connections.$.shopifyEvent': 'orderCreate'
+    }
   });
 }
 

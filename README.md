@@ -25,4 +25,3 @@ admin reports
 To fix:
 - limit fields from shopify shop api call to insert into db
 - Need to import css class for the dropdown from checkout
-- Place dropdown after notifications optional section

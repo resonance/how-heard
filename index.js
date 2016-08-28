@@ -335,6 +335,7 @@ router.get('/install', function *() {
 router.get('/authenticate', function *() {
   const token = yield howHeard.fetchAuthToken(this.query);
   const shopName = this.query.shop;
+  
   yield howHeard.saveToken(token, shopName);
 
   // ping Shopify API for Shop object
@@ -343,6 +344,13 @@ router.get('/authenticate', function *() {
   // save shop to db
   yield howHeard.updateShop(shopName, shop.shop);
 
+  // set createOrder webhook
+  const setWebhookResponse = yield howHeard.addShopifyOrderCreateWebhook(shopName, token);
+
+  // save shop to db
+  yield howHeard.updateShopWithWebhook(shopName, setWebhookResponse.webhook);
+
+  // set uninstall webhook
   yield howHeard.addShopifyUninstallWebhook(shopName, token);
 
   this.redirect('./?shop='+shopName);
@@ -419,13 +427,8 @@ router.get('/dropdown', function *() {
   // ping Shopify API for Customer object
   const customer = yield howHeard.fetchCustomerFromShopify(email, shopName, token);
 
-  console.log("CUSTOMER ORDER COUNT IS ", customer.customers[0].orders_count);
-  console.log("CUSTOMER EMAIL IS ", customer.customers[0].email);
-
-
-  // ADD CHECK TO SKIP NEXT TWO COMMANDS if customer.customers[0] == ""
-  // THEN TRY TO USE EMAIL AGAIN INSTEAD OF CUSTID IN TEMPLATE
-
+  //console.log("CUSTOMER ORDER COUNT IS ", customer.customers[0].orders_count);
+  //console.log("CUSTOMER EMAIL IS ", customer.customers[0].email);
 
   const custId = customer.customers[0].id;
 
