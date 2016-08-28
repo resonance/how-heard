@@ -206,17 +206,9 @@ router.get('/', function *() {
     choices: {},
   };
 
+	
+  const howHeardList = yield howHeard.findHowHeardList(shop.shopName);
 
-  // if submitting form from our homepage, don't query 	
-  if (!this.query.circuit) {
-	
-    const howHeardList = yield howHeard.findHowHeardList(shop.shopName);
-  }
-  else
-  {
-	const howHeardList = 1;
-	
-  }
 
   // if list exists, add to jadeOptions
   if (howHeardList) {
