@@ -214,7 +214,7 @@ router.get('/', function *() {
   }
   else
   {
-	const howHeardList = true;
+	const howHeardList = 1;
 	
   }
 
