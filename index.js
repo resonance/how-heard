@@ -207,11 +207,13 @@ router.get('/', function *() {
   };
 
 
-  // get existing list of howheards if available, use shopsCollection object
-  const list = yield howHeard.getHowHeardList(shop.companyName);
+  const howHeardList = yield howHeard.findHowHeardList(shopName);
 
   // if list exists, add to jadeOptions
-  if (list.selections !== '') {
+  if (howHeardList) {
+	
+	// get existing list of howheards if available, use shopsCollection object
+	const list = yield howHeard.getHowHeardList(shop.companyName);
 	
 	jadeOptions.choices = {
       selections: list.selections
@@ -345,10 +347,10 @@ router.get('/authenticate', function *() {
   yield howHeard.updateShop(shopName, shop.shop);
 
   // set createOrder webhook
-  //const setWebhookResponse = yield howHeard.addShopifyOrderCreateWebhook(shopName, token);
+  const setWebhookResponse = yield howHeard.addShopifyOrderCreateWebhook(shopName, token);
 
   // save shop to db
-  //yield howHeard.updateShopWithWebhook(shopName, setWebhookResponse.webhook);
+  yield howHeard.updateShopWithWebhook(shopName, setWebhookResponse.webhook);
 
   // set uninstall webhook
   yield howHeard.addShopifyUninstallWebhook(shopName, token);
