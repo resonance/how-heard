@@ -820,8 +820,10 @@ function *appendHowHeardSelection(shopName, custId, metafieldId) {
       companyName: shopName,
       customerId: custId
     }, {
-      $addToSet: { metafieldId: metafieldId },
+      $addToSet: { confirmationId: metafieldId },
   });	
+	
+	console.log("CONFIRMATION ID", metafieldId);
 		
 }
 
