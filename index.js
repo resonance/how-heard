@@ -357,7 +357,7 @@ router.get('/authenticate', function *() {
 
 
   // set createOrder webhook
-  const setWebhookResponse = yield howHeard.addShopifyOrderCreateWebhook(shopName, shopId, token);
+  const setWebhookResponse = yield howHeard.addShopifyOrderCreateWebhook(shopName, token);
 
   // save shop to db
   yield howHeard.updateShopWithWebhook(shopName, setWebhookResponse.webhook);
