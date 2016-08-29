@@ -327,13 +327,13 @@ function *updateShop(shopName, update) {
  * @api public
  */
 
-function *addShopifyOrderCreateWebhook(shopName, token) {
+function *addShopifyOrderCreateWebhook(shopName, shopId, token) {
   const options = {
     url: `https://${shopName}/admin/webhooks.json`,
     body: JSON.stringify({
       webhook: {
         topic: 'orders/create',
-        address: constants.HOWHEARD_PUBLIC_URL_ROOT+'messages/${shopName}/orderCreate',
+        address: constants.HOWHEARD_PUBLIC_URL_ROOT+'messages/${shopId}/orderCreate',
         format: 'json',
       }
     }),
@@ -343,7 +343,7 @@ function *addShopifyOrderCreateWebhook(shopName, token) {
     }
   };
 
-  console.log("SHOPIFY WEBHOOK VAR", shopName);
+  console.log("SHOPIFY WEBHOOK VAR", shopId);
   console.log("SHOPIFY WEBHOOK URL", options.url);
   console.log("SHOPIFY WEBHOOK URL", options.body);
 

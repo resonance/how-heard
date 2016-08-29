@@ -11,5 +11,5 @@ Beautify
 To fix:
 - Need to import css class for the dropdown from checkout  
 - Show marketing sources as "unpublished" initially until another selection is added
-- unify variable references (shopName)
+- refresh iframe when discount is added at checkout
 - Heroku logging
