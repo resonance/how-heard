@@ -333,7 +333,7 @@ function *addShopifyOrderCreateWebhook(shopName, token) {
     body: JSON.stringify({
       webhook: {
         topic: 'orders/create',
-        address: constants.SLACKIFY_PUBLIC_URL_ROOT+'messages/${shopName}/orderCreate',
+        address: '${constants.SLACKIFY_PUBLIC_URL_ROOT}messages/${shopName}/orderCreate',
         format: 'json',
       }
     }),
@@ -401,7 +401,7 @@ function *addShopifyUninstallWebhook(shopName, token) {
     body: JSON.stringify({
       webhook: {
         topic: 'app/uninstalled',
-        address: constants.HOWHEARD_PUBLIC_URL_ROOT+'uninstall',
+        address: '${constants.SLACKIFY_PUBLIC_URL_ROOT}uninstall',
         format: 'json',
       }
     }),
