@@ -701,7 +701,7 @@ function *saveShopifyMessage(shopName, shopifyMessage) {
   return yield ordersCollection.insert({
     companyName: shopName,
     orderId: shopifyMessage.orderId,
-    orderEmail:,shopifyMessage.orderEmail,
+    orderEmail: shopifyMessage.orderEmail,
     createdAt: shopifyMessage.orderCreatedAt,
     subtotalPrice: shopifyMessage.orderSubtotalPrice,
     referringSite: shopifyMessage.orderReferringSite,
