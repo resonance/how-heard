@@ -345,7 +345,7 @@ function *addShopifyOrderCreateWebhook(shopName, token) {
   };
 
 
-  console.log("SHOPIFY WEBHOOK URL", options.body.webhook.address);
+  console.log("SHOPIFY WEBHOOK URL", options.body.webhook);
 
 
   // Post returns an array [response, body]
