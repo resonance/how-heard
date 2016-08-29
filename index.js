@@ -575,7 +575,7 @@ router.post('/messages/:shopName/:type', function *() {
   }
 
   // Check if order message was already sent
-  const messageExists = yield howheard.shopifyMessageExists(shop.companyName, incomingMessage.orderNumber);
+  const messageExists = yield howHeard.shopifyMessageExists(shop.companyName, incomingMessage.orderNumber);
   if (messageExists) {
     console.warn('Received message that was already sent by Shopify:', this.request.body);
     this.body = 'OK'
