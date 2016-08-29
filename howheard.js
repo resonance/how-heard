@@ -322,7 +322,6 @@ function *updateShop(shopName, update) {
 /**
  * Adds an orderCreate webhook. This Shopify webhook
  * fires whenever an order is placed for the store
- * Be sure to use proper left quotes on URL and Address
  * @param {String} shopName
  * @param {String} token
  * @api public
@@ -330,11 +329,11 @@ function *updateShop(shopName, update) {
 
 function *addShopifyOrderCreateWebhook(shopName, token) {
   const options = {
-    url: `https://${shopName}/admin/webhooks.json,
+    url: `https://${shopName}/admin/webhooks.json`,
     body: JSON.stringify({
       webhook: {
         topic: 'orders/create',
-        address: `${constants.SLACKIFY_PUBLIC_URL_ROOT}messages/${shopName}/orderCreate`,
+        address: constants.SLACKIFY_PUBLIC_URL_ROOT+'messages/${shopName}/orderCreate',
         format: 'json',
       }
     }),
@@ -343,6 +342,7 @@ function *addShopifyOrderCreateWebhook(shopName, token) {
       'Content-Type': 'application/json'
     }
   };
+
 
 
   console.log("SHOPIFY WEBHOOK URL", options.body);
