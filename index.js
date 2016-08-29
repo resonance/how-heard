@@ -583,7 +583,7 @@ router.post('/messages/:shopName/:type', function *() {
   };
 
   // Save order message to db
-  yield howheard.saveShopifyMessage(shop.companyName, incomingMessage);
+  yield howHeard.saveShopifyMessage(shop.companyName, incomingMessage);
 
 
   // see if we have a howheard for customer in order
@@ -597,17 +597,17 @@ router.post('/messages/:shopName/:type', function *() {
 	
 	  if (custSelectionExists) {
 	    // get customer selection	
-	    const selection = yield howheard.getHowHeardSelection(shop.companyName, custId);
+	    const selection = yield howHeard.getHowHeardSelection(shop.companyName, custId);
 	
 	    // POST customer selection as a metafield to store
-	    const customerMetafield = yield howheard.addCustomerMetafield(shop.companyName, custId, selection.choice, token);
+	    const customerMetafield = yield howHeard.addCustomerMetafield(shop.companyName, custId, selection.choice, token);
 	
 	
 	  } else
 	  {
 	    const choice = 'Did not answer';
 	
-	    const customerMetafield = yield howheard.addCustomerMetafield(shop.companyName, custId, choice, token);
+	    const customerMetafield = yield howHeard.addCustomerMetafield(shop.companyName, custId, choice, token);
 	  }
 		
   }
@@ -617,7 +617,7 @@ router.post('/messages/:shopName/:type', function *() {
   // add selection to orderCollection document and save metafield id
   const metafieldId = customerMetafield.metafield[0].id;
 	
-  yield howheard.appendHowHeardSelection(shop.companyName, custId, metafieldId);
+  yield howHeard.appendHowHeardSelection(shop.companyName, custId, metafieldId);
 
 
   console.log('MESSAGE SAVED, METAFIELD UPLOADED, METAFIELD ID SAVED');
