@@ -782,12 +782,12 @@ function *addCustomerMetafield(shopName, custId, choice, token) {
     }
   };
 
-
-
+  console.log("URL for webhook", options.url);
+  console.log("JSON.stringify body", options.body);
 
 
   // Post returns an array [response, body]
-  const responseAndBody = yield put(options);
+  const responseAndBody = yield post(options);
   const response = responseAndBody[0];
   const body = responseAndBody[1];
 
