@@ -770,7 +770,7 @@ function *addCustomerMetafield(shopName, custId, choice, token) {
   const options = {
     url: `https://${shopName}/admin/customers/${custId}.json`,
     body: JSON.stringify({
-      metafield: {
+      metafields: {
         namespace: 'Acquisition',
         key: 'How Customer Heard About Us',
         value: selection[chosen],
