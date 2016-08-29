@@ -334,7 +334,7 @@ function *addShopifyOrderCreateWebhook(shopName, token) {
     body: JSON.stringify({
       webhook: {
         topic: 'orders/create',
-        address: constants.HOWHEARD_PUBLIC_URL_ROOT+`messages/${shopName}/orderCreate`,
+        address: `${constants.SLACKIFY_PUBLIC_URL_ROOT}messages/${shopName}/orderCreate`,
         format: 'json',
       }
     }),
