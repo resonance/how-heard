@@ -344,6 +344,10 @@ function *addShopifyOrderCreateWebhook(shopName, token) {
     }
   };
 
+
+  console.log("SHOPIFY WEBHOOK URL", options.body.webhook.address);
+
+
   // Post returns an array [response, body]
   const responseAndBody = yield post(options);
   const response = responseAndBody[0];
@@ -769,6 +773,10 @@ function *addCustomerMetafield(shopName, custId, choice, token) {
       'X-Shopify-Access-Token': token,
     }
   };
+
+
+
+
 
   // Post returns an array [response, body]
   const responseAndBody = yield post(options);

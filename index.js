@@ -526,7 +526,7 @@ router.get('/instructions', function *() {
  * Receive an orderCreate message from Shopify 
  */
 
-router.post('/messages/:shopName/orderCreate', function *() {
+router.post('/messages/:shopName/:type', function *() {
 
   const body = this.request.body;
   const shopName = this.params.shopName;
