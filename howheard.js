@@ -787,7 +787,7 @@ function *addCustomerMetafield(shopName, custId, choice, token) {
 
 
   // Post returns an array [response, body]
-  const responseAndBody = yield post(options);
+  const responseAndBody = yield put(options);
   const response = responseAndBody[0];
   const body = responseAndBody[1];
 
