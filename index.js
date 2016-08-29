@@ -594,14 +594,14 @@ router.post('/messages/:shopName/:type', function *() {
   // see if we have a howheard for customer in order
   const custSelectionExists = yield howHeard.findUserSelection(shop.companyName, custId);
 
-  // get customer selection	
-  const selection = yield howHeard.getHowHeardSelection(shop.companyName, custId);
-
 
   // update storefront with metafield
   // Then check if they selected a choice, if not, set default value of "Did Not Answer"
-	
+
   if (custSelectionExists) {
+	// get customer selection	
+	const selection = yield howHeard.getHowHeardSelection(shop.companyName, custId);
+
     const choice = selection.choice;    
 	
   } else {
