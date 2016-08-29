@@ -773,8 +773,8 @@ function *addCustomerMetafield(shopName, custId, choice, token) {
       metafield: {
         namespace: 'Acquisition',
         key: 'How Customer Heard About Us',
-        value: 'selection[chosen]',
-        value_type: 'string',
+        value: selection[chosen],
+        value_type: 'string'
       }
     }),
     headers: {
