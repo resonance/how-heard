@@ -768,7 +768,8 @@ function *addCustomerMetafield(shopName, custId, choice, token) {
   selection[chosen] = choice;	
 	
   const options = {
-    url: `https://${shopName}/admin/customers/${custId}/metafields.json`,
+	method: 'PUT',
+    url: `https://${shopName}/admin/customers/${custId}.json`,
     body: JSON.stringify({
       metafield: {
         namespace: 'Acquisition',
