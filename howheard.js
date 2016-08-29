@@ -773,7 +773,7 @@ function *addCustomerMetafield(shopName, custId, choice, token) {
       metafield: {
         namespace: 'Acquisition',
         key: 'How Customer Heard About Us',
-        value: selection[chosen],
+        value: 'selection[chosen]',
         value_type: 'string',
       }
     }),
@@ -787,7 +787,7 @@ function *addCustomerMetafield(shopName, custId, choice, token) {
 
 
   // Post returns an array [response, body]
-  const responseAndBody = yield put(options);
+  const responseAndBody = yield post(options);
   const response = responseAndBody[0];
   const body = responseAndBody[1];
 
