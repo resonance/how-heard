@@ -483,7 +483,7 @@ router.get('/dropdown', function *() {
 router.get('/response', function *() {
 
   const shopName = this.query.shopName;
-  const custId = this.query.custId;
+  const custId = parseInt(this.query.custId);
   const choice = this.query.choice;
 
   // see if user has an existing shopName, custId pair
@@ -539,7 +539,12 @@ router.post('/messages/:shopName/:type', function *() {
   const shop = yield howHeard.findShop(shopName);
   const token = shop.accessToken;
   const custId = body.customer.id;
-  const custOrderCount = body.customer.orders_count;
+  const custOrderCount = parseInt(body.customer.orders_count);
+
+  if (custOrderCount != 1) {
+	return;
+  }
+
 
   const incomingMessage = {
     orderId: body.id,
@@ -591,41 +596,25 @@ router.post('/messages/:shopName/:type', function *() {
 
 
   // update storefront with metafield
-  // Only for customer first order with store
   // Then check if they selected a choice, if not, set default value of "Did Not Answer"
-  if (custOrderCount == 1) {
 	
-	  if (custSelectionExists) {
-	    // get customer selection	
-	    const selection = yield howHeard.getHowHeardSelection(shop.companyName, custId);
+  if (custSelectionExists) {
+    const choice = selection.choice;    
 	
-	    // POST customer selection as a metafield to store
-	    const customerMetafield = yield howHeard.addCustomerMetafield(shop.companyName, custId, selection.choice, token);
-	
-	    // add selection to orderCollection document and save metafield id
-	    const metafieldId = customerMetafield.metafield.id;
-
-	    yield howHeard.appendHowHeardSelection(shop.companyName, custId, metafieldId);
-	
-	
-	  } else
-	  {
-	    const choice = 'Did not answer';
-	
-	    const customerMetafield = yield howHeard.addCustomerMetafield(shop.companyName, custId, choice, token);
-	
-	    // add selection to orderCollection document and save metafield id
-	    const metafieldId = customerMetafield.metafield.id;
-
-	    yield howHeard.appendHowHeardSelection(shop.companyName, custId, metafieldId);
-	  }
-		
+  } else {
+	const choice = 'Did not answer';
   }
 
-
+  // get customer selection	
+  const selection = yield howHeard.getHowHeardSelection(shop.companyName, custId);
 	
+  // POST customer selection as a metafield to store
+  const customerMetafield = yield howHeard.addCustomerMetafield(shop.companyName, custId, selection.choice, token);
+	
+  // add selection to orderCollection document and save metafield id
+  const metafieldId = customerMetafield.metafield.id;
 
-
+  yield howHeard.appendHowHeardSelection(shop.companyName, custId, metafieldId);
 
   console.log('MESSAGE SAVED, METAFIELD UPLOADED, METAFIELD ID SAVED');
   this.status = 200;

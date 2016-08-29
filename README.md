@@ -2,6 +2,8 @@
 
 Save metafield to Selections. Save choice to Orders
 
+Customer report
+
 Admin reports
 
 Beautify	
