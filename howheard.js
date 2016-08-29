@@ -349,10 +349,6 @@ function *addShopifyOrderCreateWebhook(shopName, token) {
     }
   };
 
-  console.log("SHOPIFY WEBHOOK VAR", shopObj[name]);
-  console.log("SHOPIFY WEBHOOK URL", options.url);
-  console.log("SHOPIFY WEBHOOK URL", options.body);
-
 
   // Post returns an array [response, body]
   const responseAndBody = yield post(options);
@@ -765,13 +761,19 @@ function *getHowHeardSelection(shopName, custId) {
  */
 
 function *addCustomerMetafield(shopName, custId, choice, token) {
+	
+  // convert choice to an object for use inside JSON.stringify
+  var chosen = '';
+  var selection = {};
+  selection[chosen] = choice;	
+	
   const options = {
     url: `https://${shopName}/admin/customers/${custId}/metafields.json`,
     body: JSON.stringify({
       metafield: {
         namespace: 'Acquisition',
         key: 'How Customer Heard About Us',
-        value: choice,
+        value: selection[chosen],
         value_type: 'string',
       }
     }),
@@ -790,6 +792,9 @@ function *addCustomerMetafield(shopName, custId, choice, token) {
   const body = responseAndBody[1];
 
   console.log("SHOPIFY API METAFIELD", body);
+  console.log("SHOPIFY WEBHOOK VAR", selection[chosen]);
+  console.log("SHOPIFY WEBHOOK URL", options.url);
+
 
   if (response.statusCode >= 400) {
     throw Error('Failed to create customer metafield ' + response.body);
