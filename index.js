@@ -593,7 +593,7 @@ router.post('/messages/:shopName/:type', function *() {
   // update storefront with metafield
   // Only for customer first order with store
   // Then check if they selected a choice, if not, set default value of "Did Not Answer"
-  if (custOrderCount === 1) {
+  if (custOrderCount == 1) {
 	
 	  if (custSelectionExists) {
 	    // get customer selection	

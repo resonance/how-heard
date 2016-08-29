@@ -820,9 +820,9 @@ function *appendHowHeardSelection(shopName, custId, metafieldId) {
       companyName: shopName,
       customerId: custId
     }, {
-      $addToSet: { confirmationId: metafieldId },
+      $set: { confirmationId: metafieldId },
   });	
-	
+	// change to int or string
 	console.log("CONFIRMATION ID", metafieldId);
 		
 }
