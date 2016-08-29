@@ -603,7 +603,7 @@ router.post('/messages/:shopName/:type', function *() {
 	    const customerMetafield = yield howHeard.addCustomerMetafield(shop.companyName, custId, selection.choice, token);
 	
 	    // add selection to orderCollection document and save metafield id
-	    const metafieldId = customerMetafield.metafield[0].id;
+	    const metafieldId = customerMetafield.metafield.id;
 
 	    yield howHeard.appendHowHeardSelection(shop.companyName, custId, metafieldId);
 	
@@ -615,7 +615,7 @@ router.post('/messages/:shopName/:type', function *() {
 	    const customerMetafield = yield howHeard.addCustomerMetafield(shop.companyName, custId, choice, token);
 	
 	    // add selection to orderCollection document and save metafield id
-	    const metafieldId = customerMetafield.metafield[0].id;
+	    const metafieldId = customerMetafield.metafield.id;
 
 	    yield howHeard.appendHowHeardSelection(shop.companyName, custId, metafieldId);
 	  }
