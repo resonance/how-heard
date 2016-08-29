@@ -16,6 +16,7 @@ var constants = require('./constants');
 /**
  * Expose public API.
  */
+
 exports.accessTokenExists = accessTokenExists;
 exports.findShop = findShop;
 exports.findOrCreate = findOrCreate;
@@ -39,7 +40,11 @@ exports.findShopById = findShopById;
 exports.addUserSelection = addUserSelection;
 exports.updateUserSelection = updateUserSelection;
 exports.findUserSelection = findUserSelection;
-
+exports.shopifyMessageExists = shopifyMessageExists;
+exports.saveShopifyMessage = saveShopifyMessage;
+exports.getHowHeardSelection = getHowHeardSelection;
+exports.addCustomerMetafield = addCustomerMetafield;
+exports.appendHowHeardSelection = appendHowHeardSelection;
 
 /*
 exports.findOrders = findOrders;
@@ -81,9 +86,12 @@ var get = thunkify(request.get);
 
 // Collection name must be unique on mLab db,
 // so we can't use `shops`.
+
 var shopsCollection = db.get('howHeardShops');
 var listsCollection = db.get('howHeardLists');
 var selectionCollection = db.get('howHeardSelections');
+var ordersCollection = db.get('howHeardOrders');
+
 
 
 
@@ -132,6 +140,7 @@ function *findShop(shopName) {
  * @return {object}
  * @api public
  */
+
 function *findOrCreate(shopName) {
   const shop = yield findShop(shopName);
   if (shop) return shop;
@@ -255,6 +264,7 @@ function *saveToken(token, shopName) {
  * @param {String} token
  * @api public
  */
+
 function *fetchShopFromShopify(shopName, token) {
   const options = {
     url: `https://${shopName}/admin/shop.json`,
@@ -317,13 +327,14 @@ function *updateShop(shopName, update) {
  * @param {String} token
  * @api public
  */
+
 function *addShopifyOrderCreateWebhook(shopName, token) {
   const options = {
     url: `https://${shopName}/admin/webhooks.json`,
     body: JSON.stringify({
       webhook: {
         topic: 'orders/create',
-        address: constants.HOWHEARD_PUBLIC_URL_ROOT+'webhook/${shopName}/orderCreate',
+        address: constants.HOWHEARD_PUBLIC_URL_ROOT+'messages/${shopName}/orderCreate',
         format: 'json',
       }
     }),
@@ -513,6 +524,7 @@ function *addSelections(shopName, selectionsArray, insert) {
  * @return {object} The updated shop
  * @api public
  */
+
 function *deleteSelection(shopName, selectionChoice) {
 
   return yield listsCollection.findOneAndUpdate({
@@ -533,6 +545,7 @@ function *deleteSelection(shopName, selectionChoice) {
  * @return {object} The updated shop
  * @api public
  */
+
 function *fetchSavedToken(shopName) {
   return yield shopsCollection.findOne({ companyName: shopName });
 
@@ -547,6 +560,7 @@ function *fetchSavedToken(shopName) {
  * @param {String} token
  * @api public
  */
+
 function *fetchCustomerFromShopify(email, shopName, token) {
   const options = {
     url: `https://${shopName}/admin/customers/search.json?query=email:${email}`,
@@ -559,8 +573,8 @@ function *fetchCustomerFromShopify(email, shopName, token) {
   const response = responseAndBody[0];
   const body = responseAndBody[1];
 
-  console.log("SHOPIFY API URL", options.url);
-  console.log("SHOPIFY API RETURNED", body);
+  //console.log("SHOPIFY API URL", options.url);
+  //console.log("SHOPIFY API RETURNED", body);
 
 
   if (response.statusCode >= 400) {
@@ -590,7 +604,7 @@ function *findShopById(storeId) {
 
 
 /**
- *
+ * See if user selection exists
  */
 
 function *findUserSelection(shopName, custId) {
@@ -650,5 +664,145 @@ function *updateUserSelection(shopName, custId, choice) {
 
 
 
+
+
+/**
+ * Query DB with shop name and message orderName
+ * to check whether message exists.
+ *
+ * @return {bool}
+ * @api public
+ */
+
+function *shopifyMessageExists(shopName, orderNumber) {
+  const shop = yield ordersCollection.findOne({
+    companyName: shopName,
+    orderNumber: orderNumber,
+  });
+  return !!shop;
+}
+
+
+
+
+
+/**
+ * Query documents with shopName, then
+ * push message object into 'messages' array.
+ * Pass doc as argument into resolve callback.
+ *
+ * @return {object} The updated shop document.
+ * @api public
+ */
+
+function *saveShopifyMessage(shopName, shopifyMessage) {
+
+  // Create a new document for every order
+  return yield ordersCollection.insert({
+    companyName: shopName,
+    orderId: shopifyMessage.orderId,
+    orderEmail:,shopifyMessage.orderEmail,
+    createdAt: shopifyMessage.orderCreatedAt,
+    subtotalPrice: shopifyMessage.orderSubtotalPrice,
+    referringSite: shopifyMessage.orderReferringSite,
+    sourceUrl: shopifyMessage.orderSourceUrl,
+    orderNumber: shopifyMessage.orderNumber,
+    customerId: shopifyMessage.customerId,
+    customerEmail: shopifyMessage.customerEmail,
+    customerCreatedAt: shopifyMessage.customerCreatedAt,
+    customerFirstName: shopifyMessage.customerFirstName,
+    customerLastName: shopifyMessage.customerLastName,
+    customerOrdersCount: shopifyMessage.customerOrdersCount,
+    customerTotalSpent: shopifyMessage.customerTotalSpent,
+    customerLastOrderId: shopifyMessage.customerLastOrderId,
+    customerCompany: shopifyMessage.customerCompany,
+    customerAddress1: shopifyMessage.customerAddress1,
+    customerAddress2: shopifyMessage.customerAddress2,
+    customerCity: shopifyMessage.customerCity,
+    customerProvince: shopifyMessage.customerProvince,
+    customerCountry: shopifyMessage.customerCountry,
+    customerZipCode: shopifyMessage.customerZipcode,
+    customerProvinceCode: shopifyMessage.customerProvinceCode,
+    customerCountryName: shopifyMessage.customerCountryName,
+  });
+}
+
+
+
+
+
+/**
+ * Fetch how heard selection for customer
+ *
+ * @return {object}
+ * @api public
+ */
+
+function *getHowHeardSelection(shopName, custId) {
+  return yield selectionCollection.findOne({ 
+	  companyName: shopName,
+      customerId: custId
+  });
+}
+
+
+
+
+
+/**
+ * Add a metafield for new customers for the store
+ * @api public
+ */
+
+function *addCustomerMetafield(shopName, custId, choice, token) {
+  const options = {
+    url: `https://${shopName}/admin/customers/${custId}/metafields.json`,
+    body: JSON.stringify({
+      metafield: {
+        namespace: 'Acquisition',
+        key: 'How Customer Heard About Us',
+        value: choice,
+        value_type: 'string',
+      }
+    }),
+    headers: {
+      'X-Shopify-Access-Token': token,
+    }
+  };
+
+  // Post returns an array [response, body]
+  const responseAndBody = yield post(options);
+  const response = responseAndBody[0];
+  const body = responseAndBody[1];
+
+  console.log("SHOPIFY API METAFIELD", body);
+
+  if (response.statusCode >= 400) {
+    throw Error('Failed to create customer metafield ' + response.body);
+  }
+
+  return JSON.parse(body);
+
+}
+
+
+
+
+
+/**
+ * Update message with metafieldId and customer's choice
+ * @api public
+ */
+
+function *appendHowHeardSelection(shopName, custId, metafieldId) {
+  
+  yield selectionCollection.update({
+      companyName: shopName,
+      customerId: custId
+    }, {
+      $addToSet: { metafieldId: metafieldId },
+  });	
+		
+}
 
 

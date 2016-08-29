@@ -312,6 +312,7 @@ router.post('/add', function *() {
  */
 
 router.get('/install', function *() {
+  
   // check for empty shop query???
   const shopName = this.query.shop;
 
@@ -324,6 +325,7 @@ router.get('/install', function *() {
 
   // redirects to /authenticate
   this.redirect(url);
+
 });
 
 
@@ -336,6 +338,7 @@ router.get('/install', function *() {
  */
 
 router.get('/authenticate', function *() {
+	
   const token = yield howHeard.fetchAuthToken(this.query);
   const shopName = this.query.shop;
   
@@ -357,6 +360,7 @@ router.get('/authenticate', function *() {
   yield howHeard.addShopifyUninstallWebhook(shopName, token);
 
   this.redirect('./?shop='+shopName);
+
 });
 
 
@@ -368,11 +372,13 @@ router.get('/authenticate', function *() {
  */
 
  router.post('/uninstall', function *() {
+	
    console.log('request body', this.request.body);
    console.log('content-type', this.request.type);
    const shopName = this.request.body.domain;
    yield howHeard.uninstallShop(shopName);
    this.status = 200;
+
 });
 
 
@@ -475,10 +481,10 @@ router.get('/response', function *() {
   const choice = this.query.choice;
 
   // see if user has an existing shopName, custId pair
-  const howHeardList = yield howHeard.findUserSelection(shopName, custId);
+  const userSelectionExists = yield howHeard.findUserSelection(shopName, custId);
 
   // if pair does not exist, add it
-  if (!howHeardList) {
+  if (!userSelectionExists) {
 	
 	  // add selections to listsCollection
 	  yield howHeard.addUserSelection(shopName, custId, choice);
@@ -516,6 +522,96 @@ router.get('/instructions', function *() {
 
 
 
+/**
+ * Receive an orderCreate message from Shopify 
+ */
+
+router.post('/messages/:shopName/orderCreate', function *() {
+
+  const body = this.request.body;
+  const shopName = this.params.shopName;
+  const shop = yield howHeard.findShop(shopName);
+  const token = shop.accessToken;
+  const custId = body.customer.id;
+  const custOrderCount = body.customer.orders_count;
+
+  const incomingMessage = {
+    orderId: body.id,
+    orderEmail: body.email,
+    orderCreatedAt: body.created_at,
+    orderSubtotalPrice: body.subtotal_price,
+    orderReferringSite: body.referring_site,
+    orderSourceUrl: body.source_url,
+    orderNumber: body.order_number,
+    customerId: body.customer.id,
+    customerEmail: body.customer.email,
+    customerCreatedAt: body.customer.created_at,
+    customerFirstName: body.customer.first_name,
+    customerLastName: body.customer.last_name,
+    customerOrdersCount: body.customer.orders_count,
+    customerTotalSpent: body.customer.total_spent,
+    customerLastOrderId: body.customer.last_order_id,
+    customerCompany: body.customer.default_address.company,
+    customerAddress1: body.customer.default_address.address1,
+    customerAddress2: body.customer.default_address.address2,
+    customerCity: body.customer.default_address.city,
+    customerProvince: body.customer.default_address.province,
+    customerCountry: body.customer.default_address.country,
+    customerZipcode: body.customer.default_address.zip,
+    customerProvinceCode: body.customer.default_address.province_code,
+    customerCountryName: body.customer.default_address.country_name,
+  };
+
+  // Check if shop exists
+  if (!shop) {
+    this.body = "Shop for shopify message could not be found";
+    return;
+  }
+
+  // Check if order message was already sent
+  const messageExists = yield howheard.shopifyMessageExists(shop.companyName, incomingMessage.orderNumber);
+  if (messageExists) {
+    console.warn('Received message that was already sent by Shopify:', this.request.body);
+    this.body = 'OK'
+    return;
+  };
+
+  // Save order message to db
+  yield howheard.saveShopifyMessage(shop.companyName, incomingMessage);
+
+
+  // see if we have a howheard for customer in order
+  const custSelectionExists = yield howHeard.findUserSelection(shop.companyName, custId);
+
+
+  // update storefront with metafield
+  // Only for customer first order with store
+  // Then check if they selected a choice, if not, set default value of "Did Not Answer"
+  if (custOrderCount === 1) {
+	
+	  if (custSelectionExists) {
+	    // get customer selection	
+	    const selection = yield howheard.getHowHeardSelection(shop.companyName, custId);
+	  } else
+	  {
+	    const selection.choice = 'Did not answer';
+	  }
+		
+  }
+
+  // POST customer selection as a metafield to store
+  const customerMetafield = yield howheard.addCustomerMetafield(shop.companyName, custId, selection.choice, token);
+	
+  // add selection to orderCollection document and save metafield id
+  const metafieldId = customerMetafield.metafield[0].id;
+	
+  yield howheard.appendHowHeardSelection(shop.companyName, custId, metafieldId);
+
+
+  console.log('MESSAGE SAVED, METAFIELD UPLOADED, METAFIELD ID SAVED');
+  this.status = 200;
+
+});
 
 
 
