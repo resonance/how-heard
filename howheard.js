@@ -779,6 +779,7 @@ function *addCustomerMetafield(shopName, custId, choice, token) {
     }),
     headers: {
       'X-Shopify-Access-Token': token,
+      'Content-Type': 'application/json'
     }
   };
 
@@ -787,7 +788,7 @@ function *addCustomerMetafield(shopName, custId, choice, token) {
 
 
   // Post returns an array [response, body]
-  const responseAndBody = yield put(options);
+  const responseAndBody = yield post(options);
   const response = responseAndBody[0];
   const body = responseAndBody[1];
 
