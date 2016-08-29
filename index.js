@@ -592,15 +592,21 @@ router.post('/messages/:shopName/orderCreate', function *() {
 	  if (custSelectionExists) {
 	    // get customer selection	
 	    const selection = yield howheard.getHowHeardSelection(shop.companyName, custId);
+	
+	    // POST customer selection as a metafield to store
+	    const customerMetafield = yield howheard.addCustomerMetafield(shop.companyName, custId, selection.choice, token);
+	
+	
 	  } else
 	  {
-	    const selection.choice = 'Did not answer';
+	    const choice = 'Did not answer';
+	
+	    const customerMetafield = yield howheard.addCustomerMetafield(shop.companyName, custId, choice, token);
 	  }
 		
   }
 
-  // POST customer selection as a metafield to store
-  const customerMetafield = yield howheard.addCustomerMetafield(shop.companyName, custId, selection.choice, token);
+
 	
   // add selection to orderCollection document and save metafield id
   const metafieldId = customerMetafield.metafield[0].id;
