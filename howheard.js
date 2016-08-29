@@ -330,6 +330,7 @@ function *updateShop(shopName, update) {
 function *addShopifyOrderCreateWebhook(shopName, token) {
   
   // convert shopName to an object for use inside JSON.stringify
+  var name = '';
   var shopObj = {};
   shopObj[name] = shopName;
 
