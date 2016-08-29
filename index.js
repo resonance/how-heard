@@ -602,22 +602,29 @@ router.post('/messages/:shopName/:type', function *() {
 	    // POST customer selection as a metafield to store
 	    const customerMetafield = yield howHeard.addCustomerMetafield(shop.companyName, custId, selection.choice, token);
 	
+	    // add selection to orderCollection document and save metafield id
+	    const metafieldId = customerMetafield.metafield[0].id;
+
+	    yield howHeard.appendHowHeardSelection(shop.companyName, custId, metafieldId);
+	
 	
 	  } else
 	  {
 	    const choice = 'Did not answer';
 	
 	    const customerMetafield = yield howHeard.addCustomerMetafield(shop.companyName, custId, choice, token);
+	
+	    // add selection to orderCollection document and save metafield id
+	    const metafieldId = customerMetafield.metafield[0].id;
+
+	    yield howHeard.appendHowHeardSelection(shop.companyName, custId, metafieldId);
 	  }
 		
   }
 
 
 	
-  // add selection to orderCollection document and save metafield id
-  const metafieldId = customerMetafield.metafield[0].id;
-	
-  yield howHeard.appendHowHeardSelection(shop.companyName, custId, metafieldId);
+
 
 
   console.log('MESSAGE SAVED, METAFIELD UPLOADED, METAFIELD ID SAVED');
