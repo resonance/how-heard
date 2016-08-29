@@ -347,12 +347,14 @@ router.get('/authenticate', function *() {
   // ping Shopify API for Shop object
   const shop = yield howHeard.fetchShopFromShopify(shopName, token);
  
+  const shopId = shop.shop.id;
+
+  console.log("shopId is", shopId);
+
+
   // save shop to db
   yield howHeard.updateShop(shopName, shop.shop);
 
-  const shopId = shop.id;
-
-  console.log("shopId is", shopId);
 
   // set createOrder webhook
   const setWebhookResponse = yield howHeard.addShopifyOrderCreateWebhook(shopName, shopId, token);
