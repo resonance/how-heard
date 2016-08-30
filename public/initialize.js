@@ -82,7 +82,7 @@ var myAppJavaScript = function($){
 	    iFrameResize(undefined, iframe);
 	
 		$( document ).ajaxComplete(function() {
-		  $.getScript( "https://how-heard.herokuapp.com/public/initialize.js");
+		  $.getScript( "https://how-heard.herokuapp.com/initialize.js");
 		});
 	
 	}
