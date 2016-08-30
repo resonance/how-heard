@@ -78,6 +78,15 @@ var myAppJavaScript = function($){
 	
     }
 
+    $(".edit_checkout").bind('ajax:complete', function() {
+
+         // tasks to do 
+        $('.section.section--optional').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
+
+     });
+
+
+
 };
 
 /* If jQuery has not yet been loaded or if it has but it's too old for our needs,
