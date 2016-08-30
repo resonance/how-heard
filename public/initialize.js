@@ -83,13 +83,15 @@ var myAppJavaScript = function($){
 	
 	}
 	
+
+  
+  }
+
+
 	// if coupon code button is clicked
 	$( 'button' ).on( 'submit', '.section.section--optional', function() {
 	  $( this ).append('<p>STUPID</p>');
 	});
-  
-  }
-
 
 
 };
