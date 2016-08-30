@@ -80,11 +80,9 @@ var myAppJavaScript = function($){
 	    iFrameResize(undefined, iframe);
 	
 	    // if coupon code button is clicked
-
-		$(‘button.field__input-btn.btn.btn--default’).on(‘submit’, ‘.section.section--optional’, function() {
-			$( this ).append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
+		$( 'button' ).on( 'submit', '.section.section--optional', function() {
+		  $( this ).append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
 		});
-
 	
 	}
   
