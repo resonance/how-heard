@@ -603,14 +603,19 @@ router.post('/messages/:shopName/:type', function *() {
 	const selection = yield howHeard.getHowHeardSelection(shop.companyName, custId);
 
     const choice = selection.choice;    
+
+    console.log('SELECTION FOUND');
 	
   } else {
 	const choice = 'Did not answer';
+	
+    console.log('SELECTION NOT FOUND');
+	
   }
 
 	
   // POST customer selection as a metafield to store
-  const customerMetafield = yield howHeard.addCustomerMetafield(shop.companyName, custId, selection.choice, token);
+  const customerMetafield = yield howHeard.addCustomerMetafield(shop.companyName, custId, choice, token);
 	
   // add selection to orderCollection document and save metafield id
   const metafieldId = customerMetafield.metafield.id;
