@@ -72,12 +72,18 @@ var myAppJavaScript = function($){
 
     // if promo code submitted, reload our js
     $("button.field__input-btn").click(function() {
-      ReloadInitialize();
+	
+	  $( document ).ajaxComplete(function() {
+        ReloadInitialize();
+	  });
+		
     });
 
     // if promo code removed, reload our js
     $("button.applied-reduction-code__clear-button").click(function() {
-      ReloadInitialize(); 
+      $( document ).ajaxComplete(function() {
+        ReloadInitialize();
+	  });
     });
 
   
