@@ -397,7 +397,7 @@ router.get('/authenticate', function *() {
 
 router.get('/initialize.js?8984j', function *() {
 
-  this.redirect('/public/initialize.js');
+  this.redirect('/public/initialize.js?8984j');
 
 });
 
