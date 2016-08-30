@@ -541,11 +541,6 @@ router.post('/messages/:shopName/:type', function *() {
   const custId = body.customer.id;
   const custOrderCount = parseInt(body.customer.orders_count);
 
-  if (custOrderCount != 1) {
-	return;
-  }
-
-
   const incomingMessage = {
     orderId: body.id,
     orderEmail: body.email,
@@ -591,25 +586,28 @@ router.post('/messages/:shopName/:type', function *() {
   yield howHeard.saveShopifyMessage(shop.companyName, incomingMessage);
 
 
+  // if this isn't the customer's first order, there's nothing more to do
+  if (custOrderCount != 1) {
+	return;
+	
+  }
+
+
   // see if we have a howheard for customer in order
   const custSelectionExists = yield howHeard.findUserSelection(shop.companyName, custId);
 
 
-  // update storefront with metafield
-  // Then check if they selected a choice, if not, set default value of "Did Not Answer"
-
+  // Check if they selected a choice, if not, set default value of "Did Not Answer"
   if (custSelectionExists) {
-	// get customer selection	
-	var selection = yield howHeard.getHowHeardSelection(shop.companyName, custId);
+	
+	  // get customer selection	
+	  var selection = yield howHeard.getHowHeardSelection(shop.companyName, custId);
 
-    var choice = selection.selection;    
-
-    console.log('SELECTION FOUND');
+      var choice = selection.selection;    
 	
   } else {
-	var choice = 'Did not answer';
 	
-    console.log('SELECTION NOT FOUND');
+	  var choice = 'Did not answer';
 	
   }
 

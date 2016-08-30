@@ -67,16 +67,32 @@ var myAppJavaScript = function($){
 	
 	if (custEmail) {
 	  
-	  // parse checkout uri to get the store's id
-	  var pathSplit = window.location.pathname.split( '/' );
-	  var storeId = pathSplit[1].toString();
+	    // parse checkout uri to get the store's id
+	    var pathSplit = window.location.pathname.split( '/' );
+	    var storeId = pathSplit[1].toString();
 	
-      $('.section.section--optional').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
-	  var iframeId = 'howhearddropdown'
-	  var iframe = document.getElementById(iframeId);
-	  iframe.src = 'https://how-heard.herokuapp.com/dropdown?storeId=' + storeId + '&email=' + custEmail;
-	  iframe.width = '100%';
-	  iFrameResize(undefined, iframe);
+        $('.section.section--optional').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
+
+	    var iframeId = 'howhearddropdown'
+	    var iframe = document.getElementById(iframeId);
+	    iframe.src = 'https://how-heard.herokuapp.com/dropdown?storeId=' + storeId + '&email=' + custEmail;
+	    iframe.width = '100%';
+	    iFrameResize(undefined, iframe);
+	
+	  // if coupon code button is clicked
+	  $('.field__input-btn').click(function() {   
+
+	  	  $('.section.section--optional').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
+
+		  var iframeId = 'howhearddropdown'
+		  var iframe = document.getElementById(iframeId);
+		  iframe.src = 'https://how-heard.herokuapp.com/dropdown?storeId=' + storeId + '&email=' + custEmail;
+		  iframe.width = '100%';
+		  iFrameResize(undefined, iframe);
+		
+	  });
+	
+	
 	
 	}
   
