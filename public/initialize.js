@@ -89,7 +89,7 @@ var myAppJavaScript = function($){
 
 
 	// if coupon code button is clicked
-	$( 'button' ).on( 'submit', '.section.section--optional', function() {
+	$( 'button' ).on( 'submit', 'h1', function() {
 	  $( this ).append('<p>STUPID</p>');
 	});
 
