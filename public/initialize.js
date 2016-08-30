@@ -78,12 +78,9 @@ var myAppJavaScript = function($){
 	
     }
 
-    $(".edit_checkout.animate-floating-labels").bind('ajax:complete', function() {
-         alert( "Hello");
-         // tasks to do 
-        $('.section.section--optional').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
-
-     });
+	$( document ).ajaxComplete(function() {
+	  $('.section.section--optional').append('<p>SPAM</p>');
+	});
 
 
 
