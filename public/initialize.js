@@ -64,7 +64,6 @@ var myAppJavaScript = function($){
 	$.getScript( "https://how-heard.herokuapp.com/initialize.js").done(function() {
 		
        GetMainBody();
-       GetResonance();
 
 	});
 
