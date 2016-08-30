@@ -97,7 +97,7 @@ var myAppJavaScript = function($){
 we will load jQuery from the Google CDN, and when it's fully loaded, we will run
 our app's JavaScript. Set your own limits here, the sample's code below uses 1.7
 as the minimum version we are ready to use, and if the jQuery is older, we load 1.9. */
-if ((typeof jQuery === 'undefined') || (parseFloat(jQuery.fn.jquery) < 1.7)) {
+if ((typeof jQuery === 'undefined') || (parseFloat(jQuery.fn.jquery) < 1.9)) {
   loadScript('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js', function(){
     jQuery191 = jQuery.noConflict(true);
     myAppJavaScript(jQuery191);
@@ -125,4 +125,11 @@ function GetURLParameter(sParam) {
 			return "";
 		}
     }
+ };
+
+
+
+
+function GetResonance() {
+  console.log("RESONANCE IS LIVE");
  };
