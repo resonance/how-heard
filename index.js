@@ -394,13 +394,13 @@ router.get('/authenticate', function *() {
 /**
  * Initial request for iframe from checkout
  */
-
-router.get('/initialize.js/:route', function *() {
+/*
+router.get('/initialize.js', function *() {
 
   this.redirect('/public/initialize.js');
 
 });
-
+*/
 
 
 

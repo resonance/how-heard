@@ -49,9 +49,7 @@ var myAppJavaScript = function($){
   // Don't use jQuery, or jQuery191, use the dollar sign.
   // Do this and do that, using $.
 
-	$( document ).ajaxComplete(function() {
-	  $('.section.section--optional').append('<p>SPAM</p>');
-	});
+
 
 
 };
