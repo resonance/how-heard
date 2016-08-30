@@ -50,9 +50,6 @@ var myAppJavaScript = function($){
   // Do this and do that, using $.
 
 
-  var stepper = GetURLParameter('step');
-  if (stepper.toString() !== 'shipping_method' || stepper.toString() !== 'contact_information' || stepper.toString() === '') {
-	
 	/*
 	*  Desc: Force cross domain iframes to size to content.
 	*  Requires: iframeResizer.contentWindow.min.js to be loaded into the target frame.
@@ -79,20 +76,7 @@ var myAppJavaScript = function($){
 	    iframe.width = '100%';
 	    iFrameResize(undefined, iframe);
 	
-
-	
-	}
-	
-
-  
-  }
-
-
-	// if coupon code button is clicked
-	$( 'button' ).on( 'submit', 'h1', function() {
-	  $( this ).append('<p>STUPID</p>');
-	});
-
+    }
 
 };
 
