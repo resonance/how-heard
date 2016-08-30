@@ -71,7 +71,7 @@ var myAppJavaScript = function($){
     }
 
     // if promo code submitted, reload our js
-    $("button.field__input-btn").click(function() {
+    $("button.field__input-btn").submit(function() {
 	
 	  $( document ).ajaxComplete(function() {
         ReloadInitialize();
@@ -80,7 +80,7 @@ var myAppJavaScript = function($){
     });
 
     // if promo code removed, reload our js
-    $("button.applied-reduction-code__clear-button").click(function() {
+    $("button.applied-reduction-code__clear-button").submit(function() {
       $( document ).ajaxComplete(function() {
         ReloadInitialize();
 	  });
