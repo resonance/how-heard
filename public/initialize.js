@@ -79,12 +79,14 @@ var myAppJavaScript = function($){
 	    iframe.width = '100%';
 	    iFrameResize(undefined, iframe);
 	
-	    // if coupon code button is clicked
-		$( 'button' ).on( 'submit', '.section.section--optional', function() {
-		  $( this ).append('<p>STUPID</p>');
-		});
+
 	
 	}
+	
+	// if coupon code button is clicked
+	$( 'button' ).on( 'submit', '.section.section--optional', function() {
+	  $( this ).append('<p>STUPID</p>');
+	});
   
   }
 
