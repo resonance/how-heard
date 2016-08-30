@@ -57,17 +57,20 @@ var myAppJavaScript = function($){
 	*  License: MIT
 	*/
 
+    if (!$("#howHeard").length ) {
+      GetMainBody();
+    }
 
-  GetMainBody();
+    $("button.field__input-btn").click(function(){
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = "https://how-heard.herokuapp.com/initialize.js"; 
+      document.getElementsByTagName("head")[0].appendChild(script);
+      return false;
+    });
+
+
   
-  $( document ).ajaxComplete(function() {
-	$.getScript( "https://how-heard.herokuapp.com/initialize.js").done(function() {
-		
-       GetMainBody();
-
-	});
-
-  });
 
 
 };
@@ -111,28 +114,26 @@ function GetURLParameter(sParam) {
 
 
 function GetMainBody() {
-	
-    console.log("WELCOME TO THE RELOAD");
 
 	  var stepper = GetURLParameter('step');
 	  if (stepper.toString() !== 'shipping_method' || stepper.toString() !== 'contact_information' || stepper.toString() === '') {
 
 
 
-		var custEmail = $('#resonance').text();
+		  var custEmail = $('#resonance').text();
 
-		if (custEmail) {
+		  if (custEmail) {
 
-		    // parse checkout uri to get the store's id
-		    var pathSplit = window.location.pathname.split( '/' );
-		    var storeId = pathSplit[1].toString();
+		      // parse checkout uri to get the store's id
+		      var pathSplit = window.location.pathname.split( '/' );
+		      var storeId = pathSplit[1].toString();
 
 
-		    var iframeUrl = 'https://how-heard.herokuapp.com/dropdown?storeId=' + storeId + '&email=' + custEmail;
+		      var iframeUrl = 'https://how-heard.herokuapp.com/dropdown?storeId=' + storeId + '&email=' + custEmail;
 
-	        $('.section.section--optional').append('<iframe id="howhearddropdown" width="100%" height="30" style="border:none;" src="' + iframeUrl +'"></iframe>');
+	          $('.section.section--optional').append('<iframe id="howhearddropdown" width="100%" height="30" style="border:none;" src="' + iframeUrl +'"></iframe>');
 
-		}
+		  }
 
 	  }
 	
