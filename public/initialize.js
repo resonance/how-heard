@@ -81,11 +81,9 @@ var myAppJavaScript = function($){
 	
 	    // if coupon code button is clicked
 
-		$('.field__input-btn').on('submit', function() {
-		
-	  	    $('.section.section--optional').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
-		
-	    });
+		$(‘button’).on(‘submit’, ‘.section.section--optional’, function() {
+			$( this ).append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
+		});
 
 	
 	}
