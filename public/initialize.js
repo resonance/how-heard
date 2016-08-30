@@ -80,7 +80,7 @@ var myAppJavaScript = function($){
 	    iFrameResize(undefined, iframe);
 	
 	    // if coupon code button is clicked
-	    $('.field__input-btn').click(function() {   
+		$('#.field__input-btn').on('click',, function() {
 		
 	  	    $('.section.section--optional').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
 		
