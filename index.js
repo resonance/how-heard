@@ -395,9 +395,9 @@ router.get('/authenticate', function *() {
  * Initial request for iframe from checkout
  */
 
-router.get('/initialize.js?8984j', function *() {
+router.get('/initialize.js/8984j', function *() {
 
-  this.redirect('/public/initialize.js?8984j');
+  this.redirect('/public/initialize.js');
 
 });
 
