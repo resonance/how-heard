@@ -602,7 +602,7 @@ router.post('/messages/:shopName/:type', function *() {
 	// get customer selection	
 	var selection = yield howHeard.getHowHeardSelection(shop.companyName, custId);
 
-    var choice = selection.choice;    
+    var choice = selection.selection;    
 
     console.log('SELECTION FOUND');
 	
