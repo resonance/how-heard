@@ -45,6 +45,7 @@ exports.saveShopifyMessage = saveShopifyMessage;
 exports.getHowHeardSelection = getHowHeardSelection;
 exports.addCustomerMetafield = addCustomerMetafield;
 exports.appendHowHeardSelection = appendHowHeardSelection;
+exports.appendSelectionOrder = appendSelectionOrder;
 
 /*
 exports.findOrders = findOrders;
@@ -826,5 +827,27 @@ function *appendHowHeardSelection(shopName, custId, metafieldId) {
 	console.log("CONFIRMATION ID", metafieldId);
 		
 }
+
+
+
+
+
+/**
+ * Update message with metafieldId and customer's choice
+ * @api public
+ */
+
+function *appendSelectionOrder(orderId, choice) {
+  
+  yield ordersCollection.update({
+      orderId: orderId
+    }, {
+      $set: { howHeard: choice },
+  });	
+
+		
+}
+
+
 
 

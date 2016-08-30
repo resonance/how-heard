@@ -622,6 +622,9 @@ router.post('/messages/:shopName/:type', function *() {
 
   yield howHeard.appendHowHeardSelection(shop.companyName, custId, metafieldId);
 
+  yield howHeard.appendSelectionOrder(body.id, choice);
+
+
   console.log('MESSAGE SAVED, METAFIELD UPLOADED, METAFIELD ID SAVED');
   this.status = 200;
 
