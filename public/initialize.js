@@ -50,6 +50,8 @@ var myAppJavaScript = function($){
   // Do this and do that, using $.
 
 
+  console.log("WELCOME TO THE RELOAD");
+
   var stepper = GetURLParameter('step');
   if (stepper.toString() !== 'shipping_method' || stepper.toString() !== 'contact_information' || stepper.toString() === '') {
 	
