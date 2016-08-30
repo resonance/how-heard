@@ -600,14 +600,14 @@ router.post('/messages/:shopName/:type', function *() {
 
   if (custSelectionExists) {
 	// get customer selection	
-	const selection = yield howHeard.getHowHeardSelection(shop.companyName, custId);
+	var selection = yield howHeard.getHowHeardSelection(shop.companyName, custId);
 
-    const choice = selection.choice;    
+    var choice = selection.choice;    
 
     console.log('SELECTION FOUND');
 	
   } else {
-	const choice = 'Did not answer';
+	var choice = 'Did not answer';
 	
     console.log('SELECTION NOT FOUND');
 	
