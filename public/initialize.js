@@ -145,7 +145,7 @@ function GetMainBody() {
 		var letterSpacing = style.letterSpacing;
 		
 
-        $('.section.section--optional').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
+        $('.section.section--billing-address').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
 	    
 	    var iframeId = 'howhearddropdown'
 	    var iframe = document.getElementById(iframeId);
