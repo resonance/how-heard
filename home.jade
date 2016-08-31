@@ -8,7 +8,7 @@ block content
       li
         a(href="/reporting") Reporting
   div.columns
-    div.column
+    div.column(style="padding:30;")
       h2 Marketing Sources
         if choices
           table
@@ -19,18 +19,11 @@ block content
                   td
                     a(href="/delete?shop=#{shopName}&selection=#{selection}") Delete
 
-    div.column
-      form(action='/add' id="addselections" name='addselections', method="post")
-        table
-          tbody
-            tr
-              td
-                h2 Add New Marketing Sources
-            tr
-              td  
-                textarea(name="selection" rows="10", required)
-                input(id="shopName" type="hidden" name='shopName' value="#{shopName}")
-                br
-                button(type="submit" style="margin: 10px;") Add
+    div.column(style="padding:30;")
+      h2 Add New Marketing Sources
+        form(action='/add' id="addselections" name='addselections', method="post")
+          textarea(name="selection" rows="10", required)
+          input(id="shopName" type="hidden" name='shopName' value="#{shopName}")
+          button(type="submit" style="margin: 10px;") Add
 
 script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
