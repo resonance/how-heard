@@ -9,21 +9,22 @@ block content
         a(href="/reporting") Reporting
   div.columns
     div.column(style="padding:30;")
-      h2(style="font-size:20;font-weight:bold;") Marketing Sources
+      h2(style="font-size:24;font-weight:bold;margin-bottom:30px;") Marketing Sources
         if choices
           table
             tbody
               each selection in choices.selections
-                tr(style="font-size:12px;")
-                  td(style="height:40px;border-bottom:1px;" data-choice="#{selection}") #{selection}
+                tr(style="border-bottom:1px solid #666666;font-size:16px;")
+                  td(style="height:40px;" data-choice="#{selection}") #{selection}
                   td(style="height:40px")
                     a(href="/delete?shop=#{shopName}&selection=#{selection}") Delete
 
     div.column(style="padding:30;")
-       h2(style="font-size:20;font-weight:bold;") Add New Marketing Sources
+       h2(style="font-size:24;font-weight:bold;margin-bottom:30px;") Add New Marketing Sources
         form(action='/add' id="addselections" name='addselections', method="post")
           textarea(name="selection" rows="10", required)
           input(id="shopName" type="hidden" name='shopName' value="#{shopName}")
-          button(type="submit" style="margin: 10px;") Add
+          p
+            button(type="submit" style="margin: 10px;") Add
 
 script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
