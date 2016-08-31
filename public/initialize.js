@@ -133,7 +133,7 @@ function GetMainBody() {
 		var pathSplit = window.location.pathname.split( '/' );
 		var storeId = pathSplit[1].toString();
 
-        $('.section.sectn--optional').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
+        $('.section.section--optional').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
 	    
 	    var iframeId = 'howhearddropdown'
 	    var iframe = document.getElementById(iframeId);
