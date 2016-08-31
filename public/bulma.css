@@ -188,7 +188,7 @@ input[type=button] {
 }
 
 html {
-  background-color: #f5f7fa;
+  background-color: #ffffff;
   font-size: 14px;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -1559,7 +1559,7 @@ a.box:active {
           align-items: center;
   background-color: white;
   border: 1px solid #d3d6db;
-  border-radius: 3px;
+  border-radius: 0px;
   color: #222324;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
@@ -1587,7 +1587,7 @@ a.box:active {
 }
 
 .select select:active, .select select:focus, .select select.is-active {
-  border-color: #1fc8db;
+  border-color: #222324;
   outline: none;
 }
 
@@ -1667,7 +1667,7 @@ a.box:active {
 }
 
 .select:after {
-  border: 1px solid #1fc8db;
+  border: 1px solid #222324;
   border-right: 0;
   border-top: 0;
   content: " ";
