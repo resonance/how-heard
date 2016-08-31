@@ -19,9 +19,8 @@ block content
                   td
                     a(href="/delete?shop=#{shopName}&selection=#{selection}") Delete
 
-  div.column
-    form(action='/add' id="addselections" name='addselections', method="post")
-      div
+    div.column
+      form(action='/add' id="addselections" name='addselections', method="post")
         h2 Add New Marketing Sources
           textarea(name="selection" rows="10", required)
           input(id="shopName" type="hidden" name='shopName' value="#{shopName}")
