@@ -9,7 +9,7 @@ block content
         a(href="/reporting") Reporting
   div.columns
     div.column(style="padding:30;")
-      h2 Marketing Sources(style="font-size:30;line-height:60")
+      h2 Marketing Sources(style="font-size:30; line-height:60;")
         if choices
           table
             tbody
@@ -20,7 +20,7 @@ block content
                     a(href="/delete?shop=#{shopName}&selection=#{selection}") Delete
 
     div.column(style="padding:30;")
-      h2 Add New Marketing Sources(style="font-size:30;;line-height:60")
+      h2 Add New Marketing Sources(style="font-size:30; line-height:60;")
         form(action='/add' id="addselections" name='addselections', method="post")
           textarea(name="selection" rows="10", required)
           input(id="shopName" type="hidden" name='shopName' value="#{shopName}")
