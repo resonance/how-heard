@@ -1560,7 +1560,7 @@ a.box:active {
   background-color: white;
   border: 1px solid #CCCCCC;
   border-radius: 0px;
-  color: #333333;
+  color: #666666;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -1707,7 +1707,7 @@ a.box:active {
 }
 
 .select.is-medium select {
-  font-size: 13px;
+  font-size: 14px;
   height: 40px;
   line-height: 32px;
   padding-left: 10px;
