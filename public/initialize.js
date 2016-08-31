@@ -135,7 +135,7 @@ function GetMainBody() {
 
 		var iframeUrl = 'https://how-heard.herokuapp.com/dropdown?storeId=' + storeId + '&email=' + custEmail;
 
-	    $('.section.section--optional').append('<iframe id="howhearddropdown" width="100%" height="30" style="border:none;" src="' + iframeUrl +'"></iframe>');
+	    $('.section.section--optional').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;" src="' + iframeUrl +'"></iframe>');
 
     }
 	
