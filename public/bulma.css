@@ -1558,7 +1558,7 @@ a.box:active {
       -ms-flex-align: center;
           align-items: center;
   background-color: white;
-  border: 1px solid #d3d6db;
+  border: 1px solid #747474;
   border-radius: 0px;
   color: #222324;
   display: -webkit-inline-box;
@@ -1583,17 +1583,17 @@ a.box:active {
 }
 
 .select select:hover {
-  border-color: #d3d6db;
+  border-color: #747474;
 }
 
 .select select:active, .select select:focus, .select select.is-active {
-  border-color: #d3d6db;
+  border-color: #747474;
   outline: none;
 }
 
 .select select[disabled], .select select.is-disabled {
   background-color: #f5f7fa;
-  border-color: #d3d6db;
+  border-color: #747474;
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -1651,7 +1651,7 @@ a.box:active {
 }
 
 .select select:hover {
-  border-color: #d3d6db;
+  border-color: #747474;
 }
 
 .select select::ms-expand {
@@ -1667,7 +1667,7 @@ a.box:active {
 }
 
 .select:after {
-  border: 1px solid #d3d6db;
+  border: 1px solid #747474;
   border-right: 0;
   border-top: 0;
   content: " ";
@@ -1684,7 +1684,7 @@ a.box:active {
 }
 
 .select:hover:after {
-  border-color: #d3d6db;
+  border-color: #747474;
 }
 
 .select.is-small {
