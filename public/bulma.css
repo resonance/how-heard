@@ -1560,7 +1560,7 @@ a.box:active {
   background-color: white;
   border: 1px solid #d3d6db;
   border-radius: 0px;
-  color: #222324;
+  color: #d3d6db;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -1583,11 +1583,11 @@ a.box:active {
 }
 
 .select select:hover {
-  border-color: #aeb1b5;
+  border-color: #d3d6db;
 }
 
 .select select:active, .select select:focus, .select select.is-active {
-  border-color: #222324;
+  border-color: #d3d6db;
   outline: none;
 }
 
@@ -1651,7 +1651,7 @@ a.box:active {
 }
 
 .select select:hover {
-  border-color: #aeb1b5;
+  border-color: #d3d6db;
 }
 
 .select select::ms-expand {
@@ -1667,7 +1667,7 @@ a.box:active {
 }
 
 .select:after {
-  border: 1px solid #222324;
+  border: 1px solid #d3d6db;
   border-right: 0;
   border-top: 0;
   content: " ";
@@ -1684,7 +1684,7 @@ a.box:active {
 }
 
 .select:hover:after {
-  border-color: #222324;
+  border-color: #d3d6db;
 }
 
 .select.is-small {
