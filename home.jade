@@ -9,18 +9,18 @@ block content
         a(href="/reporting") Reporting
   div.columns
     div.column(style="padding:30;")
-      h2(style="font-size:30;font-weight:bold;line-height:60;") Marketing Sources
+      h2(style="font-size:20;font-weight:bold;") Marketing Sources
         if choices
           table
             tbody
               each selection in choices.selections
-                tr
+                tr(style="font-size:12px;")
                   td(style="height:40px;border-bottom:1px;" data-choice="#{selection}") #{selection}
                   td(style="height:40px")
                     a(href="/delete?shop=#{shopName}&selection=#{selection}") Delete
 
     div.column(style="padding:30;")
-       h2(style="font-size:30;font-weight:bold;line-height:60;") Add New Marketing Sources
+       h2(style="font-size:20;font-weight:bold;") Add New Marketing Sources
         form(action='/add' id="addselections" name='addselections', method="post")
           textarea(name="selection" rows="10", required)
           input(id="shopName" type="hidden" name='shopName' value="#{shopName}")
