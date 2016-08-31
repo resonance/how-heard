@@ -141,13 +141,14 @@ function GetMainBody() {
 		var fontSize = style.fontSize;
 		var fontWeight = style.fontSize;style.fontWeight;
 		var fontColor = style.color;
+		var textTransform = style.textTransform;
 		
 
         $('.section.section--optional').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
 	    
 	    var iframeId = 'howhearddropdown'
 	    var iframe = document.getElementById(iframeId);
-	    iframe.src = 'https://how-heard.herokuapp.com/dropdown?storeId='+storeId+'&email='+custEmail+'&fontFamily='+fontFamily+'&fontSize='+fontSize+'&fontWeight='+fontWeight+'&fontColor='+fontColor;
+	    iframe.src = 'https://how-heard.herokuapp.com/dropdown?storeId='+storeId+'&email='+custEmail+'&fontFamily='+fontFamily+'&fontSize='+fontSize+'&fontWeight='+fontWeight+'&fontColor='+fontColor+'&textTransform='+textTransform;
 	    iframe.width = '100%';
 
 	    iFrameResize(undefined, iframe);
