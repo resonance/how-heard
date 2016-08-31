@@ -1,13 +1,13 @@
 extends /layout.jade
 block content
 
+  div.tabs
+    ul
+      li
+        a(href="/") Marketing Sources
+      li
+        a(href="/reporting") Reporting
   div.columns
-    div.tabs
-      ul
-        li
-          a(href="/") Marketing Sources
-        li
-          a(href="/reporting") Reporting
     div.column
       h2 Marketing Sources
         if choices
@@ -19,12 +19,13 @@ block content
                   td
                     a(href="/delete?shop=#{shopName}&selection=#{selection}") Delete
 
-    div.column
-      form(action='/add' id="addselections" name='addselections', method="post")
-        div
-          label(for="selection") Enter your selections
+  div.column
+    form(action='/add' id="addselections" name='addselections', method="post")
+      div
+        h2 Add New Marketing Sources
           textarea(name="selection" rows="10", required)
           input(id="shopName" type="hidden" name='shopName' value="#{shopName}")
+          br
           button(type="submit" style="margin: 10px;") Add
 
 script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
