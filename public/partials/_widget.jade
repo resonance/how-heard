@@ -1,7 +1,9 @@
-div
-  select#howHeard.field__input--select
-    each selection, i in selections
-      option(value=i) #{selection}
+div.field field--required.field--three-eights.field--show-floating-label
+  div.field__input-wrapper.field__input-wrapper--select
+    label.field__label
+      select#howHeard.field__input.field__input--select
+        each selection, i in selections
+          option(value=i) #{selection}
 
 script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
 script.

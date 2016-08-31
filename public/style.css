@@ -1,42 +1,423 @@
-.main {
-  margin: 20px auto;
-  text-align: center;
+.field {
+    width: 100%;
+    float: left;
+    padding: 0.45em;
+    box-sizing: border-box
 }
 
-.shop-button {
-  margin: 0 5px 0px 0;
-  padding: 10px 40px;
-  border: 1px solid #3A87AD;
-  border-radius: 3px;
-  background-color: white;
+@media (min-width: 750px) {
+    .floating-labels.boxsizing .field--two-thirds {
+        width: 66.66667%
+    }
+    .floating-labels.boxsizing .field--half {
+        width: 50%
+    }
+    .floating-labels.boxsizing .field--three-eights {
+        width: 37.5%
+    }
+    .floating-labels.boxsizing .field--third {
+        width: 33.33333%
+    }
+    .floating-labels.boxsizing .field--quarter {
+        width: 25%
+    }
 }
 
-.shop-button:focus {
-  outline:0;
+.field__label {
+    font-weight: 500;
+    margin: 0.5em 0;
+    display: block
 }
 
-.shop-button.selected {
-  box-shadow:none;
-  background-color: #3A87AD;
-  color: white;
-  border-color: #3A87AD;
+.main .field__label {
+    color: #4d4d4d
 }
 
-.shop-collection-view {
-  font-size: 0.8em;
-  width: 100%;
-  margin: 0 auto;
-
-  /* Old Syntax */
-  display: -webkit-box;
-  display: -moz-box;
-
-  /* New Syntax */
-  display: -webkit-flexbox;
-  -webkit-box-pack: center;
+.floating-labels .main .field__label {
+    color: #999999
 }
 
-ul
-{
-    list-style-type: none;
+.sidebar .field__label {
+    color: #4d4d4d
 }
+
+.floating-labels .sidebar .field__label {
+    color: #999999
+}
+
+.content-box .field__label {
+    color: #4d4d4d
+}
+
+.floating-labels .content-box .field__label {
+    color: #999999
+}
+
+.leaflet-popup-content .field__label {
+    color: #4d4d4d
+}
+
+.floating-labels .leaflet-popup-content .field__label {
+    color: #999999
+}
+
+.main .field--active .field__label {
+    color: #737373
+}
+
+.sidebar .field--active .field__label {
+    color: #737373
+}
+
+.content-box .field--active .field__label {
+    color: #737373
+}
+
+.leaflet-popup-content .field--active .field__label {
+    color: #737373
+}
+
+.floating-labels .field__label {
+    font-size: 0.85714em;
+    font-weight: normal;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    margin-top: 0.3em;
+    padding: 0 0.93333em;
+    z-index: 1;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-transform: translateY(3px);
+    transform: translateY(3px);
+    pointer-events: none;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=" 0 ")";
+    filter: alpha(opacity=0)
+}
+
+.floating-labels .field--show-floating-label .field__label {
+    -webkit-transform: none;
+    transform: none;
+    opacity: 1;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=" 100 ")";
+    filter: alpha(opacity=100)
+}
+
+.floating-labels .field__input-wrapper--icon-left .field__label {
+    padding-left: 40px
+}
+
+.floating-labels .field__input-wrapper--icon-right .field__label {
+    padding-right: 40px
+}
+
+.animate-floating-labels .field__label {
+    transition: all 0.2s ease-out
+}
+
+.field__input-wrapper {
+    position: relative
+}
+
+.field__input {
+    border-radius: 4px;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.94em 0.8em;
+    word-break: normal
+}
+
+.main .field__input {
+    background-color: white;
+    color: #333333
+}
+
+.no-js .main .field__input,
+.no-boxshadow .main .field__input {
+    border: 1px solid #d9d9d9
+}
+
+.boxshadow .main .field__input {
+    box-shadow: 0 0 0 1px #d9d9d9
+}
+
+.main .field__input::-webkit-input-placeholder {
+    color: #999999
+}
+
+.main .field__input:-moz-placeholder {
+    color: #999999
+}
+
+.main .field__input::-moz-placeholder {
+    color: #999999
+}
+
+.main .field__input:-ms-input-placeholder {
+    color: #999999
+}
+
+.sidebar .field__input {
+    background-color: white;
+    color: #333333
+}
+
+.no-js .sidebar .field__input,
+.no-boxshadow .sidebar .field__input {
+    border: 1px solid #d9d9d9
+}
+
+.boxshadow .sidebar .field__input {
+    box-shadow: 0 0 0 1px #d9d9d9
+}
+
+.sidebar .field__input::-webkit-input-placeholder {
+    color: #999999
+}
+
+.sidebar .field__input:-moz-placeholder {
+    color: #999999
+}
+
+.sidebar .field__input::-moz-placeholder {
+    color: #999999
+}
+
+.sidebar .field__input:-ms-input-placeholder {
+    color: #999999
+}
+
+.content-box .field__input {
+    background-color: white;
+    color: #333333
+}
+
+.no-js .content-box .field__input,
+.no-boxshadow .content-box .field__input {
+    border: 1px solid #d9d9d9
+}
+
+.boxshadow .content-box .field__input {
+    box-shadow: 0 0 0 1px #d9d9d9
+}
+
+.content-box .field__input::-webkit-input-placeholder {
+    color: #999999
+}
+
+.content-box .field__input:-moz-placeholder {
+    color: #999999
+}
+
+.content-box .field__input::-moz-placeholder {
+    color: #999999
+}
+
+.content-box .field__input:-ms-input-placeholder {
+    color: #999999
+}
+
+.leaflet-popup-content .field__input {
+    background-color: white;
+    color: #333333
+}
+
+.no-js .leaflet-popup-content .field__input,
+.no-boxshadow .leaflet-popup-content .field__input {
+    border: 1px solid #d9d9d9
+}
+
+.boxshadow .leaflet-popup-content .field__input {
+    box-shadow: 0 0 0 1px #d9d9d9
+}
+
+.leaflet-popup-content .field__input::-webkit-input-placeholder {
+    color: #999999
+}
+
+.leaflet-popup-content .field__input:-moz-placeholder {
+    color: #999999
+}
+
+.leaflet-popup-content .field__input::-moz-placeholder {
+    color: #999999
+}
+
+.leaflet-popup-content .field__input:-ms-input-placeholder {
+    color: #999999
+}
+
+.animate-floating-labels .field__input {
+    transition: all 0.2s ease-out
+}
+
+.floating-labels .field--show-floating-label .field__input {
+    padding-top: 1.5em;
+    padding-bottom: 0.38em
+}
+
+.floating-labels .field--show-floating-label .field__input::-webkit-input-placeholder {
+    color: transparent
+}
+
+.floating-labels .field--show-floating-label .field__input:-moz-placeholder {
+    color: transparent
+}
+
+.floating-labels .field--show-floating-label .field__input::-moz-placeholder {
+    color: transparent
+}
+
+.floating-labels .field--show-floating-label .field__input:-ms-input-placeholder {
+    color: transparent
+}
+
+.field__input:focus {
+    outline: none
+}
+
+.no-js .field__input:focus,
+.no-boxshadow .field__input:focus {
+    border: 2px solid #381d21
+}
+
+.boxshadow .field__input:focus {
+    box-shadow: 0 0 0 2px #381d21
+}
+
+.no-js .field--error .field__input,
+.no-boxshadow .field--error .field__input {
+    border: 2px solid #ff6d6d
+}
+
+.boxshadow .field--error .field__input {
+    box-shadow: 0 0 0 2px #ff6d6d
+}
+
+.field__input-wrapper--icon-left .field__input {
+    padding-left: 40px
+}
+
+.field__input-wrapper--icon-right .field__input {
+    padding-right: 40px
+}
+
+.floating-labels .field--show-floating-label .field__input {
+    padding-top: 1.5em;
+    padding-bottom: 0.38em
+}
+
+.floating-labels .field--show-floating-label .field__input::-webkit-input-placeholder {
+    color: transparent
+}
+
+.floating-labels .field--show-floating-label .field__input:-moz-placeholder {
+    color: transparent
+}
+
+.floating-labels .field--show-floating-label .field__input::-moz-placeholder {
+    color: transparent
+}
+
+.floating-labels .field--show-floating-label .field__input:-ms-input-placeholder {
+    color: transparent
+}
+
+.csspointerevents .field__input-wrapper--select::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    pointer-events: none
+}
+
+.field__input--select::-ms-expand {
+    display: none
+}
+
+.no-js .field__input--select,
+.no-csspointerevents .field__input--select {
+    background-position: 95% center;
+    background-position: right 1em center;
+    background-repeat: no-repeat
+}
+
+.no-js .main .field__input--select,
+.no-csspointerevents .main .field__input--select {
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-e0b56f8b6bd91b987ac4526a533b29444088db55ef80c9d47778945233c13c09.png);
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-03cace330ac9af908922bab6c8e659b8c356ca7093d8b680fb3b09cd4b642ecb.svg), none
+}
+
+.no-js .sidebar .field__input--select,
+.no-csspointerevents .sidebar .field__input--select {
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-e0b56f8b6bd91b987ac4526a533b29444088db55ef80c9d47778945233c13c09.png);
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-03cace330ac9af908922bab6c8e659b8c356ca7093d8b680fb3b09cd4b642ecb.svg), none
+}
+
+.no-js .content-box .field__input--select,
+.no-csspointerevents .content-box .field__input--select {
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-e0b56f8b6bd91b987ac4526a533b29444088db55ef80c9d47778945233c13c09.png);
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-03cace330ac9af908922bab6c8e659b8c356ca7093d8b680fb3b09cd4b642ecb.svg), none
+}
+
+.no-js .leaflet-popup-content .field__input--select,
+.no-csspointerevents .leaflet-popup-content .field__input--select {
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-e0b56f8b6bd91b987ac4526a533b29444088db55ef80c9d47778945233c13c09.png);
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-03cace330ac9af908922bab6c8e659b8c356ca7093d8b680fb3b09cd4b642ecb.svg), none
+}
+
+.field__input--select option {
+    background-color: #fff;
+    color: #000
+}
+
+.csspointerevents .field__input-wrapper--select::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    pointer-events: none
+}
+
+.csspointerevents .main .field__input-wrapper--select::before {
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-e0b56f8b6bd91b987ac4526a533b29444088db55ef80c9d47778945233c13c09.png);
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-03cace330ac9af908922bab6c8e659b8c356ca7093d8b680fb3b09cd4b642ecb.svg), none
+}
+
+.csspointerevents .sidebar .field__input-wrapper--select::before {
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-e0b56f8b6bd91b987ac4526a533b29444088db55ef80c9d47778945233c13c09.png);
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-03cace330ac9af908922bab6c8e659b8c356ca7093d8b680fb3b09cd4b642ecb.svg), none
+}
+
+.csspointerevents .content-box .field__input-wrapper--select::before {
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-e0b56f8b6bd91b987ac4526a533b29444088db55ef80c9d47778945233c13c09.png);
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-03cace330ac9af908922bab6c8e659b8c356ca7093d8b680fb3b09cd4b642ecb.svg), none
+}
+
+.csspointerevents .leaflet-popup-content .field__input-wrapper--select::before {
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-e0b56f8b6bd91b987ac4526a533b29444088db55ef80c9d47778945233c13c09.png);
+    background-image: url(//cdn.shopify.com/s/assets/checkout/dropdown-arrow-down-dark-03cace330ac9af908922bab6c8e659b8c356ca7093d8b680fb3b09cd4b642ecb.svg), none
+}
+
+.anyflexbox .field__input-btn-wrapper .field__input-wrapper {
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1
+}
+
