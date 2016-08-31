@@ -46,18 +46,8 @@ exports.getHowHeardSelection = getHowHeardSelection;
 exports.addCustomerMetafield = addCustomerMetafield;
 exports.appendHowHeardSelection = appendHowHeardSelection;
 exports.appendSelectionOrder = appendSelectionOrder;
+exports.fetchStoreOrders = fetchStoreOrders;
 
-/*
-exports.findOrders = findOrders;
-exports.saveNewShop = saveNewShop;
-exports.saveConnection = saveConnection;
-exports.updateConnection = updateConnection;
-exports.shopifyMessageExists = shopifyMessageExists;
-exports.saveShopifyMessage = saveShopifyMessage;
-exports.makeHTTPRequest = makeHTTPRequest;
-exports.saveSlackToken = saveSlackToken;
-exports.daysOrders = daysOrders;
-*/
 
 
 
@@ -850,4 +840,17 @@ function *appendSelectionOrder(orderId, choice) {
 
 
 
+
+
+/**
+ * Fetch orders for a sjop
+ *
+ * @return {object} The updated orders
+ * @api public
+ */
+
+function *fetchStoreOrders(shopName) {
+  return yield ordersCollection.find({ companyName: shopName });
+
+}
 

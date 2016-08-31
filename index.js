@@ -645,4 +645,36 @@ router.post('/messages/:shopName/:type', function *() {
 
 
 
+/**
+ * User reporting in admin
+ */
+router.get('/reporting', function *() {
+  
+  // find store object in db
+  const shop = yield howHeard.findShop(this.query.shop);
+  const shopName = shop.companyName;
+
+  const orders = yield howHeard.fetchStoreOrders(shopName);
+
+    console.log("Orders array", orders);
+
+  /*
+  var jadeOptions = {
+    shopName: this.query.shop,
+    apiKey: constants.SHOPIFY_API_KEY,
+  };
+
+  var html = jade.compile(reportingTemplate, {
+    basedir: __dirname
+  })(jadeOptions);
+  this.body = html;
+  */
+
+});
+
+
+
+
+
+
 
