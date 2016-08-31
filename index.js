@@ -414,6 +414,11 @@ router.get('/dropdown', function *() {
 
   const email = this.query.email;
   const storeId = parseInt(this.query.storeId);
+  const fontFamily = this.query.fontFamily;
+  const fontSize = this.query.fontSize;
+  const fontWeight = this.query.fontWeight;
+  const fontColor = this.query.fontColor;
+
 
   // get shopName by using storeId
   const shop = yield howHeard.findShopById(storeId);
@@ -461,6 +466,10 @@ router.get('/dropdown', function *() {
     selections: listArray,
     shopName: shopName,
     custId: custId,
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+    fontColor: fontColor
   };
 
   // Serve html to client.
