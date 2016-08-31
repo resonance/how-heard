@@ -133,9 +133,14 @@ function GetMainBody() {
 		var pathSplit = window.location.pathname.split( '/' );
 		var storeId = pathSplit[1].toString();
 
-		var iframeUrl = 'https://how-heard.herokuapp.com/dropdown?storeId=' + storeId + '&email=' + custEmail;
+	    var iframeId = 'howhearddropdown'
+	    var iframe = document.getElementById(iframeId);
+	    iframe.src = 'https://how-heard.herokuapp.com/dropdown?storeId=' + storeId + '&email=' + custEmail;
+	    iframe.width = '100%';
 
-	    $('.section.section--optional').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;" src="' + iframeUrl +'"></iframe>');
+	    iFrameResize(undefined, iframe);
+
+	    $('.section.section--optional').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none;"></iframe>');
 
     }
 	
