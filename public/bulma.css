@@ -1713,6 +1713,7 @@ a.box:active {
   padding-left: 10px;
   padding-right: 10px;
   padding-right: 44px;
+  margin-left: 20px;
 }
 
 .select.is-large {

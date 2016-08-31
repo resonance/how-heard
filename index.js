@@ -419,6 +419,7 @@ router.get('/dropdown', function *() {
   const fontWeight = this.query.fontWeight;
   const fontColor = this.query.fontColor;
   const textTransform = this.query.textTransform;
+  const letterSpacing = this.query.letterSpacing;
 
 
   // get shopName by using storeId
@@ -471,7 +472,8 @@ router.get('/dropdown', function *() {
     fontSize: fontSize,
     fontWeight: fontWeight,
     fontColor: fontColor,
-    textTransform: textTransform
+    textTransform: textTransform,
+    letterSpacing: letterSpacing
   };
 
   // Serve html to client.
