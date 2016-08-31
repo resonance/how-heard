@@ -15,7 +15,7 @@ block content
             tbody
               each selection in choices.selections
                 tr
-                  td(style="height:25px")data-choice="#{selection}") #{selection}
+                  td(style="height:25px" data-choice="#{selection}") #{selection}
                   td(style="height:25px")
                     a(href="/delete?shop=#{shopName}&selection=#{selection}") Delete
 
