@@ -656,7 +656,8 @@ router.get('/reporting', function *() {
 
   const orders = yield howHeard.fetchStoreOrders(shopName);
 
-    console.log("Orders array", orders);
+  console.log('ORDER ARRAY ', orders);
+
 
   /*
   var jadeOptions = {
