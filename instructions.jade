@@ -10,10 +10,9 @@ block content
       li(style="padding:20px;")
         a(href='/instructions?circuit=yes&shop=#{shopName}') Install
   div.columns
-    div.column(style="padding:50px;")
-    - var code1 = "<!-- How Heard App =========================================== -->"
-    - var code2 = "<div id="resonance" style="display: none;">{{checkout.email}}</div>
-    - var code3 = "<script src="https://how-heard.herokuapp.com/initialize.js"></script>"
-    - var code4 = "<!-- End How Heard App ======================================== -->"
-      p!= 
-        code1
+    div.column(style="padding:50px;") 
+      p
+        "<!-- How Heard App =========================================== -->"
+        "<div id="resonance" style="display: none;">{{checkout.email}}</div>"
+        "<script src="https://how-heard.herokuapp.com/initialize.js"></script>"
+        "<!-- End How Heard App ======================================== -->"
