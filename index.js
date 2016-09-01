@@ -184,7 +184,10 @@ router.get('/', function *() {
 	
   // if submitting form from our homepage, bypass	
   if (!this.query.circuit) {
+
     const exists = yield howHeard.accessTokenExists(this.query.shop);
+    
+    // if token does not exist, redirect to /install
     if (!exists) {
       this.redirect('./install?shop='+this.query.shop);
       return;
@@ -650,11 +653,10 @@ router.post('/messages/:shopName/:type', function *() {
  */
 router.get('/reporting', function *() {
   
-  const storeId = parseInt(this.query.storeId);
+  const shopName = this.query.shop;
 
   // find store object in db
-  const shop = yield howHeard.findShopById(storeId);
-  const shopName = shop.companyName;
+  const shop = yield howHeard.findShop(shopName);
 
   const orders = yield howHeard.fetchStoreOrders(shopName);
 
