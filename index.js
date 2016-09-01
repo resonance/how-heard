@@ -124,6 +124,7 @@ app.use(function *(next) {
 var homeTemplate = fs.readFileSync(__dirname + '/home.jade', 'utf8');
 var dropdownTemplate = fs.readFileSync(__dirname + '/dropdown.jade', 'utf8');
 var reportingTemplate = fs.readFileSync(__dirname + '/reporting.jade', 'utf8');
+var installTemplate = fs.readFileSync(__dirname + '/install.jade', 'utf8');
 
 
 
@@ -693,5 +694,20 @@ router.get('/reporting', function *() {
 
 
 
+/**
+ * User instructions linked from the Shopify App Bar
+ */
+router.get('/install', function *() {
+	
+  var jadeOptions = {
+    shopName: this.query.shop,
+  };
 
+  var html = jade.compile(installTemplate, {
+    basedir: __dirname
+  })(jadeOptions);
+
+  this.body = html;
+
+});
 
