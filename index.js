@@ -695,12 +695,13 @@ router.get('/reporting', function *() {
 
 
 /**
- * User instructions linked from the Shopify App Bar
+ * User install instructions
  */
 router.get('/install', function *() {
 	
   var jadeOptions = {
     shopName: this.query.shop,
+    apiKey: constants.SHOPIFY_API_KEY,
   };
 
   var html = jade.compile(installTemplate, {
