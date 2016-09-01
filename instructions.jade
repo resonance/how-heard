@@ -11,10 +11,15 @@ block content
         a(href='/instructions?circuit=yes&shop=#{shopName}') Install
   div.columns
     div.column(style="padding:50px;")
+    - var code1 = <!-- How Heard App =========================================== -->
+    - var code2 = <div id="resonance" style="display: none;">{{checkout.email}}</div>
+    - var code 3 = <script src="https://how-heard.herokuapp.com/initialize.js"></script>
+    - var code 4 = <!-- End How Heard App ======================================== -->
       p.
-        <!-- How Heard App =========================================== -->
-
-	    <div id="resonance" style="display: none;">{{checkout.email}}</div>
-	    <script src="https://how-heard.herokuapp.com/initialize.js"></script>
-
-		<!--
+        code1
+        br
+        code2
+        br
+        code3
+        br
+        code4
