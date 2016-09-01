@@ -858,12 +858,12 @@ function *fetchStoreOrders(shopName) {
   var orders = [];
 
   for(var i = 0; i < orderData.length; i++) {
-    orders[i] = [i];
+    orders[i] = [];
    }
 
 
   for(var i = 0; i < orderData.length; i++) {
-    orders[i][0] = orderData[i];
+    orders[i]['data'] = orderData[i];
 	
    }
 
