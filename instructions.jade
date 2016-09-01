@@ -9,8 +9,7 @@ block content
         a(href='/reporting?circuit=yes&shop=#{shopName}') Reporting
       li(style="padding:20px;")
         a(href='/instructions?circuit=yes&shop=#{shopName}') Install
-  div.columns
-    div.column(style="padding:50px;")
+  div.container
       - var foo1 = '<!-- How Heard App =========================================== -->'
       - var foo2 = '<div id="resonance" style="display: none;">{{checkout.email}}</div>'
       - var foo3 = '<script src="https://how-heard.herokuapp.com/initialize.js"></script>'
@@ -22,7 +21,5 @@ block content
         | #{foo3}
         br
         | #{foo4}
-
-    div.column(style="padding:50px;")
 
         
