@@ -673,8 +673,6 @@ router.get('/reporting', function *() {
  }
 
 
-
-
   var jadeOptions = {
 	shopName: shopName,
     apiKey: constants.SHOPIFY_API_KEY,
