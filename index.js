@@ -663,7 +663,7 @@ router.get('/reporting', function *() {
    
    if (orders[i].createdAt) {
 	
-	orders[i].createdAt = moment(orders[i].createdAt).format('MMMM Do YYYY, h:mm:ss a');
+	orders[i].createdAt = moment(orders[i].createdAt).format('MM/DD/YYYY h:mm a');
 	
    }  
 
