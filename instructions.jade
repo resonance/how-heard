@@ -1,6 +1,20 @@
 extends /layout.jade
 block content
 
-  h1 Instructions
-  p How to install
-  br
+  div.tabs
+    ul
+      li(style="padding:20px;")
+        a(href='?circuit=yes&shop=#{shopName}') Marketing Sources
+      li(style="padding:20px;")
+        a(href='/reporting?circuit=yes&shop=#{shopName}') Reporting
+      li(style="padding:20px;")
+        a(href='/instructions?circuit=yes&shop=#{shopName}') Install
+  div.columns
+    div.column(style="padding:50px;")
+      p!
+        <!-- How Heard App =========================================== -->
+
+	    <div id="resonance" style="display: none;">{{checkout.email}}</div>
+	    <script src="https://how-heard.herokuapp.com/initialize.js"></script>
+
+		<!--
