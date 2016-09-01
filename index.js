@@ -659,7 +659,7 @@ router.get('/reporting', function *() {
  for(var i = 0; i < orders.length; i++) {
 	
     var counter;
-	counter = orders[i]['data'].orderId;
+	counter = orders[i].orderId;
 	console.log('ORDER ARRAY ', counter);
    
   }
