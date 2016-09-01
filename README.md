@@ -3,10 +3,10 @@ Admin reports
 
 
 To fix:
-- Minify css (remove bulk?)
-- Fix button on JCRT
-- Better documentation in code and instructions
-
-- Merge to Master
+- Add date controls to report
+- Add csv export to report
+- Better documentation in code 
+- Add instructions
+- Merge to master
 
 
