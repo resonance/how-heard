@@ -1,3 +1,16 @@
+/* Sample JavaScript file added with ScriptTag resource. 
+This sample file is meant to teach best practices.
+Your app will load jQuery if it's not defined. 
+Your app will load jQuery if jQuery is defined but is too old, e.g. < 1.7. 
+Your app does not change the definition of $ or jQuery outside the app. 
+Example: if a Shopify theme uses jQuery 1.4.2, both of these statements run in the console will still return '1.4.2'
+once the app is installed, even if the app uses jQuery 1.9.1:
+jQuery.fn.jquery => "1.4.2" 
+$.fn.jquery -> "1.4.2"
+*/
+
+/* Using a self-executing anonymous function - (function(){})(); - so that all variables and functions defined within 
+aren’t available to the outside world. */
 
 (function(){
   
@@ -71,7 +84,10 @@ var myAppJavaScript = function($){
   
 };
 
-
+/* If jQuery has not yet been loaded or if it has but it's too old for our needs,
+we will load jQuery from the Google CDN, and when it's fully loaded, we will run
+our app's JavaScript. Set your own limits here, the sample's code below uses 1.7
+as the minimum version we are ready to use, and if the jQuery is older, we load 1.9. */
 if ((typeof jQuery === 'undefined') || (parseFloat(jQuery.fn.jquery) < 1.9)) {
   loadScript('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js', function(){
     jQuery191 = jQuery.noConflict(true);
@@ -82,6 +98,9 @@ if ((typeof jQuery === 'undefined') || (parseFloat(jQuery.fn.jquery) < 1.9)) {
 }
 
 })();
+
+
+
 
 function GetURLParameter(sParam) {
     var sPageURL = window.location.search.substring(1);
@@ -98,6 +117,9 @@ function GetURLParameter(sParam) {
 		}
     }
  };
+
+
+
 
 
 function GetMainBody() {
@@ -139,6 +161,9 @@ function GetMainBody() {
  };
 
 
+
+
+
 function ReloadInitialize() {
     var script = document.createElement("script");
     script.type = "text/javascript";
@@ -146,3 +171,5 @@ function ReloadInitialize() {
     document.getElementsByTagName("head")[0].appendChild(script);
     return false;
  };
+
+
