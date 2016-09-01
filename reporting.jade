@@ -1,0 +1,33 @@
+extends /layout.jade
+block content
+
+  table.table
+    thead
+      tr
+        th Order Number
+        th Date
+        th Subtotal
+        th Email
+        th First Name
+        th Last Name
+        th City
+        th State
+        th Country
+        th Lifetime Orders
+        th LTR
+        th How Heard   
+    tbody
+      each order in orders
+        tr
+          td #{order.orderNumber}
+          td #{order.createdAt}
+          td #{order.subtotalPrice}
+          td #{order.customerEmail}
+          td #{order.customerFirstName}
+          td #{order.customerLastName}
+          td #{order.customerCity}
+          td #{order.customerCountry}
+          td #{order.customerProvinceCode}
+          td #{order.customerOrdersCount}
+          td #{order.customerTotalSpent}
+          td #{order.howHeard}

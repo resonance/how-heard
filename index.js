@@ -656,28 +656,16 @@ router.get('/reporting', function *() {
 
   const orders = yield howHeard.fetchStoreOrders(shopName);
 
- for(var i = 0; i < orders.length; i++) {
-	
-    var counter;
-	counter = orders[i].orderId;
-	console.log('ORDER ARRAY ', counter);
-   
-  }
-
-  
-
-
-  /*
   var jadeOptions = {
-    shopName: this.query.shop,
-    apiKey: constants.SHOPIFY_API_KEY,
+    orders: orders,
   };
 
   var html = jade.compile(reportingTemplate, {
     basedir: __dirname
   })(jadeOptions);
+
   this.body = html;
-  */
+
 
 });
 
