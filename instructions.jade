@@ -12,6 +12,16 @@ block content
   div.columns
     div.column(style="padding:50px;") 
     - var foo1 = "<!-- How Heard App =========================================== -->"
+      var foo2 = "<div id="resonance" style="display: none;">{{checkout.email}}</div>"
+      var foo3 = "<script src="https://how-heard.herokuapp.com/initialize.js"></script>"
+      var foo4 = "<!-- End How Heard App ======================================== -->"
       span= foo1
+      br
+      span= foo2
+      br
+      span= foo3
+      br
+      span= foo4
+    div.column(style="padding:50px;")
 
         
