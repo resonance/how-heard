@@ -850,7 +850,7 @@ function *appendSelectionOrder(orderId, choice) {
  */
 
 function *fetchStoreOrders(shopName) {
-  return = yield ordersCollection.find({ companyName: shopName });
+  return yield ordersCollection.find({ companyName: shopName });
 
 }
 
