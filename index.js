@@ -659,6 +659,8 @@ router.get('/reporting', function *() {
   const orders = yield howHeard.fetchStoreOrders(shopName);
 
   var jadeOptions = {
+	shopName: shopName,
+    apiKey: constants.SHOPIFY_API_KEY,
     orders: orders,
   };
 
