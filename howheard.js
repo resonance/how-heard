@@ -852,6 +852,9 @@ function *appendSelectionOrder(orderId, choice) {
 function *fetchStoreOrders(shopName) {
   const orderData = yield ordersCollection.find({ companyName: shopName });
 
+  console.log("ORDER DATA LENGTH", orderData.length);
+
+
   var orders = [];
 
   for(var i = 0; i < orderData.length; i++) {
