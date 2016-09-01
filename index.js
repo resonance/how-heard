@@ -123,7 +123,7 @@ app.use(function *(next) {
 
 var homeTemplate = fs.readFileSync(__dirname + '/home.jade', 'utf8');
 var dropdownTemplate = fs.readFileSync(__dirname + '/dropdown.jade', 'utf8');
-
+var reportingTemplate = fs.readFileSync(__dirname + '/reporting.jade', 'utf8');
 
 
 
