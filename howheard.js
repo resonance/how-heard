@@ -850,15 +850,7 @@ function *appendSelectionOrder(orderId, choice) {
  */
 
 function *fetchStoreOrders(shopName) {
-  const orderData = yield ordersCollection.find({ companyName: shopName });
-
-  var orders = [];
-
-  for(var i = 0; i < orderData.length; i++) {
-    
-    orders[i] = orderData[i];
-	
-   }
+  const orderData = yield ordersCollection.find.toArray({ companyName: shopName });
 
   return orders;
 
