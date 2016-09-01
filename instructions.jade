@@ -3,13 +3,13 @@ block content
 
   div.tabs
     ul
-      li(style="padding:20px;")
+      li(style="margin-left:100px;")
         a(href='?circuit=yes&shop=#{shopName}') Marketing Sources
-      li(style="padding:20px;")
+      li
         a(href='/reporting?circuit=yes&shop=#{shopName}') Reporting
-      li(style="padding:20px;")
+      li
         a(href='/instructions?circuit=yes&shop=#{shopName}') Install
-  div.container
+    div.container
       - var foo1 = '<!-- How Heard App =========================================== -->'
       - var foo2 = '<div id="resonance" style="display: none;">{{checkout.email}}</div>'
       - var foo3 = '<script src="https://how-heard.herokuapp.com/initialize.js"></script>'
