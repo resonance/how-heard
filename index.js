@@ -679,10 +679,10 @@ router.get('/reporting', function *() {
 router.get('/instructions', function *() {
 
  var codeSnippet = [];
- codeSnippet[1] = '<!-- How Heard App =========================================== -->';
- codeSnippet[2] = '<div id="resonance" style="display: none;">{{checkout.email}}</div>';
- codeSnippet[3] = '<script src="https://how-heard.herokuapp.com/initialize.js"></script>';
- codeSnippet[4] = '<!-- End How Heard App ======================================== -->';
+ codeSnippet[1] = "<!-- How Heard App =========================================== -->";
+ codeSnippet[2] = "<div id="resonance" style="display: none;">{{checkout.email}}</div>";
+ codeSnippet[3] = "<script src="https://how-heard.herokuapp.com/initialize.js"></script>";
+ codeSnippet[4] = "<!-- End How Heard App ======================================== -->";
 	
   var jadeOptions = {
     shopName: this.query.shop,
