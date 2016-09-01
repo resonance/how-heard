@@ -3,23 +3,24 @@ block content
 
   div.tabs
     ul
-      li(style="margin-left:100px;")
+      li(style="margin-left:50px;")
         a(href='?circuit=yes&shop=#{shopName}') Marketing Sources
       li
         a(href='/reporting?circuit=yes&shop=#{shopName}') Reporting
       li
         a(href='/instructions?circuit=yes&shop=#{shopName}') Install
-    div.container
-      - var foo1 = '<!-- How Heard App =========================================== -->'
-      - var foo2 = '<div id="resonance" style="display: none;">{{checkout.email}}</div>'
-      - var foo3 = '<script src="https://how-heard.herokuapp.com/initialize.js"></script>'
-      - var foo4 = '<!-- End How Heard App ======================================== -->'
-        | #{foo1}
-        br
-        | #{foo2}
-        br
-        | #{foo3}
-        br
-        | #{foo4}
+
+  div
+    - var foo1 = '<!-- How Heard App =========================================== -->'
+    - var foo2 = '<div id="resonance" style="display: none;">{{checkout.email}}</div>'
+    - var foo3 = '<script src="https://how-heard.herokuapp.com/initialize.js"></script>'
+    - var foo4 = '<!-- End How Heard App ======================================== -->'
+      | #{foo1}
+      br
+      | #{foo2}
+      br
+      | #{foo3}
+      br
+      | #{foo4}
 
         
