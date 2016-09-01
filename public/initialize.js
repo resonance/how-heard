@@ -117,7 +117,7 @@ function GetMainBody() {
 		style = getComputedStyle(elem);
 		var fontFamily = style.fontFamily;
 		var fontSize = style.fontSize;
-		var fontWeight = style.fontSize;style.fontWeight;
+		var fontWeight = style.fontWeight;
 		var fontColor = style.color;
 		var textTransform = style.textTransform;
 		var letterSpacing = style.letterSpacing;
