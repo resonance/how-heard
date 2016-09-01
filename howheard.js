@@ -861,11 +861,12 @@ function *fetchStoreOrders(shopName) {
     orders[i] = [i];
    }
 
+/*
   for(var i = 0; i < orderData.length; i++) {
     orders[i][i] = orderData[i];
 	
    }
-
+*/
   return orders;
 
 
