@@ -658,6 +658,20 @@ router.get('/reporting', function *() {
 
   const orders = yield howHeard.fetchStoreOrders(shopName);
 
+
+  for(var i = 0; i < orders.length; i++) {
+   
+   if (orders[i].createdAt) {
+	
+	orders[i].createdAt = moment(orders[i].createdAt).format('MMMM Do YYYY, h:mm:ss a');
+	
+   }  
+
+ }
+
+
+
+
   var jadeOptions = {
 	shopName: shopName,
     apiKey: constants.SHOPIFY_API_KEY,

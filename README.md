@@ -12,3 +12,7 @@ To fix:
 - Better documentation in code
 - Add params into "/" in tabs
 - Test on JCRT dev site
+
+
+Tests:
+- Complete an order w/o using dropdown
