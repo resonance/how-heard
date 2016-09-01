@@ -650,8 +650,10 @@ router.post('/messages/:shopName/:type', function *() {
  */
 router.get('/reporting', function *() {
   
+  const storeId = parseInt(this.query.storeId);
+
   // find store object in db
-  const shop = yield howHeard.findShopById(this.query.storeId);
+  const shop = yield howHeard.findShopById(storeId);
   const shopName = shop.companyName;
 
   const orders = yield howHeard.fetchStoreOrders(shopName);
