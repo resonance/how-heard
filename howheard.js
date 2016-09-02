@@ -46,7 +46,7 @@ exports.getHowHeardSelection = getHowHeardSelection;
 exports.addCustomerMetafield = addCustomerMetafield;
 exports.appendHowHeardSelection = appendHowHeardSelection;
 exports.appendSelectionOrder = appendSelectionOrder;
-
+exports.fetchStoreOrders = fetchStoreOrders;
 
 
 
@@ -838,3 +838,24 @@ function *appendSelectionOrder(orderId, choice) {
 }
 
 
+
+
+
+/**
+ * Fetch orders for a shop
+ *
+ * @return {object} The updated orders
+ * @api public
+ */
+
+function *fetchStoreOrders(shopName) {
+  return yield ordersCollection.find({ 
+	  companyName: shopName 
+	},
+	{ _id: 0, companyName: 0, orderId: 0, orderEmail: 0, createdAt: 1, subtotalPrice: 1, referringSite: 0, sourceUrl: 0, orderNumber: 1, customerId: 0, customerEmail: 1, 
+	  customerCreatedAt: 0, customerFirstName: 1, customerLastName: 1, customerOrdersCount: 1, customerTotalSpent: 1, customerLastOrderId: 0, customerCompany: 0,
+	  customerAddress1: 0, customerAddress2: 0, customerCity: 1, customerProvince: 0, customerCountry: 1, customerZipCode: 0, customerProvinceCode: 1, 
+	  customerCountryName: 0, howHeard: 1
+    });
+
+}
