@@ -11,7 +11,7 @@ style.
 
 br
 div
-  h2 How did you hear about us? &nbsp;&nbsp;(optional)
+  h2 How did you hear about us?
     p.control
       span.select.is-medium
         select#howHeard
@@ -28,7 +28,7 @@ script.
       ul.appendChild(ul.children[Math.random() * i | 0]);
   }
 
-  $('#howHeard').prepend('<option value="choose">Please select from the following</option>');
+  $('#howHeard').prepend('<option value="choose">Please select from the following (optional)</option>');
   $('#howHeard option[value="choose"]').prop('selected', true);
 
   $("#howHeard").change(function() {
