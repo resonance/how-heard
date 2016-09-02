@@ -46,8 +46,6 @@ exports.getHowHeardSelection = getHowHeardSelection;
 exports.addCustomerMetafield = addCustomerMetafield;
 exports.appendHowHeardSelection = appendHowHeardSelection;
 exports.appendSelectionOrder = appendSelectionOrder;
-exports.fetchStoreOrders = fetchStoreOrders;
-
 
 
 
