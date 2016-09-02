@@ -1557,7 +1557,7 @@ a.box:active {
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
-  background-color: white;
+  background-color: #FFFFE3;
   border: 1px solid #CCCCCC;
   border-radius: 0px;
   color: #111111;
