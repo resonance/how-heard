@@ -28,15 +28,15 @@ block content
     tbody
       each order in orders
         tr
-          td #{order.orderNumber}
           td #{order.createdAt}
           td #{order.subtotalPrice}
+          td #{order.orderNumber}
           td #{order.customerEmail}
           td #{order.customerFirstName}
           td #{order.customerLastName}
+          td #{order.customerOrdersCount}
+          td #{order.customerTotalSpent}
           td #{order.customerCity}
           td #{order.customerProvinceCode}
           td #{order.customerCountry}
-          td #{order.customerOrdersCount}
-          td #{order.customerTotalSpent}
           td #{order.howHeard}

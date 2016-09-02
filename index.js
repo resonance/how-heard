@@ -16,6 +16,7 @@ var mount = require('koa-mount');
 var request = require('request');
 var thunkify = require('thunkify');
 var moment = require('moment-timezone');
+var json2csv = require('json2csv');
 var admin = require('./admin');
 var howHeard = require('./howheard');
 var constants = require('./constants');
@@ -633,6 +634,7 @@ router.post('/messages/:shopName/:type', function *() {
 /**
  * User reporting in admin
  */
+
 router.get('/reporting', function *() {
   
   const shopName = this.query.shop;

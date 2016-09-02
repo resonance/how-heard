@@ -301,7 +301,8 @@ function *updateShop(shopName, update) {
             phone: update.phone,
             shop_owner: update.shop_owner,
             plan_display_name: update.plan_display_name,
-            myshopify_domain: update.myshopify_domain
+            myshopify_domain: update.myshopify_domain,
+            iana_timezone: update.iana_timezone,
           }
   });
 }
@@ -838,19 +839,4 @@ function *appendSelectionOrder(orderId, choice) {
 		
 }
 
-
-
-
-
-/**
- * Fetch orders for a sjop
- *
- * @return {object} The updated orders
- * @api public
- */
-
-function *fetchStoreOrders(shopName) {
-  return yield ordersCollection.find({ companyName: shopName });
-
-}
 
