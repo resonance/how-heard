@@ -28,7 +28,7 @@ script.
       ul.appendChild(ul.children[Math.random() * i | 0]);
   }
 
-  $('#howHeard').prepend('<option value="choose">Please select from the following (optional)</option>');
+  $('#howHeard').prepend('<option value="choose">Please select from the following&nbsp;&nbsp;(optional)</option>');
   $('#howHeard option[value="choose"]').prop('selected', true);
 
   $("#howHeard").change(function() {
