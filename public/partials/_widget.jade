@@ -5,9 +5,17 @@ style.
       font-weight: #{fontWeight};
       text-transform: #{textTransform};
       letter-spacing: #{letterSpacing};
-      color: 111111;
+      color: #111111;
       line-height: 60px;
   }
+  .answer {
+      font-family: "garamond-premier-pro","Georgia",serif;
+      font-size: 13;
+      letter-spacing: #{letterSpacing};
+      color: #111111;
+      padding-left: 25px;
+  }
+
 
 br
 div
@@ -17,6 +25,10 @@ div
         select#howHeard
           each selection, i in selections
             option(value=i) #{selection}
+div
+br
+  p.answer Your answer helps us better understand our marketing efforts. Thank you!
+    
 
 script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
 script.
