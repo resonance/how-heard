@@ -534,6 +534,15 @@ router.get('/response', function *() {
 router.post('/messages/:shopName/:type', function *() {
 
   const body = this.request.body;
+
+  const sourceName = body.source_name;
+
+  // if order is from POS, there's nothing more to do
+  if (sourceName != "web") {
+	return;
+  }
+
+  
   const shopName = this.params.shopName;
   const shop = yield howHeard.findShop(shopName);
   const token = shop.accessToken;
@@ -655,8 +664,6 @@ router.get('/reporting', function *() {
 
  }
 
-
-  console.log("ORDERS", orders);
 
 
   var jadeOptions = {
