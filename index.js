@@ -539,6 +539,7 @@ router.post('/messages/:shopName/:type', function *() {
 
   // if order is from POS, there's nothing more to do
   if (sourceName != "web") {
+	this.body = 'OK'
 	return;
   }
 
