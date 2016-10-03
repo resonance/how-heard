@@ -687,7 +687,7 @@ router.get('/reporting', function *() {
   else {
 	var orders = yield howHeard.fetchStoreOrders(shopName);
 	
-	console.log("ORDERS", orders);
+	
   
   }
 
@@ -695,7 +695,8 @@ router.get('/reporting', function *() {
   for(var i = 0; i < orders.length; i++) {
    
     if (orders[i].createdAt) {
-	  orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format();
+	  orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');
+	  console.log("ORDER", orders[i].createdAt);
     }  
 
   }
