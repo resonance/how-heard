@@ -703,8 +703,8 @@ router.get('/reporting', function *() {
 
   if (orders.length > pageSize) {
 	
-	var pageCount = orders.length/pageSize;
-	var currentPage = 1;
+	var pageCount = Math.ceil(orders.length/pageSize);
+    var currentPage = 1;
 	var ordersArray = [];
 	var arrayPosition = 0;
 	var ordersList = [];
@@ -814,8 +814,6 @@ router.post('/reporting', function *() {
 	var ordersArray = [];
 	var arrayPosition = 0;
 	var ordersList = [];
-	
-	console.log("PAGE COUNT", pageCount);
 	
 	
 	// split orders into groups of length equal to pageSize
