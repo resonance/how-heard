@@ -695,8 +695,9 @@ router.get('/reporting', function *() {
   for(var i = 0; i < orders.length; i++) {
    
     if (orders[i].createdAt) {
-	  orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');
 	  console.log("ORDER", orders[i].createdAt);
+	  orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');
+
     }  
 
   }
