@@ -686,6 +686,9 @@ router.get('/reporting', function *() {
   }
   else {
 	var orders = yield howHeard.fetchStoreOrders(shopName);
+	
+	console.log("ORDERS", orders);
+  
   }
 
 
