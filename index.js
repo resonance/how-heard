@@ -815,6 +815,9 @@ router.post('/reporting', function *() {
 	var arrayPosition = 0;
 	var ordersList = [];
 	
+	console.log("PAGE COUNT", pageCount);
+	
+	
 	// split orders into groups of length equal to pageSize
 	while (orders.length > 0) {
 		ordersArray.push(orders.splice(0, pageSize));
@@ -892,8 +895,6 @@ router.get('/export', function *() {
     }
 
   }
-
-  console.log("ORDERS", orders);
 
   var csv = json2csv({ data: orders, fields: fields });
 
