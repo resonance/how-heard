@@ -17,6 +17,7 @@ var request = require('request');
 var thunkify = require('thunkify');
 var moment = require('moment-timezone');
 var json2csv = require('json2csv');
+var send = require('koa-send');
 var admin = require('./admin');
 var howHeard = require('./howheard');
 var constants = require('./constants');
@@ -34,6 +35,7 @@ var app = koa();
 var post = thunkify(request.post);
 var get = thunkify(request.get);
 
+var pageSize = 200;
 
 module.exports = app;
 
@@ -478,7 +480,8 @@ router.get('/dropdown', function *() {
     fontWeight: fontWeight,
     fontColor: fontColor,
     textTransform: textTransform,
-    letterSpacing: letterSpacing
+    letterSpacing: letterSpacing,
+    urlRoot: constants.HOWHEARD_PUBLIC_URL_ROOT
   };
 
   // Serve html to client.
@@ -532,10 +535,12 @@ router.get('/response', function *() {
  */
 
 router.post('/messages/:shopName/:type', function *() {
-
+	
   const body = this.request.body;
 
   const sourceName = body.source_name;
+
+  console.log("SOURCE_NAME", sourceName);
 
   // if order is from POS, there's nothing more to do
   if (sourceName != "web") {
@@ -543,7 +548,7 @@ router.post('/messages/:shopName/:type', function *() {
 	return;
   }
 
-  
+
   const shopName = this.params.shopName;
   const shop = yield howHeard.findShop(shopName);
   const token = shop.accessToken;
@@ -648,30 +653,97 @@ router.post('/messages/:shopName/:type', function *() {
 router.get('/reporting', function *() {
   
   const shopName = this.query.shop;
+  var fromDate = 0;
+  var toDate = 0;
 
   // find store object in db
   const shop = yield howHeard.findShop(shopName);
 
-  const orders = yield howHeard.fetchStoreOrders(shopName);
+
+  // if fromDate and toDate was passed in the url query
+  if (this.query.fromDate && this.query.toDate) {
+	
+    fromDate = this.query.fromDate;
+    toDate = this.query.toDate;
+
+    // get timezone for the store
+    var zone = moment.tz.zone(shop.iana_timezone);
+    // get offset from UTC
+    var offset = zone.parse();
+
+    // set fromDate time to the begining of the day specified
+    var fromStartOfDay = moment(fromDate).startOf("day").format();
+    // convert time to UTC to query db
+    var fromUtcTime = moment(fromStartOfDay).utcOffset(offset).format();
+
+    // set toDate time to the begining of the day specified
+    var toStartOfDay = moment(toDate).startOf("day").format();
+    // convert time to UTC to query db
+    var toUtcTime = moment(toStartOfDay).utcOffset(offset).format();
+
+    var orders = yield howHeard.fetchStoreOrdersWithDates(shopName, fromUtcTime, toUtcTime);
+
+  }
+  else {
+	var orders = yield howHeard.fetchStoreOrders(shopName);
+  }
 
 
   for(var i = 0; i < orders.length; i++) {
    
-   if (orders[i].createdAt) {
+    if (orders[i].createdAt) {
+	  orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');
+    }  
+
+  }
+
+
+  if (orders.length > pageSize) {
 	
-	orders[i].createdAt = moment(orders[i].createdAt).format('MM/DD/YYYY h:mm a');
+	var pageCount = orders.length/pageSize;
+	var currentPage = 1;
+	var ordersArray = [];
+	var arrayPosition = 0;
+	var ordersList = [];
 	
-   }  
-
- }
-
-
-
-  var jadeOptions = {
-	shopName: shopName,
-    apiKey: constants.SHOPIFY_API_KEY,
-    orders: orders,
-  };
+	// split orders into groups of length equal to pageSize
+	while (orders.length > 0) {
+		ordersArray.push(orders.splice(0, pageSize));
+	}
+	
+	// set currentPage if passed in url string
+	if (this.query.page) {
+		currentPage = this.query.page;
+	}
+	
+	// set the subset of order records to show
+	arrayPosition = currentPage - 1;
+	ordersList = ordersArray[arrayPosition];
+	
+	var jadeOptions = {
+	  shopName: shopName,
+      apiKey: constants.SHOPIFY_API_KEY,
+      orders: ordersList,
+	  fromDate: fromDate,
+      toDate: toDate,
+      currentPage: currentPage,
+      pageCount: pageCount,
+    };
+		
+  }
+  else {
+	
+	var jadeOptions = {
+      shopName: shopName,
+	  apiKey: constants.SHOPIFY_API_KEY,
+	  orders: orders,
+	  fromDate: fromDate,
+      toDate: toDate,
+	  currentPage: 1,
+	  pageCount: 1,
+	};
+	
+  }
 
   var html = jade.compile(reportingTemplate, {
     basedir: __dirname
@@ -682,6 +754,158 @@ router.get('/reporting', function *() {
 
 });
 
+
+
+
+
+/**
+ * User reporting in admin
+ */
+
+router.post('/reporting', function *() {
+
+  const shopName = this.query.shop;
+
+  const body = this.request.body;
+
+  const fromDate = body.fromdate;
+  const toDate = body.todate;
+
+
+  // find store object in db
+  const shop = yield howHeard.findShop(shopName);
+
+
+  // get timezone for the store
+  var zone = moment.tz.zone(shop.iana_timezone);
+  // get offset from UTC
+  var offset = zone.parse();
+
+  // set fromDate time to the begining of the day specified
+  var fromStartOfDay = moment(fromDate).startOf("day").format();
+  // convert time to UTC to query db
+  var fromUtcTime = moment(fromStartOfDay).utcOffset(offset).format();
+
+  // set toDate time to the begining of the day specified
+  var toStartOfDay = moment(toDate).startOf("day").format();
+  // convert time to UTC to query db
+  var toUtcTime = moment(toStartOfDay).utcOffset(offset).format();
+
+
+
+  const orders = yield howHeard.fetchStoreOrdersWithDates(shopName, fromUtcTime, toUtcTime);
+
+
+  for(var i = 0; i < orders.length; i++) {
+
+    if (orders[i].createdAt) {
+	  orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');
+    }  
+
+  }
+
+  if (orders.length > pageSize) {
+	
+	var pageCount = orders.length/pageSize;
+	var currentPage = 1;
+	var ordersArray = [];
+	var arrayPosition = 0;
+	var ordersList = [];
+	
+	// split orders into groups of length equal to pageSize
+	while (orders.length > 0) {
+		ordersArray.push(orders.splice(0, pageSize));
+	}
+	
+	// set currentPage if passed in url string
+	if (this.query.page) {
+		currentPage = this.query.page;
+	}
+	
+	// set the subset of order records to show
+	arrayPosition = currentPage - 1;
+	ordersList = ordersArray[arrayPosition];
+	
+	var jadeOptions = {
+	  shopName: shopName,
+      apiKey: constants.SHOPIFY_API_KEY,
+      orders: ordersList,
+	  fromDate: fromDate,
+      toDate: toDate,
+      currentPage: currentPage,
+      pageCount: pageCount,
+    };
+		
+  }
+  else {
+	
+	var jadeOptions = {
+      shopName: shopName,
+	  apiKey: constants.SHOPIFY_API_KEY,
+	  orders: orders,
+	  fromDate: 0,
+      toDate: 0,
+	  currentPage: 1,
+	  pageCount: 1,
+	};
+	
+  }
+
+  var html = jade.compile(reportingTemplate, {
+    basedir: __dirname
+  })(jadeOptions);
+
+  this.body = html;
+
+});
+
+
+
+
+
+
+/**
+ * Orders export from reporting
+ */
+
+router.get('/export', function *() {
+
+  const shopName = this.query.shop;  
+  var fields = ['companyName', 'createdAt', 'subtotalPrice', 'orderNumber', 'customerEmail', 
+                'customerFirstName', 'customerLastName', 'customerOrdersCount', 'customerTotalSpent', 
+                'customerCity', 'customerProvinceCode', 'customerCountryName', 'howHeard'];
+
+  // find store object in db
+  const shop = yield howHeard.findShop(shopName);
+
+  const orders = yield howHeard.fetchStoreOrders(shopName);
+
+  for(var i = 0; i < orders.length; i++) {
+
+    if (orders[i].createdAt) {
+
+	  orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');							  
+
+    }
+
+  }
+
+  console.log("ORDERS", orders);
+
+  var csv = json2csv({ data: orders, fields: fields });
+
+  fs.writeFile('file.csv', csv, function(err) {
+	if (err) throw err;
+  });
+	
+		
+  this.set('Content-disposition', 'attachment; filename=file.csv');
+  this.set('Content-type', 'text/csv');
+  yield send(this, 'file.csv');
+	
+
+
+});
 
 
 

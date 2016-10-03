@@ -11,3 +11,31 @@ script.
     });
     ShopifyApp.Bar.loadingOff();
   });
+
+  var exporter = function() {
+    var link = document.createElement('a.export');
+    link.href = '/export?circuit=yes&shop=#{shopName}';
+    link.download = 'howHeard_order_export.csv';
+
+    var e = document.createEvent('MouseEvents');
+    e.initEvent('click', true, true);
+    link.dispatchEvent(e);
+  }
+
+  $(function() {
+    $( "#datepicker-1" ).datepicker();
+    $( "#datepicker-2" ).datepicker();
+  });
+
+  function validateForm() {
+    var x = document.forms["date_submit"]["fromdate"].value;
+    var y = document.forms["date_submit"]["todate"].value;
+    if (x == null || x == "") {
+        alert("'From Date' must be filled out");
+        return false;
+    }
+    if (y == null || y == "") {
+        alert("'To Date' must be filled out");
+        return false;
+    }
+  }
