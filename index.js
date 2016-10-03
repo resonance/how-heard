@@ -809,7 +809,7 @@ router.post('/reporting', function *() {
 
   if (orders.length > pageSize) {
 	
-	var pageCount = orders.length/pageSize;
+	var pageCount = Math.ceil(orders.length/pageSize);
 	var currentPage = 1;
 	var ordersArray = [];
 	var arrayPosition = 0;
