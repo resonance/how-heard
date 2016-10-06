@@ -12,16 +12,17 @@ block content
 
   div.container(style="margin-left:100px;")
     p
-    Simply copy the following code and insert it after the '{{ tracking_code }}' code in your checkout.liquid file.
-    br
-    - var foo1 = '<!-- How Heard App =========================================== -->'
-    - var foo2 = '<div id="resonance" style="display: none;">{{checkout.email}}</div>'
-    - var foo3 = '<script src="https://how-heard.herokuapp.com/initialize.js"></script>'
-    - var foo4 = '<!-- End How Heard App ======================================== -->'
-      | #{foo1}
+      Simply copy the following code and insert it after the '{{ tracking_code }}' code in your checkout.liquid file.
       br
-      | #{foo2}
       br
-      | #{foo3}
-      br
-      | #{foo4}
+      - var foo1 = '<!-- Earpiece App =========================================== -->'
+      - var foo2 = '<div id="resonance" style="display: none;">{{checkout.email}}</div>'
+      - var foo3 = '<script src="https://how-heard.herokuapp.com/initialize.js"></script>'
+      - var foo4 = '<!-- End Earpiece App ======================================== -->'
+        | #{foo1}
+        br
+        | #{foo2}
+        br
+        | #{foo3}
+        br
+        | #{foo4}
