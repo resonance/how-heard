@@ -698,6 +698,10 @@ router.get('/reporting', function *() {
 	  orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');
     }  
 
+    if (orders[i].howHeard == null) {
+		orders[i].howHeard = "Repeat Customer";
+   }
+
   }
 
 
@@ -803,7 +807,11 @@ router.post('/reporting', function *() {
 
     if (orders[i].createdAt) {
 	  orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');
-    }  
+    }
+
+    if (orders[i].howHeard == null) {
+		orders[i].howHeard = "Repeat Customer";
+   }
 
   }
 
