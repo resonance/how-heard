@@ -123,7 +123,7 @@ function GetMainBody() {
 		var letterSpacing = style.letterSpacing;
 		
 		// append the iframe to this selector on the page
-        $('.section.section--optional').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none; padding-top:10px;padding-bottom:60px;"></iframe>');
+        $('.section.section--billing-address').append('<iframe id="howhearddropdown" width="0" height="0" style="border:none; padding-top:10px;padding-bottom:10px;"></iframe>');
 
 	    
 	    var iframeId = 'howhearddropdown'
