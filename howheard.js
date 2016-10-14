@@ -22,6 +22,11 @@ exports.findShop = findShop;
 exports.findOrCreate = findOrCreate;
 exports.getAuthUrl = getAuthUrl;
 exports.fetchAuthToken = fetchAuthToken;
+exports.createAppCharge = createAppCharge;
+exports.saveCharge = saveCharge;
+exports.checkAppChargeStatus = checkAppChargeStatus;
+exports.activateAppCharge = activateAppCharge;
+exports.saveActivation = saveActivation;
 exports.saveToken = saveToken;
 exports.fetchShopFromShopify = fetchShopFromShopify;
 exports.updateShop = updateShop;
@@ -229,6 +234,208 @@ function fetchAuthToken(query) {
 
 
 /**
+ * Create Recurring application charge
+ * by POSTing to Shopify
+ * to get confirmation_url to redirect
+ * store owner to.
+ *
+ * @api public
+ */
+
+function *createAppCharge(shopName, token, testFlag) {
+
+  console.log("shopName in function", shopName);
+  console.log("testFlag in function", testFlag);
+
+  var testStore = '';
+  var name = '';
+  var ArrayBoolean = {};
+  var ArrayString = {};
+  ArrayBoolean[testStore] = testFlag;
+  ArrayString[name] = shopName;
+
+
+  console.log("ArrayString[name]", ArrayString[name]);
+  console.log("ArrayBoolean[testStore]", ArrayBoolean[testStore]);
+	
+  const options = {
+    url: `https://${shopName}/admin/recurring_application_charges.json`,
+	body: JSON.stringify({
+      recurring_application_charge: {
+        name: 'Earpiece App Monthly Charge',
+        price: 5.0,
+        return_url: constants.HOWHEARD_PUBLIC_URL_ROOT + 'activate?shop=' + ArrayString[name],
+        trial_days: constants.HOWHEARD_TRIAL_DAYS,
+        test: ArrayBoolean[testStore],
+        format: 'json',
+      }
+    }),
+    headers: {
+      'X-Shopify-Access-Token': token,
+      'Content-Type': 'application/json'
+    }
+  };
+
+
+  const responseAndBody = yield post(options);
+  const response = responseAndBody[0];
+  const body = responseAndBody[1];
+
+  //console.log("CREATEAPPCHARGE API RESPONSE", response);
+  //console.log("CREATEAPPCHARGE API BODY", body);
+
+
+  if (response.statusCode >= 400) {
+    throw Error('Failed to create app charge ' + body)
+  }
+
+
+  return JSON.parse(body);
+}
+
+
+
+
+
+/**
+ * saveCharge
+ */
+
+function *saveCharge(id, createdAt, shopName) {
+  return yield shopsCollection.findAndModify(
+    { companyName: shopName },
+    { $set: { charge_id: id,
+              charge_created_at: createdAt,
+            }
+    }
+  );
+}
+
+
+
+
+
+/**
+ * Activate Recurring application charge
+ * by POSTing to Shopify
+ *
+ * @api public
+ */
+
+function *checkAppChargeStatus(shopName, id, token) {
+	
+  const options = {
+    url: `https://${shopName}/admin/recurring_application_charges/${id}.json`,
+    headers: {
+      'X-Shopify-Access-Token': token,
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const responseAndBody = yield get(options);
+  const response = responseAndBody[0];
+  const body = responseAndBody[1];
+
+  if (response.statusCode >= 400) {
+    throw Error('Failed to check app charge ' + body)
+    return;
+  }
+
+  return JSON.parse(body);
+}
+
+
+
+
+
+/**
+ * Activate Recurring application charge
+ * by POSTing to Shopify
+ *
+ * @api public
+ */
+
+function *activateAppCharge(shopName, id, timestamp, billingDate, token) {
+
+  // convert values to an object for use inside JSON.stringify
+  var chargeId = '';
+  var timestamp = '';
+  var billingDate = '';
+  var name = '';
+  var values = {};
+  values[chargeId] = id;
+  values[timestamp] = timestamp;
+  values[billingDate] = billingDate;
+  values[name] = shopName;
+	
+  const options = {
+    url: `https://${shopName}/admin/recurring_application_charges/${id}/activate.json`,
+	body: JSON.stringify({
+      recurring_application_charge: {
+        id: values[id],
+        name: 'Earpiece App Monthly Charge',
+        app_client_id: constants.HOWHEARD_APP_CLIENT_ID,
+        price: 5.0,
+        status: 'accepted',
+        return_url: constants.HOWHEARD_PUBLIC_URL_ROOT + '?shop=' + values[name],
+        billing_on: values[billingDate],
+        created_at: values[timestamp],
+        updated_at: values[timestamp],
+        test: constants.HOWHEARD_APP_TEST,
+        activated_on: null,
+        trial_ends_on: null,
+        canceled_on: null,  
+        trial_days: constants.HOWHEARD_TRIAL_DAYS,
+        decorated_return_url: constants.HOWHEARD_PUBLIC_URL_ROOT + '?shop=' + values[name],
+        format: 'json',
+      }
+    }),
+    headers: {
+      'X-Shopify-Access-Token': token,
+      'Content-Type': 'application/json'
+    }
+  };
+
+  //console.log("ACTIVATE APP API URL", options.url);
+
+  const responseAndBody = yield post(options);
+  const response = responseAndBody[0];
+  const body = responseAndBody[1];
+
+  //console.log("ACTIVATEAPPCHARGE API RETURNED", body);
+
+  if (response.statusCode >= 400) {
+    throw Error('Failed to activate app charge ' + body)
+    return;
+  }
+
+  return JSON.parse(body);
+}
+
+
+
+
+
+/**
+ * saveActivation
+ */
+
+function *saveActivation(activatedOn, trialEndsOn, chargeStatus, chargeType, shopName) {
+  return yield shopsCollection.findAndModify(
+    { companyName: shopName },
+    { $set: { charge_activated_on: activatedOn,
+	          charge_trial_ends: trialEndsOn,
+	          charge_status: chargeStatus,
+	          charge_type: chargeType,
+	        } 
+    }
+  );
+}
+
+
+
+
+/**
  * Save the auth token with
  * the shop it belongs to.
  *
@@ -265,6 +472,8 @@ function *fetchShopFromShopify(shopName, token) {
   const response = responseAndBody[0];
   const body = responseAndBody[1];
 
+  //console.log("FETCHSHOPFROMSHOPIFY API RETURNED", body);
+
   if (response.statusCode >= 400) {
     throw Error('Failed to fetch shop ' + body)
   }
@@ -282,7 +491,7 @@ function *fetchShopFromShopify(shopName, token) {
  * @api public
  */
 
-function *updateShop(shopName, update) {
+function *updateShop(shopName, update, chargeStatus) {
   yield shopsCollection.update({
     companyName: shopName,
   }, {
@@ -301,8 +510,10 @@ function *updateShop(shopName, update) {
             plan_display_name: update.plan_display_name,
             myshopify_domain: update.myshopify_domain,
             iana_timezone: update.iana_timezone,
+            charge_status: chargeStatus,
           }
   });
+
 }
 
 
@@ -406,6 +617,7 @@ function *addShopifyUninstallWebhook(shopName, token) {
   // Post returns an array [response, body]
   const responseAndBody = yield post(options);
   const response = responseAndBody[0];
+
   if (response.statusCode >= 400) {
     throw Error('Failed to set uninstall webhook ' + response.body);
   }
@@ -427,10 +639,19 @@ function *addShopifyUninstallWebhook(shopName, token) {
   return yield shopsCollection.findAndModify({
     companyName: shopName,
   }, {
-    $unset: { accessToken: ""  },
+    $unset: { accessToken: "",
+              charge_id: "",
+			  charge_type: "",
+			  charge_status: "",
+			  charge_created_at: "",
+			  charge_activated_on: "",
+			  charge_trial_ends: "",
+			  charge_canceled_on: "",
+            },
     $set: { connections: [] },
   });
  }
+
 
 
 
@@ -773,8 +994,8 @@ function *addCustomerMetafield(shopName, custId, choice, token) {
     }
   };
 
-  console.log("URL for webhook", options.url);
-  console.log("JSON.stringify body", options.body);
+  //console.log("URL for webhook", options.url);
+  //console.log("JSON.stringify body", options.body);
 
 
   // Post returns an array [response, body]
@@ -782,9 +1003,9 @@ function *addCustomerMetafield(shopName, custId, choice, token) {
   const response = responseAndBody[0];
   const body = responseAndBody[1];
 
-  console.log("SHOPIFY API METAFIELD", body);
-  console.log("SHOPIFY WEBHOOK VAR", selection[chosen]);
-  console.log("SHOPIFY WEBHOOK URL", options.url);
+  //console.log("SHOPIFY API METAFIELD", body);
+  //console.log("SHOPIFY WEBHOOK VAR", selection[chosen]);
+  //console.log("SHOPIFY WEBHOOK URL", options.url);
 
 
   if (response.statusCode >= 400) {
@@ -813,7 +1034,7 @@ function *appendHowHeardSelection(shopName, custId, metafieldId) {
       $set: { confirmationId: metafieldId },
   });	
 	// change to int or string
-	console.log("CONFIRMATION ID", metafieldId);
+	//console.log("CONFIRMATION ID", metafieldId);
 		
 }
 

@@ -4,15 +4,15 @@ block content
   div.tabs(style="margin-bottom:0px;")
     ul
       li(style="margin-left:65px;")
-        a(href='/?circuit=yes&shop=#{shopName}') Marketing Sources
+        a(href='/?shop=#{shopName}') Marketing Sources
       li
-        a(href='/reporting?circuit=yes&shop=#{shopName}') Reporting
+        a(href='/reporting?shop=#{shopName}') Reporting
       li
-        a(href='/instructions?circuit=yes&shop=#{shopName}') Install
+        a(href='/instructions?shop=#{shopName}') Install
 
 
   div(style="background-color:#f5f7fa;padding:15px;padding-bottom:20px;border-bottom:1px solid #d3d6db;")
-    form(action="/reporting?circuit=yes&shop=#{shopName}", name="date_submit", onsubmit="return validateForm()", method="post")
+    form(action="/reporting?shop=#{shopName}", name="date_submit", onsubmit="return validateForm()", method="post")
       table
         tr
           td(style="vertical-align;bottom;padding-left:10px;padding-right:0px;") 
@@ -24,7 +24,7 @@ block content
             input(type="submit", value="submit")
           td(width="100px;" style="vertical-align:bottom;padding-left:10px;padding-right:10px;") &nbsp;
           td(style="vertical-align:bottom;")
-            a(href='/export?circuit=yes&shop=#{shopName}' style="text-decoration:underline;color:black;border-style:none;") Data Export
+            a(href='/export?shop=#{shopName}' style="text-decoration:underline;color:black;border-style:none;") Data Export
           td(width="100px;" style="vertical-align:bottom;padding-left:10px;padding-right:10px;") &nbsp;
           td(style="vertical-align:bottom;padding-left:10px;padding-right:10px;")
             ul(style="border-style:none;")
@@ -33,9 +33,9 @@ block content
                 span Pages &#58; &nbsp;&nbsp;&nbsp;
                 - if (currentPage > 1)
                   - if (fromDate > 0)
-                    a(href='/reporting?circuit=yes&shop=#{shopName}&fromDate=#{fromDate}&toDate=#{toDate}&page=1' style='text-decoration:none;') &laquo;
+                    a(href='/reporting?shop=#{shopName}&fromDate=#{fromDate}&toDate=#{toDate}&page=1' style='text-decoration:none;') &laquo;
                   - else
-                    a(href='/reporting?circuit=yes&shop=#{shopName}&page=1' style='text-decoration:none;') &laquo;
+                    a(href='/reporting?shop=#{shopName}&page=1' style='text-decoration:none;') &laquo;
                 - var i = 1
                 - if (currentPage > 5)
                   - (i = (currentPage-4))
@@ -45,14 +45,14 @@ block content
                   - if (currentPage == i)
                     #{i}&nbsp;&nbsp;
                   - else
-                    a(href='/reporting?circuit=yes&shop=#{shopName}&page=#{i}' style='text-decoration:none;') #{i}&nbsp;&nbsp;
+                    a(href='/reporting?shop=#{shopName}&page=#{i}' style='text-decoration:none;') #{i}&nbsp;&nbsp;
                   - if (i == (currentPage+4))
                     a(href='#' style='text-decoration:none;') ...
                 - if (currentPage != pageCount)
                   - if (fromDate > 0)
-                    a(href='/reporting?circuit=yes&shop=#{shopName}&fromDate=#{fromDate}&toDate=#{toDate}&page=#{pageCount}' style='text-decoration:none;') &raquo;
+                    a(href='/reporting?shop=#{shopName}&fromDate=#{fromDate}&toDate=#{toDate}&page=#{pageCount}' style='text-decoration:none;') &raquo;
                   - else
-                    a(href='/reporting?circuit=yes&shop=#{shopName}&page=#{pageCount}' style='text-decoration:none;') &raquo;
+                    a(href='/reporting?shop=#{shopName}&page=#{pageCount}' style='text-decoration:none;') &raquo;
 
   table.table
     thead

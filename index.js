@@ -41,6 +41,8 @@ module.exports = app;
 
 
 
+
+
 // Add db call
 
 
@@ -109,12 +111,15 @@ app.use(function *(next) {
   try {
     yield next;
   } catch(err) {
-    this.status = err.status || 500;
-    this.body = 'Sorry, we made a mistake.';
-    this.app.emit('error', err, this);
+    const shopName = this.query.shop;
+	this.status = err.status || 500;
+	this.app.emit('error', err, this);
+	this.redirect('./error?shop='+shopName);
+    
+    //this.body = 'Sorry, we made a mistake.';
+
   }
 });
-
 
 
 
@@ -128,6 +133,7 @@ var homeTemplate = fs.readFileSync(__dirname + '/home.jade', 'utf8');
 var dropdownTemplate = fs.readFileSync(__dirname + '/dropdown.jade', 'utf8');
 var reportingTemplate = fs.readFileSync(__dirname + '/reporting.jade', 'utf8');
 var instructionsTemplate = fs.readFileSync(__dirname + '/instructions.jade', 'utf8');
+var errorTemplate = fs.readFileSync(__dirname + '/error.jade', 'utf8');
 
 
 
@@ -143,12 +149,12 @@ app.use(bodyParser());
 
 
 
-
 /**
  * Mount admin
  */
 
 app.use(mount('/admin', admin));
+
 
 
 
@@ -159,19 +165,9 @@ app.use(mount('/admin', admin));
 
 app.use(mount('/public', serve(__dirname+'/public')));
 
-
-
-
-
 var router = koaRouter();
 
-
-
-
-
 app.use(router.routes());
-
-
 
 
 
@@ -186,22 +182,24 @@ app.use(router.routes());
 
 router.get('/', function *() {
 	
-  // if submitting form from our homepage, bypass	
-  if (!this.query.circuit) {
-
-    const exists = yield howHeard.accessTokenExists(this.query.shop);
+  const exists = yield howHeard.accessTokenExists(this.query.shop);
     
-    // if token does not exist, redirect to /install
-    if (!exists) {
-      this.redirect('./install?shop='+this.query.shop);
-      return;
-    }
+  // if token does not exist, redirect to /install
+  if (!exists) {
+    this.redirect('./install?shop='+this.query.shop);
+    return;
   }
   
 
   // find store object in db
   const shop = yield howHeard.findShop(this.query.shop);
 
+
+  // if payment is not active, exit
+  if (shop.charge_status != "activated") {
+	this.redirect('./error?shop='+this.query.shop);
+    return;
+  }
 
   // Create jade options with default properties.
   var jadeOptions = {
@@ -234,7 +232,6 @@ router.get('/', function *() {
   }
  
 
-
   // Serve html to client.
   var html = jade.compile(homeTemplate, {
     basedir: __dirname
@@ -262,7 +259,7 @@ router.get('/delete', function *() {
 
   // need to pass 'success' msg to user?
 
-  this.redirect('./?circuit=yes&shop='+shopName);
+  this.redirect('./?shop='+shopName);
 
 });
 
@@ -303,9 +300,7 @@ router.post('/add', function *() {
 
   }
 
-  // need to pass 'success' msg to user?
-
-  this.redirect('./?circuit=yes&shop='+shopName);
+  this.redirect('./?shop='+shopName);
 
 
 });
@@ -316,11 +311,11 @@ router.post('/add', function *() {
 
 /**
  * Save new shop into DB.
+ * Create Auth url for user to approve our access
  */
 
 router.get('/install', function *() {
   
-  // check for empty shop query???
   const shopName = this.query.shop;
 
   // Use `findOrCreate` in case an
@@ -330,7 +325,7 @@ router.get('/install', function *() {
 
   const url = howHeard.getAuthUrl(shopName);
 
-  // redirects to /authenticate
+  // redirect user to accept authentication, when accepted, redirects to /authenticate
   this.redirect(url);
 
 });
@@ -340,7 +335,7 @@ router.get('/install', function *() {
 
 
 /**
- * Create an auth token and
+ * Store an auth token and
  * update shop document in DB.
  */
 
@@ -349,6 +344,9 @@ router.get('/authenticate', function *() {
   const token = yield howHeard.fetchAuthToken(this.query);
   const shopName = this.query.shop;
   
+  console.log("SHOPNAME", shopName);
+
+
   yield howHeard.saveToken(token, shopName);
 
   // ping Shopify API for Shop object
@@ -356,12 +354,10 @@ router.get('/authenticate', function *() {
  
   const shopId = shop.shop.id;
 
-  console.log("shopId is", shopId);
-
+  const chargeStatus = 'pending';
 
   // save shop to db
-  yield howHeard.updateShop(shopName, shop.shop);
-
+  yield howHeard.updateShop(shopName, shop.shop, chargeStatus);
 
   // set createOrder webhook
   const setWebhookResponse = yield howHeard.addShopifyOrderCreateWebhook(shopName, token);
@@ -372,6 +368,76 @@ router.get('/authenticate', function *() {
   // set uninstall webhook
   yield howHeard.addShopifyUninstallWebhook(shopName, token);
 
+  // allow Resonance and affiliates to use app for free
+  const storeEmail = shop.shop.email;
+  const splitEmail = storeEmail.split('@');
+  const emailDomain = splitEmail[1];
+  var testFlag = null;
+
+  if ((constants.HOWHEARD_APP_TEST == true) || (emailDomain == "resonance.nyc") || (shop.shop.plan_name == "affiliate")) {
+    var testFlag = true;
+  } 
+
+  // send API request to Shopify to create app charge
+  const payRequest = yield howHeard.createAppCharge(shopName, token, testFlag);
+
+  // save charge_id and created_at to db
+  yield howHeard.saveCharge(payRequest.recurring_application_charge.id, payRequest.recurring_application_charge.created_at, shopName);
+
+  // get confirmation_url from API response and then redirect store owner
+  this.redirect(payRequest.recurring_application_charge.confirmation_url);
+
+});
+
+
+
+
+
+/**
+ * Activate approved charge with Shopify
+ */
+
+router.get('/activate', function *() {
+
+  // store owner has accepted payment, now activate payment with shopify
+  const shopName = this.query.shop;
+
+  const shop = yield howHeard.findShop(shopName);
+
+  const timestamp = moment().format();
+  const billingDate = moment().add(constants.HOWHEARD_TRIAL_DAYS, 'days').format('YYYY-MM-DD');
+
+  // get status of app charge from shopify
+  const chargeAccepted = yield howHeard.checkAppChargeStatus(shopName, shop.charge_id, shop.accessToken);
+
+  // if store owner declined charge, exit
+  if (chargeAccepted.recurring_application_charge.status != "accepted") {
+	this.redirect('./error?shop='+shopName);
+    return;
+  }
+
+
+  // send API request to Shopify to create app charge
+  const activateRequest = yield howHeard.activateAppCharge(shopName, shop.charge_id, timestamp, billingDate, shop.accessToken);
+  
+  const chargeStatus = 'activated';
+
+  var chargeType = '';
+ 
+
+  // assign charge_type
+  if (activateRequest.recurring_application_charge.test == true) {
+    var chargeType = 'test';
+		
+  }
+  else {
+	var chargeType = 'paid';
+  }
+
+  // save activated_on, trial_ends_on, status, charge_type
+  yield howHeard.saveActivation(activateRequest.recurring_application_charge.activated_on, activateRequest.recurring_application_charge.trial_ends_on, chargeStatus, chargeType, shopName);
+
+  // success, redirect store owner to admin homepage
   this.redirect('./?shop='+shopName);
 
 });
@@ -381,18 +447,22 @@ router.get('/authenticate', function *() {
 
 
 /**
- * Save how heard webhook URL into DB.
+ * Uninstall store
+ * Don't worry about deleting app charge, shopify
+ * has already deleted it
+ * Just uninstall the shop from db
  */
 
- router.post('/uninstall', function *() {
+router.post('/uninstall', function *() {
 	
-   console.log('request body', this.request.body);
-   console.log('content-type', this.request.type);
-   const shopName = this.request.body.domain;
-   yield howHeard.uninstallShop(shopName);
-   this.status = 200;
+  //console.log('request body', this.request.body);
+  //console.log('content-type', this.request.type);
+  const shopName = this.request.body.domain;
+  yield howHeard.uninstallShop(shopName);
 
+  this.status = 200;
 });
+
 
 
 
@@ -540,8 +610,6 @@ router.post('/messages/:shopName/:type', function *() {
 
   const sourceName = body.source_name;
 
-  console.log("SOURCE_NAME", sourceName);
-
   // if order is from POS, there's nothing more to do
   if (sourceName != "web") {
 	this.body = 'OK'
@@ -636,8 +704,6 @@ router.post('/messages/:shopName/:type', function *() {
 
   yield howHeard.appendSelectionOrder(body.id, choice);
 
-
-  console.log('MESSAGE SAVED, METAFIELD UPLOADED, METAFIELD ID SAVED');
   this.status = 200;
 
 });
@@ -658,6 +724,12 @@ router.get('/reporting', function *() {
 
   // find store object in db
   const shop = yield howHeard.findShop(shopName);
+
+  // if payment is not active, exist
+  if (shop.charge_status != "activated") {
+	this.redirect('./error?shop='+shopName);
+    return;
+  }
 
 
   // if fromDate and toDate was passed in the url query
@@ -686,9 +758,6 @@ router.get('/reporting', function *() {
   }
   else {
 	var orders = yield howHeard.fetchStoreOrders(shopName);
-	
-	
-  
   }
 
 
@@ -696,7 +765,7 @@ router.get('/reporting', function *() {
    
     if (orders[i].createdAt) {
 	  orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');
-    }  
+    }
 
     if (orders[i].howHeard == null) {
 		orders[i].howHeard = "Repeat Customer";
@@ -708,7 +777,7 @@ router.get('/reporting', function *() {
   if (orders.length > pageSize) {
 	
 	var pageCount = Math.ceil(orders.length/pageSize);
-    var currentPage = 1;
+	var currentPage = 1;
 	var ordersArray = [];
 	var arrayPosition = 0;
 	var ordersList = [];
@@ -783,6 +852,13 @@ router.post('/reporting', function *() {
   const shop = yield howHeard.findShop(shopName);
 
 
+  // if payment is not active, exit
+  if (shop.charge_status != "activated") {
+	this.redirect('./error?shop='+shopName);
+    return;
+  }
+
+
   // get timezone for the store
   var zone = moment.tz.zone(shop.iana_timezone);
   // get offset from UTC
@@ -798,16 +874,13 @@ router.post('/reporting', function *() {
   // convert time to UTC to query db
   var toUtcTime = moment(toStartOfDay).utcOffset(offset).format();
 
-
-
   const orders = yield howHeard.fetchStoreOrdersWithDates(shopName, fromUtcTime, toUtcTime);
-
 
   for(var i = 0; i < orders.length; i++) {
 
     if (orders[i].createdAt) {
 	  orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');
-    }
+    }  
 
     if (orders[i].howHeard == null) {
 		orders[i].howHeard = "Repeat Customer";
@@ -822,7 +895,6 @@ router.post('/reporting', function *() {
 	var ordersArray = [];
 	var arrayPosition = 0;
 	var ordersList = [];
-	
 	
 	// split orders into groups of length equal to pageSize
 	while (orders.length > 0) {
@@ -890,7 +962,6 @@ router.get('/export', function *() {
   // find store object in db
   const shop = yield howHeard.findShop(shopName);
 
-  const orders = yield howHeard.fetchStoreOrders(shopName);
 
   for(var i = 0; i < orders.length; i++) {
 
@@ -900,7 +971,13 @@ router.get('/export', function *() {
 
     }
 
+    if (orders[i].howHeard == null) {
+		orders[i].howHeard = "Repeat Customer";
+   }
+
   }
+
+  //console.log("ORDERS", orders);
 
   var csv = json2csv({ data: orders, fields: fields });
 
@@ -938,3 +1015,24 @@ router.get('/instructions', function *() {
 
 });
 
+
+
+
+
+/**
+ * Error page
+ */
+router.get('/error', function *() {
+
+  var jadeOptions = {
+	shopName: this.query.shop,
+    apiKey: constants.SHOPIFY_API_KEY,
+  };
+	
+  var html = jade.compile(errorTemplate, {
+    basedir: __dirname
+  })(jadeOptions);
+
+  this.body = html;
+
+});
