@@ -962,6 +962,7 @@ router.get('/export', function *() {
   // find store object in db
   const shop = yield howHeard.findShop(shopName);
 
+  const orders = yield howHeard.fetchStoreOrders(shopName);
 
   for(var i = 0; i < orders.length; i++) {
 
