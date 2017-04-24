@@ -113,7 +113,7 @@ function GetMainBody() {
 		
 		// pass in css styling for h2.section__title
 		var elem, style;
-		elem = document.querySelector(`h2.section__title`);
+		elem = document.querySelector('h2.section__title');
 		style = getComputedStyle(elem);
 		var fontFamily = style.fontFamily;
 		var fontSize = style.fontSize;
