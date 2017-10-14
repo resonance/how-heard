@@ -21,9 +21,10 @@ var send = require('koa-send');
 var admin = require('./admin');
 var howHeard = require('./howheard');
 var constants = require('./constants');
-
-
-
+var schedule = require('node-schedule');
+var Slack = require('node-slack');
+var AWS = require('aws-sdk');
+var dateFormat = require('dateformat');
 
 
 /**
@@ -115,7 +116,7 @@ app.use(function *(next) {
 	this.status = err.status || 500;
 	this.app.emit('error', err, this);
 	this.redirect('./error?shop='+shopName);
-    
+
     //this.body = 'Sorry, we made a mistake.';
 
   }
@@ -169,7 +170,217 @@ var router = koaRouter();
 
 app.use(router.routes());
 
+/****
 
+ CRON JOB TO PUSH DATA TO S3
+
+****/
+
+howHeardSchedulejob();
+
+function howHeardSchedulejob() {
+  howHeard.findAllShops().then(function(shops){
+    var promises = [];
+    for(var i = 0; i < shops.length; i++) {
+      var p = new Promise(function(success, reject){
+        var shop = shops[i];
+        success(
+          schedule.scheduleJob('0 00 06 * * *', function(){
+            if (shop.companyName == "tuckernyc.myshopify.com" || shop.companyName == "jcrt.myshopify.com" || shop.companyName == "thekitnyc.myshopify.com") {
+              pushingFilesToS3(shop);
+            }
+          })
+        );
+      });
+      promises.push(p);
+    }
+    return Promise.all(promises);
+  });
+}
+
+function generateCsvFiles(shop) {
+
+  var fields = ['companyName', 'createdAt', 'subtotalPrice', 'orderNumber', 'customerEmail',
+                'customerFirstName', 'customerLastName', 'customerOrdersCount', 'customerTotalSpent',
+                'customerCity', 'customerProvinceCode', 'customerCountryName', 'howHeard'];
+
+
+  var today = new Date();
+  var dateOffset = (24*60*60*1000) * 1; //1 day
+  var fromDate = new Date();
+  var toDate = new Date();
+  fromDate.setTime(today.getTime() - dateOffset);
+  toDate.setTime(today.getTime() - dateOffset);
+  fromDate.setHours(0, 0);
+
+  //adjustments
+  if (shop.iana_timezone == "Pacific/Pago_Pago") {
+    toDate.setHours(8, 59);
+    fromDate.setHours(fromDate.getHours() - 15);
+  }
+  if (shop.iana_timezone == "America/New_York") {
+    toDate.setHours(14, 59);
+    fromDate.setHours(fromDate.getHours() - 9);
+  }
+  // get timezone for the store
+  var zone = moment.tz.zone(shop.iana_timezone);
+  // get offset from UTC
+  var offset = zone.parse();
+
+  // convert time to UTC to query db
+  var fromUtcTime = moment(fromDate).utcOffset(offset).format();
+  // convert time to UTC to query db
+  var toUtcTime = moment(toDate).utcOffset(offset).format();
+
+  var shopName = shop.name.toUpperCase().replace(" ", "");
+
+  return howHeard.findOrdersWithDates(shop.companyName, fromUtcTime, toUtcTime).then(function(orders){
+    for(var i = 0; i < orders.length; i++) {
+      if (orders[i].createdAt) {
+        orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');
+      }
+      if (orders[i].howHeard == null) {
+        orders[i].howHeard = "Repeat Customer";
+      }
+    }
+    var csv = json2csv({ data: orders, fields: fields });
+    var filename = 'daily-' + shop.name + '.csv'
+    var key = generateKey(shopName, 0);
+    fs.writeFile(filename, csv, function(err) {
+      if (err) throw err;
+    });
+    var file = {};
+    file.key = key;
+    file.body = filename;
+    return file;
+  }).then(function(dailyfile){
+    var files = [];
+    files.push(dailyfile);
+    return howHeard.findOrders(shop.companyName).then(function(orders){
+      for(var i = 0; i < orders.length; i++) {
+        if (orders[i].createdAt) {
+          orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');
+        }
+        if (orders[i].howHeard == null) {
+          orders[i].howHeard = "Repeat Customer";
+        }
+      }
+      var csv = json2csv({ data: orders, fields: fields });
+      var filename = 'full-' + shop.name + '.csv'
+      var key = generateKey(shopName, 1);
+      fs.writeFile(filename, csv, function(err) {
+      if (err) throw err;
+      });
+      var file = {};
+      file.key = key;
+      file.body = filename;
+      files.push(file);
+      return files;
+    });
+  });
+
+  function generateKey(shopName, fileNumber) {
+    var today = new Date();
+    var dateOffset = (24*60*60*1000) * 1; //1 day
+    var yesterday = new Date();
+    yesterday.setTime(today.getTime() - dateOffset);
+    var date = dateFormat(yesterday, "mm dd yyyy").split(' ').join('_');
+    return (
+      (fileNumber == 1) ? shopName + "/Applications/HowHeard/data.csv" : shopName + "/Applications/HowHeard/" + date + "/data.csv"
+    );
+  }
+
+}
+
+function pushingFilesToS3(shop) {
+
+  return generateCsvFiles(shop).then(function(files){
+    var promises = [];
+      for(var i = 0; i < files.length; i++) {
+        var p = new Promise(function(success, reject){
+          var file = files[i];
+          success(
+            //console.log(file)
+            sendFileToS3(file)
+          );
+        });
+        promises.push(p);
+      }
+    return Promise.all(promises);
+  }).then(function(){
+    //    Success message
+    sendMessageToSlack("Earpiece Data Transfer to s3 success - for " + shop.name);
+  }).catch(function(e){
+    console.log(e);
+    //    Failed message
+    sendMessageToSlack("Earpiece Data Transfer to s3 failed - for " + shop.name);
+  });
+
+  function sendFileToS3(file) {
+    // Load credentials and set region from JSON file
+    AWS.config.loadFromPath('./config.json');
+
+    // Create S3 service object
+    var s3 = new AWS.S3({apiVersion: '2006-03-01'});
+
+    var uploadParams = {
+      Bucket: 'resonance-core-0-0-0',
+      Key: '',
+      Body: ''
+    };
+
+    var fileStream = fs.createReadStream(file.body);
+    fileStream.on('error', function(err) {
+      console.log('File Error', err);
+    });
+
+    uploadParams.Body = fileStream;
+    uploadParams.Key = file.key;
+
+    // call S3 to retrieve upload file to specified bucket
+    s3.upload(uploadParams, function(err, data) {
+      if (err) {
+        console.log("Error", err);
+      }
+      if (data) {
+        console.log("Upload Success", data.Location);
+      }
+    });
+  }
+
+  function sendMessageToSlack(message) {
+
+    var NotificationOpts = {
+      url : 'https://hooks.slack.com/services/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', //You will need to place the webhook url here. Ex: from #data-quality channel
+      channel : "#data-quality",
+      username : "res.Magic Health bot",
+      failed : "Earpiece Data Transfer to s3 failed - for all brands",
+      succeed : "Earpiece Data Transfer to s3 success - for all brands"
+    };
+
+    var slack = new Slack(NotificationOpts.url, {});
+    var color = message.indexOf("success") !== -1 ? "#009900" : "#FF0000";
+
+    slack.send({
+        channel: NotificationOpts.channel,
+        username: NotificationOpts.username,
+        text: "Notification of the report from Earpiece",
+        attachments: [{
+          "text": message,
+          "color": color
+        }]
+      },
+     function(err, res) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(res);
+        }
+      });
+
+  }
+
+}
 
 
 
@@ -181,15 +392,15 @@ app.use(router.routes());
  */
 
 router.get('/', function *() {
-	
+
   const exists = yield howHeard.accessTokenExists(this.query.shop);
-    
+
   // if token does not exist, redirect to /install
   if (!exists) {
     this.redirect('./install?shop='+this.query.shop);
     return;
   }
-  
+
 
   // find store object in db
   const shop = yield howHeard.findShop(this.query.shop);
@@ -211,16 +422,16 @@ router.get('/', function *() {
     choices: {},
   };
 
-	
+
   const howHeardList = yield howHeard.findHowHeardList(shop.companyName);
 
 
   // if list exists, add to jadeOptions
   if (howHeardList) {
-	
+
 	// get existing list of howheards if available, use shopsCollection object
 	const list = yield howHeard.getHowHeardList(shop.companyName);
-	
+
 	jadeOptions.choices = {
       selections: list.selections
     }
@@ -230,7 +441,7 @@ router.get('/', function *() {
       selections: ['From A Friend', 'Other']
     }
   }
- 
+
 
   // Serve html to client.
   var html = jade.compile(homeTemplate, {
@@ -246,15 +457,15 @@ router.get('/', function *() {
 
 /**
  * User wants to delete a how heard selection
- * 
+ *
  */
 
 router.get('/delete', function *() {
-	
+
   const shopName = this.query.shop;
   const selectionChoice = this.query.selection;
-	
-	
+
+
   yield howHeard.deleteSelection(shopName, selectionChoice);
 
   // need to pass 'success' msg to user?
@@ -269,7 +480,7 @@ router.get('/delete', function *() {
 
 /**
  * User wants to add a how heard selection
- * 
+ *
  */
 
 router.post('/add', function *() {
@@ -288,13 +499,13 @@ router.post('/add', function *() {
   // if list does not exist, append 'Other'
   if (!howHeardList) {
 	  selectionsArray.push("From A Friend", "Other");
-	  
+
 	  // add selections to listsCollection
 	  yield howHeard.addSelections(shopName, selectionsArray);
-		
+
   }
   else {
-	
+
 	  // update listsCollection with new selections
 	  yield howHeard.updateSelections(shopName, selectionsArray);
 
@@ -315,7 +526,7 @@ router.post('/add', function *() {
  */
 
 router.get('/install', function *() {
-  
+
   const shopName = this.query.shop;
 
   // Use `findOrCreate` in case an
@@ -340,10 +551,10 @@ router.get('/install', function *() {
  */
 
 router.get('/authenticate', function *() {
-	
+
   const token = yield howHeard.fetchAuthToken(this.query);
   const shopName = this.query.shop;
-  
+
   console.log("SHOPNAME", shopName);
 
 
@@ -351,7 +562,7 @@ router.get('/authenticate', function *() {
 
   // ping Shopify API for Shop object
   const shop = yield howHeard.fetchShopFromShopify(shopName, token);
- 
+
   const shopId = shop.shop.id;
 
   const chargeStatus = 'pending';
@@ -376,7 +587,7 @@ router.get('/authenticate', function *() {
 
   if ((constants.HOWHEARD_APP_TEST == true) || (emailDomain == "resonance.nyc") || (shop.shop.plan_name == "affiliate")) {
     var testFlag = true;
-  } 
+  }
 
   // send API request to Shopify to create app charge
   const payRequest = yield howHeard.createAppCharge(shopName, token, testFlag);
@@ -419,16 +630,16 @@ router.get('/activate', function *() {
 
   // send API request to Shopify to create app charge
   const activateRequest = yield howHeard.activateAppCharge(shopName, shop.charge_id, timestamp, billingDate, shop.accessToken);
-  
+
   const chargeStatus = 'activated';
 
   var chargeType = '';
- 
+
 
   // assign charge_type
   if (activateRequest.recurring_application_charge.test == true) {
     var chargeType = 'test';
-		
+
   }
   else {
 	var chargeType = 'paid';
@@ -454,7 +665,7 @@ router.get('/activate', function *() {
  */
 
 router.post('/uninstall', function *() {
-	
+
   //console.log('request body', this.request.body);
   //console.log('content-type', this.request.type);
   const shopName = this.request.body.domain;
@@ -533,12 +744,12 @@ router.get('/dropdown', function *() {
 
   // is customer is not new, then exit
   if (customer.customers[0].orders_count > 0) {
-    return;	
+    return;
   }
-  
+
   // get store's how heard list
   const list = yield howHeard.getHowHeardList(shop.companyName);
-  
+
   var listArray = list.selections;
 
   var jadeOptions = {
@@ -582,7 +793,7 @@ router.get('/response', function *() {
 
   // if pair does not exist, add it
   if (!userSelectionExists) {
-	
+
 	  // add selections to listsCollection
 	  yield howHeard.addUserSelection(shopName, custId, choice);
 
@@ -601,11 +812,11 @@ router.get('/response', function *() {
 
 
 /**
- * Receive an orderCreate message from Shopify 
+ * Receive an orderCreate message from Shopify
  */
 
 router.post('/messages/:shopName/:type', function *() {
-	
+
   const body = this.request.body;
 
   const sourceName = body.source_name;
@@ -671,7 +882,7 @@ router.post('/messages/:shopName/:type', function *() {
   // if this isn't the customer's first order, there's nothing more to do
   if (custOrderCount != 1) {
 	return;
-	
+
   }
 
 
@@ -681,22 +892,22 @@ router.post('/messages/:shopName/:type', function *() {
 
   // Check if they selected a choice, if not, set default value of "Did Not Answer"
   if (custSelectionExists) {
-	
-	  // get customer selection	
+
+	  // get customer selection
 	  var selection = yield howHeard.getHowHeardSelection(shop.companyName, custId);
 
-      var choice = selection.selection;    
-	
+      var choice = selection.selection;
+
   } else {
-	
+
 	  var choice = 'Did not answer';
-	
+
   }
 
-	
+
   // POST customer selection as a metafield to store
   const customerMetafield = yield howHeard.addCustomerMetafield(shop.companyName, custId, choice, token);
-	
+
   // add selection to orderCollection document and save metafield id
   const metafieldId = customerMetafield.metafield.id;
 
@@ -717,7 +928,7 @@ router.post('/messages/:shopName/:type', function *() {
  */
 
 router.get('/reporting', function *() {
-  
+
   const shopName = this.query.shop;
   var fromDate = 0;
   var toDate = 0;
@@ -734,7 +945,7 @@ router.get('/reporting', function *() {
 
   // if fromDate and toDate was passed in the url query
   if (this.query.fromDate && this.query.toDate) {
-	
+
     fromDate = this.query.fromDate;
     toDate = this.query.toDate;
 
@@ -762,7 +973,7 @@ router.get('/reporting', function *() {
 
 
   for(var i = 0; i < orders.length; i++) {
-   
+
     if (orders[i].createdAt) {
 	  orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');
     }
@@ -775,27 +986,27 @@ router.get('/reporting', function *() {
 
 
   if (orders.length > pageSize) {
-	
+
 	var pageCount = Math.ceil(orders.length/pageSize);
 	var currentPage = 1;
 	var ordersArray = [];
 	var arrayPosition = 0;
 	var ordersList = [];
-	
+
 	// split orders into groups of length equal to pageSize
 	while (orders.length > 0) {
 		ordersArray.push(orders.splice(0, pageSize));
 	}
-	
+
 	// set currentPage if passed in url string
 	if (this.query.page) {
 		currentPage = this.query.page;
 	}
-	
+
 	// set the subset of order records to show
 	arrayPosition = currentPage - 1;
 	ordersList = ordersArray[arrayPosition];
-	
+
 	var jadeOptions = {
 	  shopName: shopName,
       apiKey: constants.SHOPIFY_API_KEY,
@@ -805,10 +1016,10 @@ router.get('/reporting', function *() {
       currentPage: currentPage,
       pageCount: pageCount,
     };
-		
+
   }
   else {
-	
+
 	var jadeOptions = {
       shopName: shopName,
 	  apiKey: constants.SHOPIFY_API_KEY,
@@ -818,7 +1029,7 @@ router.get('/reporting', function *() {
 	  currentPage: 1,
 	  pageCount: 1,
 	};
-	
+
   }
 
   var html = jade.compile(reportingTemplate, {
@@ -846,7 +1057,6 @@ router.post('/reporting', function *() {
 
   const fromDate = body.fromdate;
   const toDate = body.todate;
-
 
   // find store object in db
   const shop = yield howHeard.findShop(shopName);
@@ -880,7 +1090,7 @@ router.post('/reporting', function *() {
 
     if (orders[i].createdAt) {
 	  orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');
-    }  
+    }
 
     if (orders[i].howHeard == null) {
 		orders[i].howHeard = "Repeat Customer";
@@ -889,27 +1099,27 @@ router.post('/reporting', function *() {
   }
 
   if (orders.length > pageSize) {
-	
+
 	var pageCount = Math.ceil(orders.length/pageSize);
 	var currentPage = 1;
 	var ordersArray = [];
 	var arrayPosition = 0;
 	var ordersList = [];
-	
+
 	// split orders into groups of length equal to pageSize
 	while (orders.length > 0) {
 		ordersArray.push(orders.splice(0, pageSize));
 	}
-	
+
 	// set currentPage if passed in url string
 	if (this.query.page) {
 		currentPage = this.query.page;
 	}
-	
+
 	// set the subset of order records to show
 	arrayPosition = currentPage - 1;
 	ordersList = ordersArray[arrayPosition];
-	
+
 	var jadeOptions = {
 	  shopName: shopName,
       apiKey: constants.SHOPIFY_API_KEY,
@@ -919,10 +1129,10 @@ router.post('/reporting', function *() {
       currentPage: currentPage,
       pageCount: pageCount,
     };
-		
+
   }
   else {
-	
+
 	var jadeOptions = {
       shopName: shopName,
 	  apiKey: constants.SHOPIFY_API_KEY,
@@ -932,7 +1142,7 @@ router.post('/reporting', function *() {
 	  currentPage: 1,
 	  pageCount: 1,
 	};
-	
+
   }
 
   var html = jade.compile(reportingTemplate, {
@@ -954,9 +1164,9 @@ router.post('/reporting', function *() {
 
 router.get('/export', function *() {
 
-  const shopName = this.query.shop;  
-  var fields = ['companyName', 'createdAt', 'subtotalPrice', 'orderNumber', 'customerEmail', 
-                'customerFirstName', 'customerLastName', 'customerOrdersCount', 'customerTotalSpent', 
+  const shopName = this.query.shop;
+  var fields = ['companyName', 'createdAt', 'subtotalPrice', 'orderNumber', 'customerEmail',
+                'customerFirstName', 'customerLastName', 'customerOrdersCount', 'customerTotalSpent',
                 'customerCity', 'customerProvinceCode', 'customerCountryName', 'howHeard'];
 
   // find store object in db
@@ -968,7 +1178,7 @@ router.get('/export', function *() {
 
     if (orders[i].createdAt) {
 
-	  orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');							  
+	  orders[i].createdAt = moment(orders[i].createdAt).tz(shop.iana_timezone).format('MM/DD/YYYY h:mm');
 
     }
 
@@ -985,12 +1195,12 @@ router.get('/export', function *() {
   fs.writeFile('file.csv', csv, function(err) {
 	if (err) throw err;
   });
-	
-		
+
+
   this.set('Content-disposition', 'attachment; filename=file.csv');
   this.set('Content-type', 'text/csv');
   yield send(this, 'file.csv');
-	
+
 
 
 });
@@ -1002,7 +1212,7 @@ router.get('/export', function *() {
  * User install instructions
  */
 router.get('/instructions', function *() {
-	
+
   var jadeOptions = {
     shopName: this.query.shop,
     apiKey: constants.SHOPIFY_API_KEY,
@@ -1029,7 +1239,7 @@ router.get('/error', function *() {
 	shopName: this.query.shop,
     apiKey: constants.SHOPIFY_API_KEY,
   };
-	
+
   var html = jade.compile(errorTemplate, {
     basedir: __dirname
   })(jadeOptions);
