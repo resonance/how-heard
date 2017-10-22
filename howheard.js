@@ -19,6 +19,7 @@ var constants = require('./constants');
 
 exports.accessTokenExists = accessTokenExists;
 exports.findShop = findShop;
+exports.findAllShops = findAllShops;
 exports.findOrCreate = findOrCreate;
 exports.getAuthUrl = getAuthUrl;
 exports.fetchAuthToken = fetchAuthToken;
@@ -53,14 +54,17 @@ exports.appendHowHeardSelection = appendHowHeardSelection;
 exports.appendSelectionOrder = appendSelectionOrder;
 exports.fetchStoreOrders = fetchStoreOrders;
 exports.fetchStoreOrdersWithDates = fetchStoreOrdersWithDates;
+exports.findOrders = findOrders;
+exports.findOrdersWithDates = findOrdersWithDates;
 
 
 /**
  * Connect to database.
- * Be sure to grab the right config var, as they can vary for mongodb 
+ * Be sure to grab the right config var, as they can vary for mongodb
  */
 
-var db = monk(process.env.MONGODB_URI || 'localhost');
+var db = monk(process.env.MONGODB_URI || 'mongodb://heroku_s9m52hz8:nlblmjp86jc4jkm2skdh7mlue5@ds013456.mlab.com:13456/heroku_s9m52hz8');
+//var db = monk(process.env.MONGODB_URI || 'localhost');
 
 
 
@@ -104,7 +108,7 @@ function *accessTokenExists(shopName) {
     accessToken: { $exists: true },
   });
 
-  //  converting a value to a boolean, then inverting it, then inverting it again	
+  //  converting a value to a boolean, then inverting it, then inverting it again
   return !!shop;
 }
 
@@ -123,7 +127,23 @@ function *findShop(shopName) {
   return yield shopsCollection.findOne({ companyName: shopName });
 }
 
+/**
+ * Find all shops in the db.
+ *
+ */
 
+
+function findAllShops() {
+	return new Promise(function(success, reject) {
+		shopsCollection.find({}, function(err, data){
+			if (err) {
+				reject(err);
+			} else {
+				success(data);
+			}
+		});
+	});
+}
 
 
 
@@ -175,7 +195,7 @@ function getRandomCode(length) {
  *
  * @return {String}
  * @api public
- * Grab Key & Secret from App Admin and add as config vars in Heroku 
+ * Grab Key & Secret from App Admin and add as config vars in Heroku
  */
 
 function getAuthUrl(shopName) {
@@ -257,7 +277,7 @@ function *createAppCharge(shopName, token, testFlag) {
 
   console.log("ArrayString[name]", ArrayString[name]);
   console.log("ArrayBoolean[testStore]", ArrayBoolean[testStore]);
-	
+
   const options = {
     url: `https://${shopName}/admin/recurring_application_charges.json`,
 	body: JSON.stringify({
@@ -323,7 +343,7 @@ function *saveCharge(id, createdAt, shopName) {
  */
 
 function *checkAppChargeStatus(shopName, id, token) {
-	
+
   const options = {
     url: `https://${shopName}/admin/recurring_application_charges/${id}.json`,
     headers: {
@@ -367,7 +387,7 @@ function *activateAppCharge(shopName, id, timestamp, billingDate, token) {
   values[timestamp] = timestamp;
   values[billingDate] = billingDate;
   values[name] = shopName;
-	
+
   const options = {
     url: `https://${shopName}/admin/recurring_application_charges/${id}/activate.json`,
 	body: JSON.stringify({
@@ -384,7 +404,7 @@ function *activateAppCharge(shopName, id, timestamp, billingDate, token) {
         test: constants.HOWHEARD_APP_TEST,
         activated_on: null,
         trial_ends_on: null,
-        canceled_on: null,  
+        canceled_on: null,
         trial_days: constants.HOWHEARD_TRIAL_DAYS,
         decorated_return_url: constants.HOWHEARD_PUBLIC_URL_ROOT + '?shop=' + values[name],
         format: 'json',
@@ -427,7 +447,7 @@ function *saveActivation(activatedOn, trialEndsOn, chargeStatus, chargeType, sho
 	          charge_trial_ends: trialEndsOn,
 	          charge_status: chargeStatus,
 	          charge_type: chargeType,
-	        } 
+	        }
     }
   );
 }
@@ -529,7 +549,7 @@ function *updateShop(shopName, update, chargeStatus) {
  */
 
 function *addShopifyOrderCreateWebhook(shopName, token) {
-  
+
   // convert shopName to an object for use inside JSON.stringify
   var name = '';
   var shopObj = {};
@@ -575,7 +595,7 @@ function *addShopifyOrderCreateWebhook(shopName, token) {
  */
 
 function *updateShopWithWebhook(shopName, update) {
-  
+
   const shopifyEvent = 'orderCreate';
 
   yield shopsCollection.findAndModify({
@@ -667,7 +687,7 @@ function *addShopifyUninstallWebhook(shopName, token) {
 function *findHowHeardList(shopName) {
   const list = yield listsCollection.findOne({ companyName: shopName });
 
-  //  converting a value to a boolean, then inverting it, then inverting it again	
+  //  converting a value to a boolean, then inverting it, then inverting it again
   return !!list;
 }
 
@@ -749,7 +769,7 @@ function *deleteSelection(shopName, selectionChoice) {
   }, {
     $pull: { selections: selectionChoice },
   });
-	
+
  }
 
 
@@ -826,12 +846,12 @@ function *findShopById(storeId) {
 
 function *findUserSelection(shopName, custId) {
   const userSelection = yield selectionCollection.findOne(
-	{ 
+	{
 		companyName: shopName,
 		customerId: custId
 	});
 
-  //  converting a value to a boolean, then inverting it, then inverting it again	
+  //  converting a value to a boolean, then inverting it, then inverting it again
   return !!userSelection;
 }
 
@@ -956,7 +976,7 @@ function *saveShopifyMessage(shopName, shopifyMessage) {
  */
 
 function *getHowHeardSelection(shopName, custId) {
-  return yield selectionCollection.findOne({ 
+  return yield selectionCollection.findOne({
 	  companyName: shopName,
       customerId: custId
   });
@@ -972,12 +992,12 @@ function *getHowHeardSelection(shopName, custId) {
  */
 
 function *addCustomerMetafield(shopName, custId, choice, token) {
-	
+
   // convert choice to an object for use inside JSON.stringify
   var chosen = '';
   var selection = {};
-  selection[chosen] = choice;	
-	
+  selection[chosen] = choice;
+
   const options = {
     url: `https://${shopName}/admin/customers/${custId}/metafields.json`,
     body: JSON.stringify({
@@ -1026,16 +1046,16 @@ function *addCustomerMetafield(shopName, custId, choice, token) {
  */
 
 function *appendHowHeardSelection(shopName, custId, metafieldId) {
-  
+
   yield selectionCollection.update({
       companyName: shopName,
       customerId: custId
     }, {
       $set: { confirmationId: metafieldId },
-  });	
+  });
 	// change to int or string
 	//console.log("CONFIRMATION ID", metafieldId);
-		
+
 }
 
 
@@ -1048,14 +1068,14 @@ function *appendHowHeardSelection(shopName, custId, metafieldId) {
  */
 
 function *appendSelectionOrder(orderId, choice) {
-  
+
   yield ordersCollection.update({
       orderId: orderId
     }, {
       $set: { howHeard: choice },
-  });	
+  });
 
-		
+
 }
 
 
@@ -1070,11 +1090,11 @@ function *appendSelectionOrder(orderId, choice) {
  */
 
 function *fetchStoreOrders(shopName) {
-  return yield ordersCollection.find({ 
-	  companyName: shopName 
+  return yield ordersCollection.find({
+	  companyName: shopName
 	},
     {
-		sort: { createdAt : -1 }	
+		sort: { createdAt : -1 }
     });
 
 }
@@ -1092,12 +1112,48 @@ function *fetchStoreOrders(shopName) {
  */
 
 function *fetchStoreOrdersWithDates(shopName, fromUtcTime, toUtcTime) {
-  return yield ordersCollection.find({ 
+  return yield ordersCollection.find({
 	  companyName: shopName,
 	  createdAt : {$gte: fromUtcTime, $lt: toUtcTime}
 	},
     {
-		sort: { createdAt : -1 }	
+		sort: { createdAt : -1 }
     });
 
+}
+
+/**
+ * Find all orders for a shop
+ *
+ */
+
+function findOrders(shopName) {
+	return new Promise(function(success, reject) {
+		ordersCollection.find({ companyName: shopName}, { sort: { createdAt : -1 } }, function(err, data){
+			if (err) {
+				reject(err);
+			} else {
+				success(data);
+			}
+		});
+	});
+}
+
+
+
+/**
+ * Find orders for a shop
+ *
+ */
+
+function findOrdersWithDates(shopName, fromUtcTime, toUtcTime) {
+  return new Promise(function(success, reject) {
+    ordersCollection.find({companyName: shopName, createdAt : {$gte: fromUtcTime, $lt: toUtcTime}}, {sort: { createdAt : -1 }}, function(err, data){
+      if (err) {
+        reject(err);
+      } else {
+        success(data);
+      }
+    });
+  });
 }
